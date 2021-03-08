@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/item_pets"
+        android:icon="@drawable/ic_pets"
+        android:title="@string/pets" />
+    <item
+        android:id="@+id/item_blogs"
+        android:icon="@drawable/ic_leash"
+        android:title="@string/blogs" />
+    <item
+        android:id="@+id/item_clinic"
+        android:icon="@drawable/ic_clinic"
+        android:title="@string/clinic" />
+
+    <item
+        android:id="@+id/item_service"
+        android:icon="@drawable/ic_services"
+        android:title="@string/service" />
+    <item
+        android:id="@+id/item_chat"
+        android:icon="@drawable/ic_writing"
+        android:title="@string/chat" />
+</menu>

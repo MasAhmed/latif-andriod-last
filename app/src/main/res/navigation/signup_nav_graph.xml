@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/signup_nav_graph.xml"
+    app:startDestination="@id/registerFragment">
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.latifapp.latif.ui.auth.signup.fragments.regester.registerFragment"
+        tools:layout="@layout/fragment_register" >
+        <action android:id="@+id/navTo_policyFragment"
+            app:destination="@id/policyFragment"
+            />
+    </fragment>
+
+    <fragment
+        android:id="@+id/policyFragment"
+        android:name="com.latifapp.latif.ui.auth.signup.fragments.policy.PolicyFragment"
+        tools:layout="@layout/fragment_policy">
+
+        <action android:id="@+id/navTo_interestsFragment"
+            app:destination="@id/interestsFragment"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/interestsFragment"
+        android:name="com.latifapp.latif.ui.auth.signup.fragments.interests.InterestsFragment"
+        tools:layout="@layout/fragment_interests" />
+</navigation>

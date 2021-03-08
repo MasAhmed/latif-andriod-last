@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    >
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/unselect_bg"
+    android:minWidth="100dp"
+    android:minHeight="40dp"
+    android:textColor="@color/sunset_orange"
+    android:textSize="15sp"
+    android:fontFamily="@font/tajawal_regular"
+    android:text="dogs"
+    android:gravity="center"
+    android:lines="1"
+    android:id="@+id/text_item"
+    />
+</LinearLayout>
