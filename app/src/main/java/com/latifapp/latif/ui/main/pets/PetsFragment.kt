@@ -1,9 +1,11 @@
 package com.latifapp.latif.ui.main.pets
 
+import android.app.ProgressDialog.show
 import android.graphics.drawable.GradientDrawable
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +20,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.latifapp.latif.R
 import com.latifapp.latif.databinding.FragmentPetsBinding
+import com.latifapp.latif.ui.main.pets.bottomDialog.BottomDialogFragment
 
 class PetsFragment : Fragment() {
 
@@ -42,6 +45,16 @@ class PetsFragment : Fragment() {
             layoutManager=LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false)
             adapter=PetsAdapter()
         }
+
+        binding.pin.setOnClickListener {
+            Log.d("dndndndndndn","HERE")
+
+            childFragmentManager.let {
+                BottomDialogFragment().apply {
+                    show(it, tag)
+                }
+            }
+        }
     }
 
     private val callback = OnMapReadyCallback { googleMap ->
@@ -54,8 +67,8 @@ class PetsFragment : Fragment() {
          * install it inside the SupportMapFragment. This method will only be triggered once the
          * user has installed Google Play services and returned to the app.
          */
-        val sydney = LatLng(-34.0, 151.0)
-        googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        val sydney = LatLng(30.0512724,31.1867696)
+         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+
     }
 }

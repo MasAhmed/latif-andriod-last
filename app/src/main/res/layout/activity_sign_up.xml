@@ -22,7 +22,7 @@
             android:layout_gravity="center"
             android:textColor="@color/white"
             android:textSize="30dp"
-            android:fontFamily="@font/tajawal_bold"
+            android:fontFamily="@font/poppins_bold"
              android:text="@string/signUp"
             />
     </LinearLayout>
@@ -71,7 +71,7 @@
         android:textColor="@color/sunset_orange"
         android:drawableTint="@color/sunset_orange"
         android:textSize="15sp"
-        android:fontFamily="@font/tajawal_regular"
+        android:fontFamily="@font/poppins_regular"
         android:layout_alignParentBottom="true"
         android:layout_margin="10dp"
         app:layout_constraintStart_toStartOf="parent"

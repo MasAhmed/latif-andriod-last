@@ -35,7 +35,7 @@
             android:maxWidth="90dp"
             android:text="Cats"
             android:textColor="@color/red"
-            android:fontFamily="@font/tajawal_regular"
+            android:fontFamily="@font/poppins_regular"
             android:textSize="13sp"
             android:layout_gravity="center"
             android:gravity="center"

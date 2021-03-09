@@ -5,7 +5,24 @@
     android:id="@+id/main_nav_graph"
     app:startDestination="@id/pets_fragments">
 
-    <fragment android:id="@+id/pets_fragments"
+    <fragment
+        android:id="@+id/pets_fragments"
         android:name="com.latifapp.latif.ui.main.pets.PetsFragment"
-        tools:layout="@layout/fragment_pets"/>
+        tools:layout="@layout/fragment_pets" />
+    <fragment
+        android:id="@+id/items_fragments"
+        android:name="com.latifapp.latif.ui.main.items.ItemsFragment"
+        tools:layout="@layout/fragment_items" />
+    <fragment
+        android:id="@+id/clinic_fragments"
+        android:name="com.latifapp.latif.ui.main.clinic.ClinicFragment"
+        tools:layout="@layout/fragment_clinic" />
+    <fragment
+        android:id="@+id/chat_fragments"
+        android:name="com.latifapp.latif.ui.main.chat.ChatFragment"
+        tools:layout="@layout/fragment_chat" />
+    <fragment
+        android:id="@+id/services_fragments"
+        android:name="com.latifapp.latif.ui.main.services.ServicesFragment"
+        tools:layout="@layout/fragment_services" />
 </navigation>

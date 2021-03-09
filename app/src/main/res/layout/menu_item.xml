@@ -8,7 +8,7 @@
         android:layout_height="wrap_content"
         android:text="@string/pets"
         android:textSize="18sp"
-        android:fontFamily="@font/tajawal_bold"
+        android:fontFamily="@font/poppins_bold"
         android:textColor="@color/black"
         android:id="@+id/text"/>
 </LinearLayout>

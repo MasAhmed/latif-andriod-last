@@ -12,7 +12,7 @@
     android:minHeight="40dp"
     android:textColor="@color/sunset_orange"
     android:textSize="15sp"
-    android:fontFamily="@font/tajawal_regular"
+    android:fontFamily="@font/poppins_regular"
     android:text="dogs"
     android:gravity="center"
     android:lines="1"
