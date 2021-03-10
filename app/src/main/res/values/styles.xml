@@ -8,4 +8,13 @@
     <style name="CustomBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@android:color/transparent</item>
     </style>
+    <style name="PopupMenuStyle" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:dividerHeight">1dp</item>
+        <item name="android:width">100dp</item>
+
+        <item name="android:gravity">center</item>
+          <item name="android:background">@drawable/bottom_curve_bg_red_color</item>
+        <item name="android:popupBackground">#000</item>
+     </style>
 </resources>
