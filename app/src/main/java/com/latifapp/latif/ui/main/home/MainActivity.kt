@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.core.view.GravityCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.Navigation
@@ -13,9 +14,14 @@ import com.etebarian.meowbottomnavigation.MeowBottomNavigation
 import com.latifapp.latif.R
 import com.latifapp.latif.databinding.ActivityMainBinding
 import com.latifapp.latif.ui.main.profile.ProfileActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.runBlocking
+import kotlin.coroutines.coroutineContext
 
 class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedListener,
     MenuAdapter.MenuAction {
+    private lateinit var navigation: NavController
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +36,9 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         binding.nav.add(MeowBottomNavigation.Model(4, R.drawable.ic_services))
         binding.nav.add(MeowBottomNavigation.Model(5, R.drawable.ic_writing))
         binding.nav.show(1)
-        val navigation = Navigation.findNavController(
+
+
+         navigation = Navigation.findNavController(
             this,
             R.id.fragment_container
         )
@@ -83,6 +91,12 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         when (enum) {
             MenuAdapter.MenuEnum.profile -> startActivity(
                 Intent(this, ProfileActivity::class.java))
+            MenuAdapter.MenuEnum.blogs -> navigation.navigate(R.id.blogs_fragments)
         }
+
+        runBlocking {
+            binding.drawerLayout.closeDrawers()
+        }
+
     }
 }

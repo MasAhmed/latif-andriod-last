@@ -25,4 +25,8 @@
         android:id="@+id/services_fragments"
         android:name="com.latifapp.latif.ui.main.services.ServicesFragment"
         tools:layout="@layout/fragment_services" />
+    <fragment
+        android:id="@+id/blogs_fragments"
+        android:name="com.latifapp.latif.ui.main.blogs.BlogsFragment"
+        tools:layout="@layout/fragment_blogs" />
 </navigation>

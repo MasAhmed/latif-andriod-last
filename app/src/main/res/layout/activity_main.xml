@@ -47,6 +47,7 @@
 
 
 
+
 </RelativeLayout>
 
     <com.google.android.material.navigation.NavigationView
@@ -70,7 +71,7 @@
             <ImageView
                 android:layout_width="120dp"
                 android:layout_height="100dp"
-                android:src="@drawable/latif"
+                app:srcCompat="@drawable/latif"
                 android:layout_marginTop="50dp"
 
                 />

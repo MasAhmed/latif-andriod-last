@@ -26,7 +26,7 @@
         android:layout_height="40dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:src="@drawable/ic_menu_dot"
+        app:srcCompat="@drawable/ic_menu_dot"
         android:padding="5dp"
         android:id="@+id/menuBtn"/>
 
@@ -50,7 +50,7 @@
         app:layout_constraintTop_toTopOf="@id/petName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/petName"
-        android:src="@drawable/ic_back2"
+        app:srcCompat="@drawable/ic_back2"
         android:scaleType="centerInside"
          android:id="@+id/backBtn"/>
     <androidx.core.widget.NestedScrollView
@@ -196,7 +196,7 @@
         app:layout_constraintTop_toTopOf="@id/sellerNameTxt"
         app:layout_constraintBottom_toBottomOf="@id/numAdsTxt"
         android:layout_marginStart="20dp"
-        android:src="@drawable/placeholder"
+        app:srcCompat="@drawable/placeholder"
         app:riv_oval="true"
          app:riv_border_color="@color/white"
         app:riv_border_width="0.5dp"

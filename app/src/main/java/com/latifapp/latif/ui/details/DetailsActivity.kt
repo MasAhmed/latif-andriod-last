@@ -12,6 +12,7 @@ import com.latifapp.latif.R
 import com.latifapp.latif.databinding.ActivityDetailsBinding
 import com.latifapp.latif.databinding.CallDialogBinding
 import com.latifapp.latif.databinding.TopOptionMenuBinding
+import com.latifapp.latif.ui.details.dialog.ReportDialogFragment
 
 
 class DetailsActivity : AppCompatActivity() {
@@ -67,6 +68,8 @@ class DetailsActivity : AppCompatActivity() {
                 topMenuPopUp.dismiss()
             }
             popupBinding.reportBtn.setOnClickListener {
+                // show report dialog
+                ReportDialogFragment().show(supportFragmentManager,"ReportDialog")
                 topMenuPopUp.dismiss()
             }
         }
