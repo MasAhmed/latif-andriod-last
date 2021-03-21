@@ -9,10 +9,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation
 import com.latifapp.latif.R
 import com.latifapp.latif.databinding.ActivityMainBinding
+import com.latifapp.latif.ui.filter.FilterActivity
 import com.latifapp.latif.ui.main.profile.ProfileActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
@@ -20,7 +22,8 @@ import kotlinx.coroutines.runBlocking
 import kotlin.coroutines.coroutineContext
 
 class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedListener,
-    MenuAdapter.MenuAction {
+    MenuAdapter.MenuAction, BottomNavItemsAdapter.Action {
+    private val bottomAdapter=BottomNavItemsAdapter(this@MainActivity)
     private lateinit var navigation: NavController
     private lateinit var binding: ActivityMainBinding
 
@@ -29,30 +32,24 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-        binding.nav.add(MeowBottomNavigation.Model(1, R.drawable.ic_pets))
-        binding.nav.add(MeowBottomNavigation.Model(2, R.drawable.ic_leash))
-        binding.nav.add(MeowBottomNavigation.Model(3, R.drawable.ic_clinic))
-        binding.nav.add(MeowBottomNavigation.Model(4, R.drawable.ic_services))
-        binding.nav.add(MeowBottomNavigation.Model(5, R.drawable.ic_writing))
-        binding.nav.show(1)
-
-
          navigation = Navigation.findNavController(
             this,
             R.id.fragment_container
         )
-        binding.nav.setOnClickMenuListener {
-            when (it.id) {
-                1 -> navigation.navigate(R.id.pets_fragments)
-                2 -> navigation.navigate(R.id.items_fragments)
-                3 -> navigation.navigate(R.id.clinic_fragments)
-                4 -> navigation.navigate(R.id.services_fragments)
-                5 -> navigation.navigate(R.id.chat_fragments)
-            }
+        binding.toolbar.searchBtn.setOnClickListener {
+            startActivity(Intent(this@MainActivity,FilterActivity::class.java))
         }
+
+        setBottomBarNav()
         navigation.addOnDestinationChangedListener(this)
         setMenu()
+    }
+
+    private fun setBottomBarNav() {
+        binding.bottomNavRecyclerView.apply {
+            layoutManager=GridLayoutManager(this@MainActivity,5)
+            adapter=bottomAdapter
+        }
     }
 
     private fun setMenu() {
@@ -79,11 +76,11 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         arguments: Bundle?
     ) {
         when (destination.id) {
-            R.id.pets_fragments -> binding.nav.show(1)
-            R.id.items_fragments -> binding.nav.show(2)
-            R.id.clinic_fragments -> binding.nav.show(3)
-            R.id.services_fragments -> binding.nav.show(4)
-            R.id.chat_fragments -> binding.nav.show(5)
+            R.id.pets_fragments -> bottomAdapter.show(0)
+            R.id.items_fragments -> bottomAdapter.show(1)
+            R.id.clinic_fragments -> bottomAdapter.show(2)
+            R.id.services_fragments -> bottomAdapter.show(3)
+            R.id.chat_fragments -> bottomAdapter.show(4)
         }
     }
 
@@ -91,12 +88,25 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         when (enum) {
             MenuAdapter.MenuEnum.profile -> startActivity(
                 Intent(this, ProfileActivity::class.java))
-            MenuAdapter.MenuEnum.blogs -> navigation.navigate(R.id.blogs_fragments)
-        }
+            MenuAdapter.MenuEnum.blogs -> navigation.navigate(R.id.nav_blogs_fragments)
+            MenuAdapter.MenuEnum.pets -> navigation.navigate(R.id.nav_pets_list_fragments)
+            MenuAdapter.MenuEnum.items -> navigation.navigate(R.id.nav_items_fragments)
+            MenuAdapter.MenuEnum.service -> navigation.navigate(R.id.nav_services_fragments)
+         }
 
         runBlocking {
             binding.drawerLayout.closeDrawers()
         }
 
+    }
+
+    override fun selectedItem(pos: Int) {
+         when(pos){
+             0 -> navigation.navigate(R.id.nav_pets_fragments)
+             1 -> navigation.navigate(R.id.nav_items_fragments)
+             2 -> navigation.navigate(R.id.nav_clinic_fragments)
+             3 -> navigation.navigate(R.id.nav_services_fragments)
+             4 -> navigation.navigate(R.id.nav_chat_fragments)
+         }
     }
 }

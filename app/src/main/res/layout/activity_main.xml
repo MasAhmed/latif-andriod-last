@@ -23,27 +23,29 @@
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar"
         app:defaultNavHost="true"
-       android:layout_above="@id/nav"
+       android:layout_above="@id/view1"
         app:navGraph="@navigation/main_nav_graph" />
 
 
 
-    <com.etebarian.meowbottomnavigation.MeowBottomNavigation
-        android:id="@+id/nav"
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/top_curve_bg_red_color"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/view1"
+        />
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_gravity="bottom"
-         android:background="@color/white"
-        app:mbn_backgroundBottomColor="@color/red"
-        app:mbn_circleColor="#ffffff"
-        app:mbn_countBackgroundColor="@color/red"
-         app:mbn_defaultIconColor="@color/white"
-        app:mbn_rippleColor="#2f424242"
-        app:mbn_selectedIconColor="@color/red"
-        app:mbn_shadowColor="#1f212121"
+        tools:listitem="@layout/item_bottom_nav_bar"
+        tools:itemCount="1"
+        android:id="@+id/bottomNavRecyclerView"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        />
 
-          />
 
 
 

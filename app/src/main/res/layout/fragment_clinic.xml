@@ -3,12 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".ui.main.clinic.ClinicFragment">
 
    <androidx.recyclerview.widget.RecyclerView
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        android:id="@+id/recyclerView"
+       android:layout_centerInParent="true"
        tools:listitem="@layout/clinic_item"
        android:layout_marginTop="10dp"/>
 

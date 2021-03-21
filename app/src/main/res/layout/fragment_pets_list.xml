@@ -1,14 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".ui.main.petsList.PetsListFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
-
-</FrameLayout>
+ <androidx.recyclerview.widget.RecyclerView
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     android:layout_marginStart="5dp"
+     android:layout_marginEnd="5dp"
+      android:layout_marginTop="5dp"
+     android:id="@+id/petsListRecyclerView"
+     android:layout_below="@id/petsCatgRecyclerView"
+     />
+ <View
+     android:layout_width="match_parent"
+     android:layout_height="65dp"
+     android:background="@drawable/bottom_curve_bg"
+     />
+ <androidx.recyclerview.widget.RecyclerView
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     tools:listitem="@layout/pet_item_layout"
+     tools:itemCount="1"
+     android:id="@+id/petsCatgRecyclerView"
+     android:layout_marginStart="4dp"
+     android:layout_marginEnd="4dp"
+     />
+ <TextView
+     android:layout_width="80dp"
+     android:layout_height="40dp"
+     android:layout_alignParentBottom="true"
+     android:layout_alignParentEnd="true"
+     android:layout_margin="20dp"
+     android:gravity="center"
+     android:textColor="@color/red"
+     android:text="@string/sell"
+     android:textAllCaps="false"
+     android:textSize="20sp"
+     android:elevation="3dp"
+     android:background="@drawable/btn_bg"
+     android:fontFamily="@font/poppins_bold"
+     />
+</RelativeLayout>

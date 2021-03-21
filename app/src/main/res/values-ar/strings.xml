@@ -1,2 +1,56 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="app_name">Latif</string>
+    <string name="user_name">اسم المستخدم</string>
+    <string name="password">كلمة المرور</string>
+    <string name="login">تسجيل الدخول</string>
+    <string name="signUp">تسجيل حساب</string>
+    <string name="interests">اهتمامك</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="name">الاسم</string>
+    <string name="email">البريد الالكتروني</string>
+    <string name="address">العنوان</string>
+    <string name="phone">رقم الموبايل</string>
+    <string name="country">البلد</string>
+    <string name="city">المدينة</string>
+    <string name="governorate">المحافظة</string>
+    <string name="policy">سياسة التطبيق</string>
+    <string name="back">رجوع</string>
+    <string name="policy_title">سياية و معايير التطبيق</string>
+    <string name="policy_checkbox_txt">اوافق ..</string>
+    <string name="choose_interest">اختر اهتماماتك</string>
+    <string name="done">تم</string>
+    <string name="chat">المحادثة</string>
+    <string name="service">خدمات</string>
+    <string name="clinic">العيادة</string>
+    <string name="blogs">مقالات</string>
+    <string name="pets">حيوانات اليفة</string>
+    <string name="items">اكسسورات</string>
+    <string name="profile">الحساب</string>
+    <string name="sell">بيع</string>
+    <string name="price">الثمن</string>
+    <string name="date">التاريخ</string>
+    <string name="location">الموقع</string>
+    <string name="birthday">تاريخ الميلاد</string>
+    <string name="gender">الجنس</string>
+    <string name="myAds">اعلاناتي</string>
+    <string name="language">اللغة</string>
+    <string name="call">مكالمة</string>
+    <string name="sms">SMS</string>
+    <string name="reportAd">الإبلاغ عن الإعلان</string>
+    <string name="share">مشاركة</string>
+    <string name="subscribe">الاشتراك</string>
+    <string name="reason">السبب</string>
+    <string name="veterinary">عيادة بيطرية</string>
+    <string name="pharmacy">الصيدلية و الادوية</string>
+    <string name="housing">مسكن</string>
+    <string name="hostelry">ضيافة</string>
+    <string name="delivery">التوصيل</string>
+    <string name="shower">الاستحمام وقص الشعر</string>
+    <string name="filter">فلتر</string>
+    <string name="whatULookingFor">عما تبحث؟</string>
+    <string name="priceRange">يتراوح السعر</string>
+    <string name="applyFilter">اجراء الفلتر</string>
+    <string name="send">ارسال</string>
+    <string name="typeMsg">اكتب الرسالة الخاصة بك ..</string>
+</resources>

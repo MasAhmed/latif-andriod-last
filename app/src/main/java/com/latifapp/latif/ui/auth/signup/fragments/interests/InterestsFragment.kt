@@ -1,5 +1,6 @@
 package com.latifapp.latif.ui.auth.signup.fragments.interests
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import com.latifapp.latif.R
 import com.latifapp.latif.databinding.FragmentInterestsBinding
+import com.latifapp.latif.ui.main.home.MainActivity
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -36,6 +38,11 @@ class InterestsFragment : Fragment() {
         binding.recyclerView.apply {
             layoutManager=GridLayoutManager(activity,3)
             adapter=adapter_
+        }
+
+
+        binding.doneBtn.setOnClickListener {
+            startActivity(Intent(context, MainActivity::class.java))
         }
     }
 

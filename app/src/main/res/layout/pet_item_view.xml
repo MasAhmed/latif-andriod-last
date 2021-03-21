@@ -6,7 +6,8 @@
     app:cardCornerRadius="15dp"
     android:layout_marginStart="5dp"
     android:layout_marginEnd="5dp"
-    android:layout_marginTop="10dp">
+    android:layout_marginBottom="10dp"
+    android:layout_marginTop="2dp">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/sunset_orange"
-            android:textSize="16sp"
+            android:textSize="17sp"
             android:text="Dog 1"
             android:fontFamily="@font/tajawal_bold"
             app:layout_constraintTop_toTopOf="parent"
@@ -77,7 +78,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:background="@drawable/select_bg"
-            android:drawableStart="@drawable/ic_report"
+            android:drawableStart="@drawable/ic_report_white"
             android:drawableTint="@color/white"
             android:drawablePadding="3dp"
             android:gravity="center"

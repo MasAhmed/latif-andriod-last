@@ -18,9 +18,11 @@
         android:gravity="center_vertical"
         >
     <ImageView
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         app:srcCompat="@drawable/hostel"
+        android:scaleType="centerInside"
+        android:id="@+id/image"
         />
     <TextView
         android:layout_width="wrap_content"
@@ -30,6 +32,7 @@
          android:fontFamily="@font/poppins_bold"
         android:layout_marginStart="10dp"
         android:gravity="center"
+        android:id="@+id/title"
         android:textSize="17sp"/>
     </LinearLayout>
     <View

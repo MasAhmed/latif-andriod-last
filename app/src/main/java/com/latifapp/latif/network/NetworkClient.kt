@@ -1,14 +1,10 @@
 package com.example.postsapplication.network
 
 import android.util.Log
-import androidx.annotation.Nullable
-import androidx.hilt.Assisted
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityComponent
-import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.components.SingletonComponent
 import okhttp3.HttpUrl
 import okhttp3.Interceptor
@@ -16,7 +12,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.security.SecureRandom
 import java.security.cert.X509Certificate
@@ -48,7 +43,7 @@ object NetworkClient {
 
     @Provides
     @Singleton
-    fun getNetworkService( retrofit: Retrofit): NetworkApis {
+    fun getNetworkService(retrofit: Retrofit): NetworkApis {
         return retrofit.create(NetworkApis::class.java)
     }
 

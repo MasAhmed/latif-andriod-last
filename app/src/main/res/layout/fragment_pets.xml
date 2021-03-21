@@ -13,11 +13,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
    />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        app:srcCompat="@drawable/ic_pin"
+        android:id="@+id/pin"/>
+
+
 
     <View
         android:layout_width="match_parent"
         android:layout_height="65dp"
-        android:background="@drawable/bottom_curve_bg_red_color"
+        android:background="@drawable/bottom_curve_bg"
         />
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
@@ -43,10 +51,5 @@
         android:background="@drawable/btn_bg"
          android:fontFamily="@font/poppins_bold"
         />
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        app:srcCompat="@drawable/ic_pin"
-        android:id="@+id/pin"/>
+
 </RelativeLayout>

@@ -12,6 +12,7 @@ import com.latifapp.latif.R
 import com.latifapp.latif.databinding.ActivityDetailsBinding
 import com.latifapp.latif.databinding.CallDialogBinding
 import com.latifapp.latif.databinding.TopOptionMenuBinding
+
 import com.latifapp.latif.ui.details.dialog.ReportDialogFragment
 
 
@@ -38,7 +39,9 @@ class DetailsActivity : AppCompatActivity() {
             topMenuDialogShow(it)
 
         }
-
+        binding.backBtn.setOnClickListener {
+            onBackPressed()
+        }
         setListOfImages()
     }
 

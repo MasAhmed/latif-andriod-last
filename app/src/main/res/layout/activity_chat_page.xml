@@ -1,9 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/details_bg"
     tools:context=".ui.main.chat.chatPage.ChatPageActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/pippin"
+        android:orientation="horizontal"
+        android:id="@+id/toolbar"
+        android:padding="8dp"
+        android:gravity="center_vertical"
+        android:elevation="3dp"
+        >
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_back2"
+            android:id="@+id/backBtn"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            app:riv_oval="true"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="8dp"
+            app:riv_mutate_background="true"
+            android:src="@drawable/ic_person"
+             android:id="@+id/image"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_regular"
+            android:textColor="@color/sunset_orange"
+            android:text="sara ahmed"
+            android:textSize="13sp"
+            android:lines="1"
+            android:id="@+id/nameTxt"
+             />
+    </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/list"
+        android:layout_below="@id/toolbar"
+        android:layout_above="@id/writeContainer"
+        tools:itemCount="5"
+        tools:listitem="@layout/chat_send_item"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="#C6FFE0E0"
+        android:orientation="horizontal"
+        android:id="@+id/writeContainer"
+        android:layout_alignParentBottom="true"
+        android:minHeight="70dp"
+        android:gravity="center_vertical"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:elevation="3dp"
+        >
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext_bg"
+            android:minHeight="40dp"
+            android:layout_weight="1"
+            android:elevation="1dp"
+            android:inputType="textMultiLine"
+            android:hint="@string/typeMsg"
+            android:fontFamily="@font/tajawal_regular"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:scrollbars="vertical"
+            android:id="@+id/typeMsg"
+            android:maxLines="2"
+             />
+        <View
+            android:layout_width="15dp"
+            android:layout_height="1dp"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/send"
+            android:fontFamily="@font/tajawal_bold"
+            android:backgroundTint="@color/sunset_orange"
+            android:textAllCaps="false"
+            android:id="@+id/sendBtn"/>
+
+
+
+    </LinearLayout>
+</RelativeLayout>

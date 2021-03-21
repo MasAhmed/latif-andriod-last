@@ -1,5 +1,6 @@
 package com.latifapp.latif.ui.main.pets.bottomDialog
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.latifapp.latif.R
 import com.latifapp.latif.databinding.FragmentBottomDialogBinding
+import com.latifapp.latif.ui.details.DetailsActivity
 import com.latifapp.latif.ui.details.PetImageAdapter
 import kotlinx.android.synthetic.main.fragment_bottom_dialog.*
 
@@ -41,6 +43,10 @@ class BottomDialogFragment : BottomSheetDialogFragment() {
         binding.recyclerView.apply {
             layoutManager=LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
             adapter= PetImageAdapter()
+        }
+
+        binding.title.setOnClickListener {
+            startActivity(Intent(context,DetailsActivity::class.java))
         }
      }
 
