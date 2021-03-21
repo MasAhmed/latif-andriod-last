@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+     android:orientation="vertical"
+    android:gravity="center"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+         android:orientation="vertical"
+        android:background="@drawable/gray_cr"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center"
+        app:cardBackgroundColor="@color/red"
+         app:cardCornerRadius="25dp"
+        android:elevation="3dp"
+        >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="4dp"
+            android:padding="5dp"
+            android:id="@+id/rootv"
+            android:gravity="center"
+            android:elevation="2dp"
+            android:background="@drawable/pink_cr"
+
+            >
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                app:srcCompat="@drawable/ic_cat"
+                android:tint="@color/red"
+                android:id="@+id/image"
+                />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:lines="1"
+        android:maxWidth="90dp"
+        android:text="Cats"
+        android:textColor="@color/white"
+        android:fontFamily="@font/poppins_regular"
+        android:textSize="13sp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:id="@+id/text"
+        android:layout_marginBottom="3dp"
+        />
+</LinearLayout>
