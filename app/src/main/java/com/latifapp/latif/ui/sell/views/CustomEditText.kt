@@ -3,16 +3,26 @@ package com.latifapp.latif.ui.sell.views
 import android.content.Context
 import android.graphics.Color
 import android.text.Editable
+import android.text.InputType
 import android.text.TextWatcher
 import android.widget.EditText
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.DrawableCompat
-import com.google.android.material.textfield.TextInputLayout
 import com.latifapp.latif.R
 
-class CustomEditText(context_: Context, label: String, action: ViewAction<String>) : CustomParentView<String>(context_, label,action),
+
+class CustomEditText(
+    context_: Context,
+    label: String,
+    val isText: Boolean,
+    action: ViewAction<String>
+) : CustomParentView<String>(
+    context_,
+    label,
+    action
+),
     TextWatcher {
     override fun createView() {
         val editText = EditText(context)
@@ -33,6 +43,7 @@ class CustomEditText(context_: Context, label: String, action: ViewAction<String
                 ContextCompat.getColor(context, R.color.yellow_orange)
             )
             addTextChangedListener(this@CustomEditText)
+            inputType = if (!isText) InputType.TYPE_CLASS_NUMBER else InputType.TYPE_CLASS_TEXT
         }
 
     }
@@ -43,8 +54,8 @@ class CustomEditText(context_: Context, label: String, action: ViewAction<String
 
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
         action?.getActionId(s.toString())
-     }
+    }
 
     override fun afterTextChanged(s: Editable?) {
-     }
+    }
 }

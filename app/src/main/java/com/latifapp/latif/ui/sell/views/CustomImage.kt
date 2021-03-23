@@ -1,0 +1,30 @@
+package com.latifapp.latif.ui.sell.views
+
+import android.content.Context
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.ImageView
+import android.widget.LinearLayout
+import com.latifapp.latif.databinding.CustomImageBinding
+import com.latifapp.latif.ui.sell.ImagesAdapter
+import com.makeramen.roundedimageview.RoundedImageView
+
+class CustomImage (context_: Context, label: String, action: ViewAction<ImageView>) :
+    CustomParentView<ImageView>(context_, label,action){
+    override fun createView() {
+        val image=CustomImageBinding.inflate(LayoutInflater.from(context))
+        view=image.apply {
+            val params = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+
+            params.setMargins(0, 20, 0, 5)
+            root.layoutParams = params
+            imageview?.setOnClickListener {
+                action?.getActionId(imageview!!)
+            }
+        }.root
+
+    }
+}

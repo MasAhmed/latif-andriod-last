@@ -2,8 +2,10 @@ package com.latifapp.latif.ui.sell.views
 
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.LinearLayout
+import android.widget.Switch
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.github.angads25.toggle.interfaces.OnToggledListener
@@ -18,7 +20,6 @@ class CustomSwitch(context_: Context, label: String,action :ViewAction<Boolean>)
     override fun createView() {
         val switch = SwitchlayoutBinding.inflate(LayoutInflater.from(context))
 
-            LabeledSwitch(context)
         switch.apply {
             labelTxt.text=label
             val params = LinearLayout.LayoutParams(
@@ -29,6 +30,7 @@ class CustomSwitch(context_: Context, label: String,action :ViewAction<Boolean>)
             root.layoutParams = params
             switchBtn.setOnToggledListener(this@CustomSwitch)
          }
+
 
         view=switch.root
     }

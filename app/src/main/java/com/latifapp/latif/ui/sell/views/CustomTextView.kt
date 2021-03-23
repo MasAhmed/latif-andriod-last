@@ -26,6 +26,7 @@ class CustomTextView(context_: Context, label: String) :
             typeface= ResourcesCompat.getFont(context, R.font.poppins_medium)
             params.setMargins(0, 40, 0, 5)
             layoutParams = params
+
         }
 
     }

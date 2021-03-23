@@ -53,4 +53,9 @@
     <string name="applyFilter">اجراء الفلتر</string>
     <string name="send">ارسال</string>
     <string name="typeMsg">اكتب الرسالة الخاصة بك ..</string>
+    <string name="addphoto">Add image</string>
+    <string name="placeyourAd">Place this ad</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="cancel_">Cancel</string>
 </resources>
