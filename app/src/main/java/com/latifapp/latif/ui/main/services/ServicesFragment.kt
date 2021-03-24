@@ -8,6 +8,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.latifapp.latif.R
 import com.latifapp.latif.databinding.FragmentServicesBinding
+import com.latifapp.latif.ui.base.BaseFragment
+import com.latifapp.latif.ui.main.blogs.BlogsViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -19,6 +22,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [ServicesFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+@AndroidEntryPoint
 class ServicesFragment : Fragment() {
 
 

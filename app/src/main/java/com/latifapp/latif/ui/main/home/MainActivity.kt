@@ -16,11 +16,12 @@ import com.latifapp.latif.R
 import com.latifapp.latif.databinding.ActivityMainBinding
 import com.latifapp.latif.ui.filter.FilterActivity
 import com.latifapp.latif.ui.main.profile.ProfileActivity
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
 import kotlin.coroutines.coroutineContext
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedListener,
     MenuAdapter.MenuAction, BottomNavItemsAdapter.Action {
     private val bottomAdapter=BottomNavItemsAdapter(this@MainActivity)

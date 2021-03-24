@@ -3,17 +3,17 @@ package com.latifapp.latif.ui.auth.login
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.LayoutInflater
 import com.latifapp.latif.databinding.ActivityLoginBinding
 import com.latifapp.latif.ui.auth.signup.SignUpActivity
+import com.latifapp.latif.ui.base.BaseActivity
 import com.latifapp.latif.ui.main.home.MainActivity
 
-class LoginActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityLoginBinding
+class LoginActivity :BaseActivity<LoginViewModel,ActivityLoginBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityLoginBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+
 
         binding.signUpBtn.setOnClickListener {
             startActivity(Intent(this,SignUpActivity::class.java))
@@ -22,4 +22,17 @@ class LoginActivity : AppCompatActivity() {
             startActivity(Intent(this,MainActivity::class.java))
         }
      }
+
+    override fun setBindingView(inflater: LayoutInflater): ActivityLoginBinding {
+        return  ActivityLoginBinding.inflate(inflater)
+
+    }
+
+    override fun showLoader() {
+        TODO("Not yet implemented")
+    }
+
+    override fun hideLoader() {
+        TODO("Not yet implemented")
+    }
 }

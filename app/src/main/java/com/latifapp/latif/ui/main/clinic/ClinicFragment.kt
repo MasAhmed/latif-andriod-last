@@ -7,7 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
  import com.latifapp.latif.databinding.FragmentClinicBinding
+import com.latifapp.latif.ui.base.BaseFragment
+import com.latifapp.latif.ui.main.blogs.BlogsViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ClinicFragment : Fragment() {
 
 

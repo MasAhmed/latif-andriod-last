@@ -9,9 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.latifapp.latif.databinding.FragmentChatHistoryListBinding
+import com.latifapp.latif.ui.base.BaseFragment
+import com.latifapp.latif.ui.main.blogs.BlogsViewModel
 import com.latifapp.latif.ui.main.chat.chatPage.ChatPageActivity
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class ChatHistoryListFragment : Fragment(), ChatHistoryListAdapter.Action {
 
     private lateinit var binding: FragmentChatHistoryListBinding

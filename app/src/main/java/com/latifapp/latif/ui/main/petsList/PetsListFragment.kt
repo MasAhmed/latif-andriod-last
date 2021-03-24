@@ -8,8 +8,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.latifapp.latif.R
 import com.latifapp.latif.databinding.FragmentPetsListBinding
+import com.latifapp.latif.ui.base.BaseFragment
+import com.latifapp.latif.ui.main.blogs.BlogsViewModel
 import com.latifapp.latif.ui.main.pets.PetsAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PetsListFragment : Fragment() {
     private lateinit var binding:FragmentPetsListBinding
 

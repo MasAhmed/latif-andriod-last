@@ -25,7 +25,7 @@ import javax.net.ssl.X509TrustManager
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkClient {
-    val BASE_URL = "https://jsonplaceholder.typicode.com/"
+    val BASE_URL = "https://latifapp.herokuapp.com/"
     private val TIMEOUT_MIN = 2
 
 

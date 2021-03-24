@@ -20,8 +20,12 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.latifapp.latif.R
 import com.latifapp.latif.databinding.FragmentPetsBinding
+import com.latifapp.latif.ui.base.BaseFragment
+import com.latifapp.latif.ui.main.blogs.BlogsViewModel
 import com.latifapp.latif.ui.main.pets.bottomDialog.BottomDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PetsFragment : Fragment() {
 
     private lateinit var binding: FragmentPetsBinding
