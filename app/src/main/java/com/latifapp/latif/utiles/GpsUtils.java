@@ -1,15 +1,20 @@
 package com.latifapp.latif.utiles;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.IntentSender;
+import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.Location;
 import android.location.LocationManager;
 
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -21,13 +26,17 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+
 import static android.content.ContentValues.TAG;
+import static com.latifapp.latif.utiles.AppConstants.GPS_REQUEST;
+
 public class GpsUtils {
     private Context context;
     private SettingsClient mSettingsClient;
     private LocationSettingsRequest mLocationSettingsRequest;
     private LocationManager locationManager;
     private LocationRequest locationRequest;
+
     public GpsUtils(Context context) {
         this.context = context;
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
@@ -43,13 +52,16 @@ public class GpsUtils {
         builder.setAlwaysShow(true); //this is the key ingredient
         //**************************
     }
+
     // method for turn on GPS
     public void turnGPSOn(onGpsListener onGpsListener) {
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             if (onGpsListener != null) {
-                onGpsListener.gpsStatus(true);
+                onGpsListener.gpsStatus(true, getCurrentLocation(locationManager));
+
             }
         } else {
+
             mSettingsClient
                     .checkLocationSettings(mLocationSettingsRequest)
                     .addOnSuccessListener((Activity) context, new OnSuccessListener<LocationSettingsResponse>() {
@@ -58,7 +70,7 @@ public class GpsUtils {
                         public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
 //  GPS is already enable, callback GPS status through listener
                             if (onGpsListener != null) {
-                                onGpsListener.gpsStatus(true);
+                                onGpsListener.gpsStatus(true, getCurrentLocation(locationManager));
                             }
                         }
                     })
@@ -72,22 +84,40 @@ public class GpsUtils {
                                         // Show the dialog by calling startResolutionForResult(), and check the
                                         // result in onActivityResult().
                                         ResolvableApiException rae = (ResolvableApiException) e;
-                                        rae.startResolutionForResult((Activity) context, 5);
+                                        rae.startResolutionForResult((Activity) context, GPS_REQUEST);
                                     } catch (IntentSender.SendIntentException sie) {
                                         Log.i(TAG, "PendingIntent unable to execute request.");
                                     }
                                     break;
                                 case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                                    String errorMessage = "Location settings are inadequate, and cannot be " +
-                                            "fixed here. Fix in Settings.";
+                                    String errorMessage = "Please turn on GPS ...";
                                     Log.e(TAG, errorMessage);
                                     Toast.makeText((Activity) context, errorMessage, Toast.LENGTH_LONG).show();
                             }
+                            onGpsListener.gpsStatus(false, null);
                         }
                     });
         }
     }
+
+    public Location getCurrentLocation(LocationManager locationManager) {
+        try {
+            String bestProvider = String.valueOf(locationManager.getBestProvider(new Criteria(), false));
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                    PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
+                            != PackageManager.PERMISSION_GRANTED) {
+
+                return null;
+            }
+            Location mLocation = locationManager.getLastKnownLocation(bestProvider);
+            return mLocation;
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
     public interface onGpsListener {
-        void gpsStatus(boolean isGPSEnable);
+        void gpsStatus(boolean isGPSEnable, Location mLocation);
     }
 }

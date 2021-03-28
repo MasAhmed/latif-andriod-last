@@ -58,4 +58,5 @@
     <string name="camera">Camera</string>
     <string name="gallery">Gallery</string>
     <string name="cancel_">Cancel</string>
+    <string name="ads_types">Ads type</string>
 </resources>

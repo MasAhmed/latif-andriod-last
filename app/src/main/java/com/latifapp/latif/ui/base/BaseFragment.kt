@@ -20,15 +20,18 @@ import com.google.android.material.snackbar.Snackbar
 import com.latifapp.latif.R
 import com.latifapp.latif.databinding.FragmentBlogsBinding
 import com.latifapp.latif.databinding.ToastMsgBinding
+import kotlinx.coroutines.Dispatchers
 
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
-open abstract class BaseFragment<T : BaseViewModel, B : ViewBinding>() : Fragment(), BaseView<B> {
+open abstract class BaseFragment<viewmodel : BaseViewModel, viewbinding : ViewBinding>() :
+    Fragment(), BaseView<viewbinding> {
     @Inject
-    lateinit var viewModel: T
-    public lateinit var binding: B
+    lateinit var viewModel: viewmodel
+    public lateinit var binding: viewbinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,13 +55,16 @@ open abstract class BaseFragment<T : BaseViewModel, B : ViewBinding>() : Fragmen
         }
 
         lifecycleScope.launchWhenStarted {
-            viewModel.loader_.collect {
-                if (it)
-                    showLoader()
-                else hideLoader()
-            }
+            withContext(Dispatchers.Main) {
+                viewModel.loader_.collect {
+                    if (it)
+                        showLoader()
+                    else hideLoader()
+                }
+
         }
     }
+}
 
 
 }

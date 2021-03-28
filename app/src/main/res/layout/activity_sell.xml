@@ -46,11 +46,24 @@
             android:layout_height="match_parent"
             android:padding="12dp"
             >
+            <AutoCompleteTextView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="@string/ads_types"
+                android:fontFamily="@font/poppins_regular"
+                android:id="@+id/adsTypeSpinner"
+                android:layout_marginBottom="5dp"
+                android:inputType="none"
+                android:gravity="center_vertical"
+                android:background="@drawable/bg_drop_down"
+                />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:id="@+id/container"
+                android:layout_below="@id/adsTypeSpinner"
                  >
 
             </LinearLayout>
@@ -75,4 +88,7 @@
                 />
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
+    <include layout="@layout/loader_"
+        android:id="@+id/loader_"
+        />
 </RelativeLayout>

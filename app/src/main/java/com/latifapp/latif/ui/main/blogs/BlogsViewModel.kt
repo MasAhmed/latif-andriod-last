@@ -22,7 +22,7 @@ class BlogsViewModel @Inject constructor(val repo: DataRepo) : BaseViewModel("en
         viewModelScope.launch(Dispatchers.IO) {
             val result = repo.getBlogsList()
             when (result) {
-                is ResultWrapper.Success -> flow_.value = result.value
+                is ResultWrapper.Success -> flow_.value = result.value.response.data!!
                 else -> getErrorMsg(result)
             }
             loader.value=false

@@ -2,6 +2,7 @@ package com.latifapp.latif.ui.base
 
 import androidx.lifecycle.ViewModel
 import com.latifapp.latif.data.models.BlogsModel
+import com.latifapp.latif.data.models.ResponseModel
 import com.latifapp.latif.network.ResultWrapper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,7 +20,7 @@ open class BaseViewModel(val lang: String) : ViewModel() {
         get() = loader
 
 
-    protected fun getErrorMsg(result: ResultWrapper<List<BlogsModel>>) {
+    protected fun getErrorMsg(result: ResultWrapper<Any>) {
         when (result) {
             is ResultWrapper.NetworkError -> errorMsg.value =
                 if (lang.equals("en")) networkErrorMsgEn else networkErrorMsgAr

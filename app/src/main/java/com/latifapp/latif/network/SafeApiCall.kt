@@ -39,7 +39,7 @@ import javax.inject.Inject
                 moshiAdapter.fromJson(it)
             }
         } catch (exception: Exception) {
-            null
+            ErrorResponse()
         }
     }
 

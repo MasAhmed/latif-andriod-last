@@ -45,12 +45,24 @@ object Permissions {
     }
 
     fun checkLocationPermissions(context: Context): Boolean {
-        if (ContextCompat.checkSelfPermission(context,
-                Manifest.permission.ACCESS_FINE_LOCATION) !==
-            PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(context as Activity,
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
-              return false
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            )
+            != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                context,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    context as Activity,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) || ActivityCompat.shouldShowRequestPermissionRationale(
+                    context as Activity,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+            ) {
+                return false
             } else {
                 return false
             }
@@ -58,31 +70,30 @@ object Permissions {
         }
         return true
 
-        }
-
-
-
-        fun showPermissionsDialog(
-            context: Context?,
-            message: String?,
-            permissionsArray: Array<String>,
-            requestID: Int
-        ) {
-            val alertBuilder = AlertDialog.Builder(context)
-            alertBuilder.setCancelable(true)
-            alertBuilder.setTitle("Permission necessary")
-            alertBuilder.setMessage(message)
-            //request permission to allow
-            alertBuilder.setPositiveButton(
-                android.R.string.ok
-            ) { dialog: DialogInterface?, which: Int ->
-                ActivityCompat.requestPermissions(
-                    (context as Activity?)!!,
-                    permissionsArray!!,
-                    requestID
-                )
-            }
-            val alert = alertBuilder.create()
-            alert.show()
-        }
     }
+
+
+    fun showPermissionsDialog(
+        context: Context?,
+        message: String?,
+        permissionsArray: Array<String>,
+        requestID: Int
+    ) {
+        val alertBuilder = AlertDialog.Builder(context)
+        alertBuilder.setCancelable(true)
+        alertBuilder.setTitle("Permission necessary")
+        alertBuilder.setMessage(message)
+        //request permission to allow
+        alertBuilder.setPositiveButton(
+            android.R.string.ok
+        ) { dialog: DialogInterface?, which: Int ->
+            ActivityCompat.requestPermissions(
+                (context as Activity?)!!,
+                permissionsArray!!,
+                requestID
+            )
+        }
+        val alert = alertBuilder.create()
+        alert.show()
+    }
+}

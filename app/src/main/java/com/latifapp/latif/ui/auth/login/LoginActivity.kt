@@ -8,7 +8,9 @@ import com.latifapp.latif.databinding.ActivityLoginBinding
 import com.latifapp.latif.ui.auth.signup.SignUpActivity
 import com.latifapp.latif.ui.base.BaseActivity
 import com.latifapp.latif.ui.main.home.MainActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginActivity :BaseActivity<LoginViewModel,ActivityLoginBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,10 +31,8 @@ class LoginActivity :BaseActivity<LoginViewModel,ActivityLoginBinding>() {
     }
 
     override fun showLoader() {
-        TODO("Not yet implemented")
-    }
+     }
 
     override fun hideLoader() {
-        TODO("Not yet implemented")
-    }
+     }
 }

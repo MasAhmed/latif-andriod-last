@@ -1,6 +1,7 @@
 package com.latifapp.latif.ui.map
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +9,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.latifapp.latif.R
+import com.latifapp.latif.utiles.AppConstants
 import com.latifapp.latif.utiles.GpsUtils
 import com.latifapp.latif.utiles.Permissions
 
@@ -40,16 +42,20 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 0
             )
         } else {
-
             mMap.setMyLocationEnabled(true)
         }
 
 
     }
-
-    private fun turnGPSOn() {
-        GpsUtils(this).turnGPSOn { isGPSEnable -> // turn on GPS
-            Log.d("dndnndndndnnd","$isGPSEnable")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK && requestCode == AppConstants.GPS_REQUEST) {
+             // flag maintain before get location
         }
+
+    }
+    private fun turnGPSOn() {
+        GpsUtils(this).turnGPSOn {  isGPSEnable,mlocation -> // turn on GPS
+         }
     }
 }

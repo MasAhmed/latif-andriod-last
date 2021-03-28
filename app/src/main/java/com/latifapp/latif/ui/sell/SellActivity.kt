@@ -4,21 +4,22 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.ImageView
-import android.widget.Toast
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.latifapp.latif.R
+import com.latifapp.latif.data.models.AdsTypeModel
 import com.latifapp.latif.data.models.RequireModel
-import com.latifapp.latif.data.models.SellModel
 import com.latifapp.latif.databinding.ActivitySellBinding
+import com.latifapp.latif.ui.base.BaseActivity
 import com.latifapp.latif.ui.map.MapsActivity
 import com.latifapp.latif.ui.sell.views.*
 import com.latifapp.latif.utiles.Permissions
@@ -27,124 +28,76 @@ import com.latifapp.latif.utiles.getRealPathFromGallery
 import com.nguyenhoanglam.imagepicker.model.Config
 import com.nguyenhoanglam.imagepicker.model.Image
 import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker
-import kotlinx.coroutines.flow.StateFlow
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import java.io.File
-import java.util.ArrayList
+import java.util.*
 
-class SellActivity : AppCompatActivity() {
-    private lateinit var binding: ActivitySellBinding
+@AndroidEntryPoint
+class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
+     AdapterView.OnItemClickListener {
+
+    private lateinit var typeList: List<AdsTypeModel>
     private var items = arrayOf<String>()
     private lateinit var liveData: MutableLiveData<MutableList<String>>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySellBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.getAdsTypeList().collect {
+                typeList=it
+
+                val list_ = it.map { it.name }
+                val arrayAdapter = this@SellActivity?.let {
+                    ArrayAdapter<String>(
+                        it, android.R.layout.simple_list_item_1, list_
+                    )
+                }
+                binding.adsTypeSpinner.apply {
+                    setAdapter(arrayAdapter)
+                    setOnClickListener {
+                        showDropDown()
+                    }
+                    onItemClickListener =this@SellActivity
+
+                }
+            }
+
+        }
+
         items = arrayOf<String>(
             getString(R.string.camera),
             getString(R.string.gallery),
             getString(R.string.cancel_)
         )
-        val model = SellModel(
-            "",
-            listOf(
-                RequireModel(
-                    type = "String",
-                    required = true,
-                    name = "Code",
-                    label = "Code"
-                ),
-                RequireModel(
-                    type = "select",
-                    required = true,
-                    name = "training",
-                    label = "training",
-                    options = listOf("ncn", "ncnckc", "kckckc")
-                ),
-                RequireModel(
-                    type = "boolean",
-                    required = true,
-                    name = "playWithKids",
-                    label = "play With Kids"
-                ),
-                RequireModel(
-                    type = "boolean",
-                    required = true,
-                    name = "playWithKids",
-                    label = "play With Kids"
-                ),
-                RequireModel(
-                    type = "boolean",
-                    required = true,
-                    name = "playWithKids",
-                    label = "play With Kids"
-                ),
-                RequireModel(
-                    type = "boolean",
-                    required = true,
-                    name = "playWithKids",
-                    label = "play With Kids"
-                ), RequireModel(
-                    type = "select",
-                    required = true,
-                    name = "training",
-                    label = "training",
-                    options = listOf("ncn", "ncnckc", "kckckc")
-                ), RequireModel(
-                    type = "select",
-                    required = true,
-                    name = "training",
-                    label = "training",
-                    options = listOf("ncn", "ncnckc", "kckckc")
-                ), RequireModel(
-                    type = "select",
-                    required = true,
-                    name = "training",
-                    label = "training",
-                    options = listOf("ncn", "ncnckc", "kckckc")
-                ),
-                RequireModel(
-                    type = "String",
-                    required = true,
-                    name = "Code",
-                    label = "Code"
-                ), RequireModel(
-                    type = "int",
-                    required = true,
-                    name = "Code",
-                    label = "Code number"
-                ), RequireModel(
-                    type = "fileList",
-                    required = true,
-                    name = "Code",
-                    label = "Code"
-                ), RequireModel(
-                    type = "file",
-                    required = true,
-                    name = "Code",
-                    label = "Code"
-                ), RequireModel(
-                    type = "map",
-                    required = true,
-                    name = "Code",
-                    label = "Code"
-                )
-            )
-        )
 
-        for (model_ in model.list)
+
+    }
+
+    private fun getForm(type: String?) {
+        lifecycleScope.launchWhenStarted {
+            viewModel.getCreateForm(type!!).collect {
+                if (!it.form.isNullOrEmpty()) {
+                    setFormViews(it.form)
+                }
+            }
+        }
+    }
+
+    private fun setFormViews(form: List<RequireModel>) {
+        for (model_ in form)
             when (model_.type) {
                 "boolean" -> createSwitch(model_)
-                "int" -> createEditText(model_)
-                "String" -> createEditText(model_)
+
                 "fileList" -> createImagesList(model_)
                 "file" -> createImage(model_)
                 "select" -> createSpinner(model_)
                 "map" -> createMapBtn(model_)
+                else  -> createEditText(model_)
+
 
             }
-
     }
 
     private fun createMapBtn(model: RequireModel) {
@@ -160,7 +113,7 @@ class SellActivity : AppCompatActivity() {
                 )
             } else {
 
-                startActivity(Intent(this,MapsActivity::class.java))
+                startActivity(Intent(this, MapsActivity::class.java))
             }
         }
     }
@@ -201,7 +154,8 @@ class SellActivity : AppCompatActivity() {
 
 
     fun createEditText(model: RequireModel) {
-        val text = CustomEditText(this, model.label!!,model.type.equals("String"), object :
+        if (model.label.isNullOrEmpty())return
+        val text = CustomEditText(this, model.label!!, model.type.equals("String"), object :
             CustomParentView.ViewAction<String> {
             override fun getActionId(text: String) {
 
@@ -335,5 +289,24 @@ class SellActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun setBindingView(inflater: LayoutInflater): ActivitySellBinding {
+        return ActivitySellBinding.inflate(inflater)
+    }
+
+    override fun showLoader() {
+        binding.loader.bar.visibility = View.VISIBLE
+    }
+
+    override fun hideLoader() {
+
+        binding.loader.bar.visibility = View.GONE
+    }
+
+
+
+    override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        getForm(typeList.get(position).name)
     }
 }
