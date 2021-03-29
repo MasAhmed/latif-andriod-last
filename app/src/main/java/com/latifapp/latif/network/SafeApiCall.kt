@@ -1,6 +1,7 @@
 package com.latifapp.latif.network
 
 import android.util.Log
+import com.latifapp.latif.utiles.Utiles
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -15,13 +16,13 @@ import javax.inject.Inject
             try {
                 ResultWrapper.Success(apiCall.invoke())
             } catch (throwable: Throwable) {
-                Log.d("dndndndndndnd","$throwable")
+                Utiles.log_D("dndndndndndnd","$throwable")
                 when (throwable) {
                     is IOException -> ResultWrapper.NetworkError
                     is HttpException -> {
                         val code = throwable.code()
                         val errorResponse = convertErrorBody(throwable)
-                        Log.d("dndndndndndnd","$errorResponse  $code")
+                        Utiles.log_D("dndndndndndnd","$errorResponse  $code")
                         ResultWrapper.GenericError(code, errorResponse)
                     }
                     else -> {

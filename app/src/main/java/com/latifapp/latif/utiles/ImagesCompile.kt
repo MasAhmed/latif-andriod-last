@@ -40,7 +40,7 @@ fun Uri.getRealPathFromGallery(activity: Context?):String{
         return getRealPathFromURI(uri, activity!!)!!
     } catch (e: Exception) {
         e.printStackTrace()
-        Log.d("mvmvmvmmvmv", e.message!!)
+        Utiles.log_D("mvmvmvmmvmv", e.message!!)
     }
     return ""
 }
@@ -81,12 +81,12 @@ fun getRealPathFromURI(
     val cursor =
         activity.contentResolver.query(contentURI, null, null, null, null)
     return if (cursor == null) {
-        Log.d("MediaStoreMediaStore2", contentURI.path!!)
+        Utiles.log_D("MediaStoreMediaStore2", contentURI.path!!)
         contentURI.path
     } else {
         cursor.moveToFirst()
         val idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
-        Log.d("MediaStoreMediaStore3", cursor.getString(idx))
+        Utiles.log_D("MediaStoreMediaStore3", cursor.getString(idx))
         val path = cursor.getString(idx)
         cursor.close()
         path

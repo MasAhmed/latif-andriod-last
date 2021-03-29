@@ -36,7 +36,7 @@ class CustomEditText(
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
             typeface = ResourcesCompat.getFont(context, R.font.poppins_regular)
-            params.setMargins(0, 20, 0, 5)
+            params.setMargins(0, 40, 0, 5)
             layoutParams = params
             DrawableCompat.setTint(
                 background,

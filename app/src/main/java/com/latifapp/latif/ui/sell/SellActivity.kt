@@ -5,9 +5,10 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ImageView
@@ -21,9 +22,11 @@ import com.latifapp.latif.data.models.RequireModel
 import com.latifapp.latif.databinding.ActivitySellBinding
 import com.latifapp.latif.ui.base.BaseActivity
 import com.latifapp.latif.ui.map.MapsActivity
+import com.latifapp.latif.ui.sell.adapters.ImagesAdapter
 import com.latifapp.latif.ui.sell.views.*
 import com.latifapp.latif.utiles.Permissions
 import com.latifapp.latif.utiles.Permissions.galleryRequest
+import com.latifapp.latif.utiles.Utiles
 import com.latifapp.latif.utiles.getRealPathFromGallery
 import com.nguyenhoanglam.imagepicker.model.Config
 import com.nguyenhoanglam.imagepicker.model.Image
@@ -35,35 +38,24 @@ import java.util.*
 
 @AndroidEntryPoint
 class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
-     AdapterView.OnItemClickListener {
+    AdapterView.OnItemClickListener {
 
+    private var url: String?=""
     private lateinit var typeList: List<AdsTypeModel>
     private var items = arrayOf<String>()
     private lateinit var liveData: MutableLiveData<MutableList<String>>
+    private val hashMap: MutableMap<String, String> = mutableMapOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         lifecycleScope.launchWhenStarted {
             viewModel.getAdsTypeList().collect {
-                typeList=it
-
-                val list_ = it.map { it.name }
-                val arrayAdapter = this@SellActivity?.let {
-                    ArrayAdapter<String>(
-                        it, android.R.layout.simple_list_item_1, list_
-                    )
-                }
-                binding.adsTypeSpinner.apply {
-                    setAdapter(arrayAdapter)
-                    setOnClickListener {
-                        showDropDown()
-                    }
-                    onItemClickListener =this@SellActivity
-
+                if (!it.isNullOrEmpty()) {
+                    typeList = it
+                    setAdsTypeSpinnerData()
                 }
             }
-
         }
 
         items = arrayOf<String>(
@@ -72,13 +64,43 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
             getString(R.string.cancel_)
         )
 
+        binding.submitBtn.setOnClickListener {
+            lifecycleScope.launchWhenStarted {
+                viewModel.saveForm(url!!, hashMap).collect {
 
+                }
+            }
+        }
+
+    }
+
+    private fun setAdsTypeSpinnerData() {
+        val list_ = typeList.map { it.name }
+        val arrayAdapter = this@SellActivity?.let {
+            ArrayAdapter<String>(
+                it, android.R.layout.simple_list_item_1, list_
+            )
+        }
+
+        binding.adsTypeSpinner.apply {
+            setAdapter(arrayAdapter)
+            setOnClickListener {
+                showDropDown()
+            }
+            setOnFocusChangeListener { _, _ ->
+                showDropDown()
+            }
+            onItemClickListener = this@SellActivity
+            visibility = VISIBLE
+
+        }
     }
 
     private fun getForm(type: String?) {
         lifecycleScope.launchWhenStarted {
             viewModel.getCreateForm(type!!).collect {
                 if (!it.form.isNullOrEmpty()) {
+                    url=it.url
                     setFormViews(it.form)
                 }
             }
@@ -87,17 +109,41 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
 
     private fun setFormViews(form: List<RequireModel>) {
         for (model_ in form)
-            when (model_.type) {
+            when (model_.type?.toLowerCase()) {
                 "boolean" -> createSwitch(model_)
-
-                "fileList" -> createImagesList(model_)
                 "file" -> createImage(model_)
-                "select" -> createSpinner(model_)
+                "files" -> createImagesList(model_)
+                "select" -> createCheckBoxGroup(model_)
+                "dropdown" -> createSpinner(model_)
+                "radiobutton" -> createRadioButtonGroup(model_)
                 "map" -> createMapBtn(model_)
-                else  -> createEditText(model_)
+                else -> createEditText(model_)
 
 
             }
+    }
+
+
+    private fun createCheckBoxGroup(model: RequireModel) {
+        val text = CustomCheckBoxGroup(this, model.label!!, model.options!!, object :
+            CustomParentView.ViewAction<String> {
+            override fun getActionId(text: String) {
+                setHashMapValues("${model.name}", "$text")
+            }
+        }
+        )
+        binding.container.addView(text.getView())
+    }
+
+    private fun createRadioButtonGroup(model: RequireModel) {
+        val text = CustomRadioGroup(this, model.label!!, model.options!!, object :
+            CustomParentView.ViewAction<String> {
+            override fun getActionId(text: String) {
+                setHashMapValues("${model.name}", "$text")
+            }
+        }
+        )
+        binding.container.addView(text.getView())
     }
 
     private fun createMapBtn(model: RequireModel) {
@@ -154,22 +200,24 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
 
 
     fun createEditText(model: RequireModel) {
-        if (model.label.isNullOrEmpty())return
-        val text = CustomEditText(this, model.label!!, model.type.equals("String"), object :
-            CustomParentView.ViewAction<String> {
-            override fun getActionId(text: String) {
-
+        if (model.label.isNullOrEmpty()) return
+        val text =
+            CustomEditText(this, model.label!!, model.type?.toLowerCase().equals("string"), object :
+                CustomParentView.ViewAction<String> {
+                override fun getActionId(text: String) {
+                    setHashMapValues("${model.name}", "$text")
+                }
             }
-        }
-        )
+            )
         binding.container.addView(text.getView())
     }
 
     fun createSwitch(model: RequireModel) {
+        setHashMapValues("${model.name}", "false")
         val switch = CustomSwitch(this, model.label!!, object :
             CustomParentView.ViewAction<Boolean> {
             override fun getActionId(isON: Boolean) {
-
+                setHashMapValues("${model.name}", "$isON")
             }
         }
         )
@@ -180,7 +228,7 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
         val text = CustomSpinner(this, model.label!!, model.options!!, object :
             CustomParentView.ViewAction<String> {
             override fun getActionId(text: String) {
-
+                setHashMapValues("${model.name}", "$text")
             }
         }
         )
@@ -278,7 +326,7 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
                     for (model in imagesList) {
                         val uri = Uri.fromFile(File(model.path))
                         val path: String = uri.getRealPathFromGallery(this)
-                        Log.d("dndnddd,dkkdkd2", path)
+                        Utiles.log_D("dndnddd,dkkdkd2", path)
                         list.add(path)
                     }
                     liveData.postValue(list)
@@ -305,8 +353,21 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
     }
 
 
-
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         getForm(typeList.get(position).name)
+        binding.container.removeAllViews()
+        binding.mapBtn.visibility = GONE
+        hashMap.clear()
+    }
+
+
+    fun setHashMapValues(key: String, value: String) {
+        if (value.isNullOrEmpty())
+            hashMap.remove(key)
+        else
+            hashMap.put(key, value)
+
+
+        Utiles.log_D("cncnncncncncn", hashMap)
     }
 }

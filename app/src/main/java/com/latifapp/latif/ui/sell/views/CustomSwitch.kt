@@ -26,9 +26,11 @@ class CustomSwitch(context_: Context, label: String,action :ViewAction<Boolean>)
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
-            params.setMargins(0, 20, 0, 5)
+
+            params.setMargins(0, 40, 0, 5)
             root.layoutParams = params
             switchBtn.setOnToggledListener(this@CustomSwitch)
+
          }
 
 

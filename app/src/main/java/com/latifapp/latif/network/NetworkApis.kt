@@ -1,8 +1,7 @@
 package com.example.postsapplication.network
 
 import com.latifapp.latif.data.models.*
-import retrofit2.http.Body
-import retrofit2.http.GET
+import retrofit2.http.*
 
 
 interface NetworkApis {
@@ -16,5 +15,7 @@ interface NetworkApis {
     suspend fun getAdsTypeList(): ResponseModel<List<AdsTypeModel>>
 
     @GET("api/public/ads/get-create-form")
-    suspend fun getCreateForm(): SellFormModel
+    suspend fun getCreateForm(@Query("adType" )type:String): SellFormModel
+    @POST("{url}")
+    suspend fun saveForm(@Path("url")url: String, @Body model: SaveformModelRequest) :SellFormModel
 }

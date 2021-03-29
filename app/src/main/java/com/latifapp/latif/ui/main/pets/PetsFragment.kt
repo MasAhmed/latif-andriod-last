@@ -36,6 +36,7 @@ import com.latifapp.latif.ui.sell.SellActivity
 import com.latifapp.latif.utiles.AppConstants
 import com.latifapp.latif.utiles.GpsUtils
 import com.latifapp.latif.utiles.Permissions
+import com.latifapp.latif.utiles.Utiles
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -66,7 +67,7 @@ class PetsFragment : Fragment() {
         }
 
         binding.pin.setOnClickListener {
-            Log.d("dndndndndndn", "HERE")
+            Utiles.log_D("dndndndndndn", "HERE")
 
             childFragmentManager.let {
                 BottomDialogFragment().apply {
@@ -123,7 +124,7 @@ class PetsFragment : Fragment() {
     }
 
     private fun moveToLocation(location: Location?) {
-        Log.d("ddnndndndndn","${location}")
+        Utiles.log_D("ddnndndndndn","${location}")
         mMap?.moveCamera(
             CameraUpdateFactory.newLatLngZoom(
                 LatLng(

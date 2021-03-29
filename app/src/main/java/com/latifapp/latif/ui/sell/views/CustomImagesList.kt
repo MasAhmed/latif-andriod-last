@@ -5,11 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.latifapp.latif.databinding.AddImagesListBinding
-import com.latifapp.latif.ui.sell.ImagesAdapter
+import com.latifapp.latif.ui.sell.adapters.ImagesAdapter
 
-class CustomImagesList (context_: Context, label: String,val adapter:ImagesAdapter, action: ViewAction<View>) :
+class CustomImagesList (context_: Context, label: String, val adapter: ImagesAdapter, action: ViewAction<View>) :
     CustomParentView<View>(context_, label,action){
 
 
@@ -21,7 +20,7 @@ class CustomImagesList (context_: Context, label: String,val adapter:ImagesAdapt
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
-            params.setMargins(0, 20, 0, 5)
+            params.setMargins(0, 40, 0, 5)
             root.layoutParams = params
             addImageBtn.setOnClickListener {
                 action?.getActionId(addImageBtn)
@@ -29,6 +28,7 @@ class CustomImagesList (context_: Context, label: String,val adapter:ImagesAdapt
                     ,false)
                 imagesList.adapter=adapter
             }
+            label.text=this@CustomImagesList.label
         }
 
 

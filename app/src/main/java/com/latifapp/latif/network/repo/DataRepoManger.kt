@@ -17,6 +17,10 @@ class DataRepoManger @Inject constructor(val apis: NetworkApis) : DataRepo {
     }
 
     override suspend fun getCreateForm(type: String): ResultWrapper<SellFormModel> {
-        return safeApiCall { apis.getCreateForm() }
+        return safeApiCall { apis.getCreateForm(type) }
+    }
+
+    override suspend fun saveForm(url: String, model: SaveformModelRequest): ResultWrapper<SellFormModel> {
+        return safeApiCall { apis.saveForm(url,model) }
     }
 }

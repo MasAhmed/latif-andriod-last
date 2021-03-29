@@ -1,13 +1,11 @@
 package com.latifapp.latif.ui.sell
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
-import com.latifapp.latif.data.models.AdsTypeModel
-import com.latifapp.latif.data.models.BlogsModel
-import com.latifapp.latif.data.models.SellFormModel
+import com.latifapp.latif.data.models.*
 import com.latifapp.latif.network.ResultWrapper
 import com.latifapp.latif.network.repo.DataRepo
 import com.latifapp.latif.ui.base.BaseViewModel
+import com.latifapp.latif.utiles.Utiles
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,12 +15,13 @@ import javax.inject.Inject
 class SellViewModel @Inject constructor(val repo: DataRepo):BaseViewModel("en") {
 
     private val flow_ = MutableStateFlow<List<AdsTypeModel>>(arrayListOf())
+    private var adType=""
 
     fun getAdsTypeList(): StateFlow<List<AdsTypeModel>> {
         loader.value=true
         viewModelScope.launch(Dispatchers.IO) {
             val result = repo.getAdsTypeList()
-            Log.d("dndnndnddnndnd"," $result")
+            Utiles.log_D("dndnndnddnndnd"," $result")
             when (result) {
                 is ResultWrapper.Success -> flow_.value = result.value.response.data!!
                 else -> getErrorMsg(result)
@@ -33,11 +32,31 @@ class SellViewModel @Inject constructor(val repo: DataRepo):BaseViewModel("en") 
     }
 
     fun getCreateForm(type:String): StateFlow<SellFormModel> {
+        adType=type
         val flow_ = MutableStateFlow<SellFormModel>(SellFormModel())
         loader.value=true
         viewModelScope.launch(Dispatchers.IO) {
             val result = repo.getCreateForm(type)
-            Log.d("dndnndnddnndnd"," $result")
+            Utiles.log_D("dndnndnddnndnd"," $result")
+            when (result) {
+                is ResultWrapper.Success -> flow_.value = result.value
+                else -> getErrorMsg(result)
+            }
+            loader.value=false
+        }
+        return flow_
+    }
+
+    fun saveForm(url:String, hashMap: MutableMap<String, String>): StateFlow<SellFormModel> {
+        val list= mutableListOf<UserAds>()
+        for (model in hashMap)
+            list.add(UserAds(model.key,model.value))
+       val model= SaveformModelRequest(adType,list)
+        val flow_ = MutableStateFlow<SellFormModel>(SellFormModel())
+        loader.value=true
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = repo.saveForm(url,model)
+            Utiles.log_D("dndnndnddnndnd"," $result")
             when (result) {
                 is ResultWrapper.Success -> flow_.value = result.value
                 else -> getErrorMsg(result)

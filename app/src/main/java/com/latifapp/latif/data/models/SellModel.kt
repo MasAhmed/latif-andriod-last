@@ -5,12 +5,15 @@ data class SellFormModel(val url: String?=null,
 data class RequireModel(
     val type: String?,
     val required: Boolean?,
+    val multi: Boolean=false,
     val name: String?,
     val label: String?,
     val options: List<String>?=null
 
 )
-data class AdsTypeRequest(
-    val adsType: String?
+data class SaveformModelRequest(
+    val type: String?,
+    val userAds: List<UserAds>
 
 )
+data class UserAds( val id: String?, val value: String?)

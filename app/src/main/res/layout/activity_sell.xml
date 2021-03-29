@@ -48,7 +48,7 @@
             >
             <AutoCompleteTextView
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="45dp"
                 android:hint="@string/ads_types"
                 android:fontFamily="@font/poppins_regular"
                 android:id="@+id/adsTypeSpinner"
@@ -56,6 +56,8 @@
                 android:inputType="none"
                 android:gravity="center_vertical"
                 android:background="@drawable/bg_drop_down"
+                android:visibility="gone"
+                android:textSize="14sp"
                 />
 
             <LinearLayout
@@ -85,6 +87,18 @@
                 android:textAllCaps="false"
                 android:text="@string/placeyourAd"
                 android:visibility="gone"
+                />
+            <Button
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/mapBtn"
+                android:id="@+id/submitBtn"
+                android:layout_marginTop="20dp"
+                android:textSize="15sp"
+                android:textAllCaps="false"
+                android:text="@string/submit"
+                android:visibility="visible"
                 />
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>

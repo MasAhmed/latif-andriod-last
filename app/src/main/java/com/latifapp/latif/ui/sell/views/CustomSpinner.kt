@@ -10,7 +10,8 @@ import com.latifapp.latif.R
 
 
 class CustomSpinner(context_: Context, label: String,val list_: List<String>,action :ViewAction<String>) :
-    CustomParentView<String>(context_, label,action), AdapterView.OnItemSelectedListener {
+    CustomParentView<String>(context_, label,action),
+    AdapterView.OnItemClickListener {
 
 
 
@@ -31,9 +32,9 @@ class CustomSpinner(context_: Context, label: String,val list_: List<String>,act
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
-            params.setMargins(0, 20, 0, 5)
+            params.setMargins(0, 40, 0, 5)
             layoutParams = params
-            onItemSelectedListener=this@CustomSpinner
+            onItemClickListener=this@CustomSpinner
             setTextIsSelectable(true)
 
             isCursorVisible=false
@@ -48,12 +49,10 @@ class CustomSpinner(context_: Context, label: String,val list_: List<String>,act
         }
         }
 
-    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-         action?.getActionId(list_.get(position))
-    }
 
-    override fun onNothingSelected(parent: AdapterView<*>?) {
 
+    override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        action?.getActionId(list_.get(position))
     }
 
 

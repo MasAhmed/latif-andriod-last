@@ -13,7 +13,7 @@ abstract class CustomParentView<T>(val context:Context,val label:String,val acti
     @JvmName("getView1")
     fun getView(): View? {
         createView()
-        return view
+         return view
     }
 
     public interface ViewAction<T>{
