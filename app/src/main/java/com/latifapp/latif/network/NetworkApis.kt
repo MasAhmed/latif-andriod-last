@@ -6,7 +6,10 @@ import retrofit2.http.*
 
 interface NetworkApis {
     @GET("api/public/blogs")
-    suspend fun getBlogs(): ResponseModel<List<BlogsModel>>
+    suspend fun getBlogs(@Query("page") page:Int): ResponseModel<List<BlogsModel>>
+
+    @GET("api/public/blogCategory")
+    suspend fun getBlogsCategoryList(): List<CategoryModel>
 
     @GET("api/public/category")
     suspend fun getCategoryList(): ResponseModel<List<BlogsModel>>
@@ -16,6 +19,6 @@ interface NetworkApis {
 
     @GET("api/public/ads/get-create-form")
     suspend fun getCreateForm(@Query("adType" )type:String): SellFormModel
-    @POST("{url}")
-    suspend fun saveForm(@Path("url")url: String, @Body model: SaveformModelRequest) :SellFormModel
+    @POST
+    suspend fun saveForm(@Url url: String, @Body model: SaveformModelRequest) :ResponseModel<SellFormModel>
 }

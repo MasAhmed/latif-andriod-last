@@ -24,10 +24,11 @@
      android:layout_width="match_parent"
      android:layout_height="wrap_content"
      tools:listitem="@layout/pet_item_layout"
-     tools:itemCount="1"
+     tools:itemCount="0"
      android:id="@+id/petsCatgRecyclerView"
      android:layout_marginStart="4dp"
      android:layout_marginEnd="4dp"
+     android:minHeight="65dp"
      />
  <TextView
      android:layout_width="80dp"

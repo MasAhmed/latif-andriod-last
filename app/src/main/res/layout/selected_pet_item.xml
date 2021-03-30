@@ -29,19 +29,25 @@
             android:layout_height="20dp"
             app:srcCompat="@drawable/ic_cat"
             android:tint="@color/red"
+            android:id="@+id/image"
             />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:lines="1"
             android:maxWidth="90dp"
-            android:text="Cats"
+            android:text="Cat sksk"
             android:textColor="@color/red"
             android:fontFamily="@font/poppins_regular"
             android:textSize="13sp"
             android:layout_gravity="center"
             android:gravity="center"
             android:layout_marginTop="3dp"
+            android:id="@+id/text"
+            android:autoSizeMaxTextSize="13sp"
+            android:autoSizeMinTextSize="8sp"
+            android:autoSizeStepGranularity="1sp"
+            android:autoSizeTextType="uniform"
             />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

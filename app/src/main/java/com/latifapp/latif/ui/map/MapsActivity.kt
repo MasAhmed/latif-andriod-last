@@ -9,7 +9,9 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -20,13 +22,15 @@ import com.latifapp.latif.utiles.AppConstants
 import com.latifapp.latif.utiles.GpsUtils
 import com.latifapp.latif.utiles.Permissions
 import com.latifapp.latif.utiles.Utiles
+import kotlinx.android.synthetic.main.activity_maps.*
 import java.lang.Exception
 
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener {
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
-
+    private var latLng: LatLng? = null
+    private var placeName: String? = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
@@ -34,7 +38,22 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+        Utiles.setMyLocationPositionInBottom(mapFragment.view)
         turnGPSOn()
+
+        backBtn.setOnClickListener {
+            onBackPressed()
+        }
+        selectBtn.setOnClickListener {
+            if (latLng!=null){
+                 intent.putExtra("lat",latLng?.latitude)
+                 intent.putExtra("lng",latLng?.longitude)
+                 intent.putExtra("placeName",placeName)
+                setResult(RESULT_OK,intent)
+                finish()
+            }
+        }
+
     }
 
     @SuppressLint("MissingPermission")
@@ -52,16 +71,23 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener {
             )
         } else {
             mMap.setMyLocationEnabled(true)
-             buildGoogleApiClient()
+            setupmap()
+        }
+        mMap.setOnCameraIdleListener {
+            locTxt.setText(R.string.loading)
+            latLng = mMap.cameraPosition.target
+            MapsUtiles.getMyLocationName(this, latLng!!)
+                .observe(this, Observer {
+                    if (!it.isNullOrEmpty()) {
+                        locTxt.setText("$it")
+                        placeName = "$it"
+                    }
+
+                })
         }
 
-
     }
 
-    private fun buildGoogleApiClient() {
-
-
-    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -75,26 +101,24 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener {
     private fun turnGPSOn() {
         GpsUtils(this).turnGPSOn { isGPSEnable, mlocation -> // turn on GPS
 
-             try {
-                val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-                locationManager.requestLocationUpdates(
-                    LocationManager.NETWORK_PROVIDER,
-                    0L,
-                    10f,
-                    this
-                ) //You can also use LocationManager.GPS_PROVIDER and LocationManager.PASSIVE_PROVIDER
-
-
-            } catch (e: Exception) {
-
-            }
-
         }
     }
 
-    override fun onLocationChanged(location: Location) {
-        Utiles.log_D("locationlocation", location)
-        mMap?.moveCamera(
+    @SuppressLint("MissingPermission")
+    private fun setupmap() {
+        val fusedLocationProviderClient =
+            LocationServices.getFusedLocationProviderClient(this)
+        val task =
+            fusedLocationProviderClient.lastLocation
+        task.addOnSuccessListener { location: Location ->
+
+            moveToLocation(location)
+        }
+    }
+
+    private fun moveToLocation(location: Location) {
+        Utiles.log_D("ddnndndndndn", "${location}\n $mMap")
+        mMap?.animateCamera(
             CameraUpdateFactory.newLatLngZoom(
                 LatLng(
                     location!!.latitude,
@@ -102,6 +126,5 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener {
                 ), 15f
             )
         )
-        mMap?.animateCamera(CameraUpdateFactory.zoomTo(14f), 2000, null)
     }
 }

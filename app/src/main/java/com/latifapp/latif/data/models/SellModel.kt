@@ -8,9 +8,11 @@ data class RequireModel(
     val multi: Boolean=false,
     val name: String?,
     val label: String?,
-    val options: List<String>?=null
+    val options: List<OptionsModel>?=null
 
 )
+data class OptionsModel(val code: String?,
+                        val label: String?)
 data class SaveformModelRequest(
     val type: String?,
     val userAds: List<UserAds>

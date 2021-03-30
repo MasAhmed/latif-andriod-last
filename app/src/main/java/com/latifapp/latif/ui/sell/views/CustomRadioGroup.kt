@@ -3,6 +3,7 @@ package com.latifapp.latif.ui.sell.views
 import android.content.Context
 import android.view.LayoutInflater
 import androidx.recyclerview.widget.GridLayoutManager
+import com.latifapp.latif.data.models.OptionsModel
 import com.latifapp.latif.databinding.CheckboxsGroupLayoutBinding
 import com.latifapp.latif.ui.sell.adapters.CheckBoxsListAdapter
 import com.latifapp.latif.ui.sell.adapters.RadioButtonAdapter
@@ -10,7 +11,7 @@ import com.latifapp.latif.ui.sell.adapters.RadioButtonAdapter
 class CustomRadioGroup(
     context_: Context,
     label: String,
-    val list_: List<String>,
+    val list_: List<OptionsModel>,
     action: ViewAction<String>
 ) :
     CustomParentView<String>(context_, label, action), CheckBoxsListAdapter.CheckBoxAction {

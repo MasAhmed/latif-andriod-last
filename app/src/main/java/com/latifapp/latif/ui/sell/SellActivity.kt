@@ -25,6 +25,7 @@ import com.latifapp.latif.ui.map.MapsActivity
 import com.latifapp.latif.ui.sell.adapters.ImagesAdapter
 import com.latifapp.latif.ui.sell.views.*
 import com.latifapp.latif.utiles.Permissions
+import com.latifapp.latif.utiles.Permissions.MapRequest
 import com.latifapp.latif.utiles.Permissions.galleryRequest
 import com.latifapp.latif.utiles.Utiles
 import com.latifapp.latif.utiles.getRealPathFromGallery
@@ -32,17 +33,20 @@ import com.nguyenhoanglam.imagepicker.model.Config
 import com.nguyenhoanglam.imagepicker.model.Image
 import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.activity_sell.*
 import kotlinx.coroutines.flow.collect
 import java.io.File
 import java.util.*
 
 @AndroidEntryPoint
 class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
-    AdapterView.OnItemClickListener {
+    AdapterView.OnItemSelectedListener {
 
     private var url: String?=""
     private lateinit var typeList: List<AdsTypeModel>
     private var items = arrayOf<String>()
+    private var lat = 0.0
+    private var lng = 0.0
     private lateinit var liveData: MutableLiveData<MutableList<String>>
     private val hashMap: MutableMap<String, String> = mutableMapOf()
 
@@ -82,16 +86,11 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
             )
         }
 
-        binding.adsTypeSpinner.apply {
-            setAdapter(arrayAdapter)
-            setOnClickListener {
-                showDropDown()
-            }
-            setOnFocusChangeListener { _, _ ->
-                showDropDown()
-            }
-            onItemClickListener = this@SellActivity
-            visibility = VISIBLE
+        binding.spinner.apply {
+            adsTypeSpinner.setAdapter(arrayAdapter)
+            adsTypeSpinner.onItemSelectedListener = this@SellActivity
+            label.text=getString(R.string.ads_types)
+            root.visibility = VISIBLE
 
         }
     }
@@ -147,7 +146,7 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
     }
 
     private fun createMapBtn(model: RequireModel) {
-        binding.mapBtn.visibility = View.VISIBLE
+        binding.mapContainer.visibility = View.VISIBLE
         binding.mapBtn.setOnClickListener {
             // intent to map
             if (!Permissions.checkLocationPermissions(this)) {
@@ -159,7 +158,7 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
                 )
             } else {
 
-                startActivity(Intent(this, MapsActivity::class.java))
+                startActivityForResult(Intent(this, MapsActivity::class.java),MapRequest)
             }
         }
     }
@@ -336,6 +335,14 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
                     e.printStackTrace()
                 }
             }
+            else if (requestCode == MapRequest){
+                lat=data!!.extras!!.getDouble("lat")
+                lng=data!!.extras!!.getDouble("lng")
+                setHashMapValues("latitude","$lat")
+                setHashMapValues("longitude","$lng")
+               val placename=data!!.extras!!.getString("placeName")
+                binding.placeNme.text=placename
+            }
         }
     }
 
@@ -353,12 +360,7 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
     }
 
 
-    override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        getForm(typeList.get(position).name)
-        binding.container.removeAllViews()
-        binding.mapBtn.visibility = GONE
-        hashMap.clear()
-    }
+
 
 
     fun setHashMapValues(key: String, value: String) {
@@ -370,4 +372,15 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
 
         Utiles.log_D("cncnncncncncn", hashMap)
     }
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        getForm(typeList.get(position).name)
+        binding.container.removeAllViews()
+        binding.mapContainer.visibility = GONE
+        binding.placeNme.text=""
+        hashMap.clear()
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+     }
 }

@@ -14,6 +14,7 @@ object Permissions {
 
     val cameraRequest: Int = 10
     val galleryRequest: Int = 11
+    val MapRequest: Int = 15
     val cameraManifestPermissionsList = arrayOf(
         Manifest.permission.CAMERA,
         Manifest.permission.READ_EXTERNAL_STORAGE,

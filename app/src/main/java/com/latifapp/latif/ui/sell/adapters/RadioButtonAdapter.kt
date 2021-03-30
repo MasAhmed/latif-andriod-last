@@ -6,10 +6,11 @@ import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.RadioButton
 import androidx.recyclerview.widget.RecyclerView
+import com.latifapp.latif.data.models.OptionsModel
 import com.latifapp.latif.databinding.CheckboxLayoutBinding
 import com.latifapp.latif.databinding.RadiobuttonLayoutBinding
 
-class RadioButtonAdapter (val list:List<String>,val action: CheckBoxsListAdapter.CheckBoxAction) : RecyclerView.Adapter<RadioButtonAdapter.MyViewHolder>() {
+class RadioButtonAdapter (val list:List<OptionsModel>,val action: CheckBoxsListAdapter.CheckBoxAction) : RecyclerView.Adapter<RadioButtonAdapter.MyViewHolder>() {
     private var selectedcheckbox:RadioButton?=null
      class MyViewHolder (val binding: RadiobuttonLayoutBinding) : RecyclerView.ViewHolder(binding.root){
     }
@@ -26,11 +27,11 @@ class RadioButtonAdapter (val list:List<String>,val action: CheckBoxsListAdapter
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.binding.checkbox.text=list.get(position)
+        holder.binding.checkbox.text=list.get(position).label
 
         holder.binding.checkbox.setOnCheckedChangeListener{ compoundButton: CompoundButton, b: Boolean ->
             if (b) {
-                action.getChecked(list.get(position))
+                action.getChecked(list.get(position).code!!)
                 if (selectedcheckbox!=null)
                     selectedcheckbox?.isChecked=false
                 selectedcheckbox=holder.binding.checkbox

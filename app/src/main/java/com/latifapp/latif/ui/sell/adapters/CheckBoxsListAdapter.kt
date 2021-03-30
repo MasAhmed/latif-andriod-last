@@ -4,10 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.CompoundButton
 import androidx.recyclerview.widget.RecyclerView
+import com.latifapp.latif.data.models.OptionsModel
 import com.latifapp.latif.databinding.CheckboxLayoutBinding
 import com.latifapp.latif.databinding.PetImageItemBinding
 
-class CheckBoxsListAdapter(val list:List<String>,val action:CheckBoxAction) : RecyclerView.Adapter<CheckBoxsListAdapter.MyViewHolder>() {
+class CheckBoxsListAdapter(val list:List<OptionsModel>,val action:CheckBoxAction) : RecyclerView.Adapter<CheckBoxsListAdapter.MyViewHolder>() {
     private val selectedTexts:MutableSet<String> = mutableSetOf()
     class MyViewHolder (val binding: CheckboxLayoutBinding) : RecyclerView.ViewHolder(binding.root){
     }
@@ -24,16 +25,16 @@ class CheckBoxsListAdapter(val list:List<String>,val action:CheckBoxAction) : Re
     }
 
     override fun onBindViewHolder(holder: CheckBoxsListAdapter.MyViewHolder, position: Int) {
-       holder.binding.checkbox.text=list.get(position)
+       holder.binding.checkbox.text=list.get(position).label
         holder.binding.checkbox.setOnCheckedChangeListener{ compoundButton: CompoundButton, b: Boolean ->
             if (b)
-                selectedTexts.add(list.get(position))
-            else selectedTexts.remove(list.get(position))
+                selectedTexts.add(list.get(position).code!!)
+            else selectedTexts.remove(list.get(position).code)
             var txt=""
             for (s in selectedTexts){
                 txt+="$s,"
             }
-
+            txt = txt.substring(0, txt.length - 1)
             action.getChecked(txt)
         }
     }

@@ -46,26 +46,17 @@
             android:layout_height="match_parent"
             android:padding="12dp"
             >
-            <AutoCompleteTextView
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:hint="@string/ads_types"
-                android:fontFamily="@font/poppins_regular"
-                android:id="@+id/adsTypeSpinner"
-                android:layout_marginBottom="5dp"
-                android:inputType="none"
-                android:gravity="center_vertical"
-                android:background="@drawable/bg_drop_down"
-                android:visibility="gone"
-                android:textSize="14sp"
-                />
+
+            <include layout="@layout/custom_spinner_layout"
+                android:id="@+id/spinner"
+                android:visibility="gone"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:id="@+id/container"
-                android:layout_below="@id/adsTypeSpinner"
+                android:layout_below="@id/spinner"
                  >
 
             </LinearLayout>
@@ -76,23 +67,40 @@
                 android:id="@+id/line"
                 android:layout_margin="10dp"
                 android:layout_below="@id/container"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/mapContainer"
+                android:layout_marginTop="20dp"
+                android:layout_below="@id/line"
+                android:gravity="center"
+                android:visibility="gone"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:fontFamily="@font/poppins_regular"
+                    android:layout_margin="5dp"
+                    android:id="@+id/placeNme"/>
+
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                  android:layout_centerHorizontal="true"
-                android:layout_below="@id/line"
                 android:id="@+id/mapBtn"
-                android:layout_marginTop="20dp"
                 android:textSize="15sp"
                 android:textAllCaps="false"
                 android:text="@string/placeyourAd"
-                android:visibility="gone"
+
                 />
+            </LinearLayout>
             <Button
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_below="@id/mapBtn"
+                android:layout_below="@id/mapContainer"
                 android:id="@+id/submitBtn"
                 android:layout_marginTop="20dp"
                 android:textSize="15sp"
