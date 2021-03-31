@@ -7,6 +7,8 @@ import retrofit2.http.*
 interface NetworkApis {
     @GET("api/public/blogs")
     suspend fun getBlogs(@Query("page") page:Int): ResponseModel<List<BlogsModel>>
+    @GET("api/public/blogs/keyword={keyword}")
+    suspend fun getSearchBlogs(@Path("keyword") txt:String): ResponseModel<List<BlogsModel>>
 
     @GET("api/public/blogCategory")
     suspend fun getBlogsCategoryList(): List<CategoryModel>

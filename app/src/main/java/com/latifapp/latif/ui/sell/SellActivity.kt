@@ -34,6 +34,7 @@ import com.nguyenhoanglam.imagepicker.model.Image
 import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_sell.*
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import java.io.File
 import java.util.*
@@ -42,7 +43,7 @@ import java.util.*
 class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
     AdapterView.OnItemSelectedListener {
 
-    private var url: String?=""
+    private var url: String? = ""
     private lateinit var typeList: List<AdsTypeModel>
     private var items = arrayOf<String>()
     private var lat = 0.0
@@ -52,7 +53,37 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding.backBtn.setOnClickListener { onBackPressed() }
+        items = arrayOf<String>(
+            getString(R.string.camera),
+            getString(R.string.gallery),
+            getString(R.string.cancel_)
+        )
 
+        getAdsType()
+
+        binding.submitBtn.setOnClickListener {
+           submitAdForm()
+        }
+
+    }
+
+    private fun submitAdForm() {
+        if (hashMap.isNullOrEmpty())
+            toastMsg_Warning(getString(R.string.addFormValue),binding.root,this)
+        else
+        lifecycleScope.launchWhenStarted {
+            viewModel.saveForm(url!!, hashMap).observe(this@SellActivity, Observer {
+                if (!it.msg.isNullOrEmpty()) {
+                    toastMsg_Success(it.msg, binding.root, this@SellActivity)
+
+                }
+                onBackPressed()
+            })
+        }
+    }
+
+    private fun getAdsType() {
         lifecycleScope.launchWhenStarted {
             viewModel.getAdsTypeList().collect {
                 if (!it.isNullOrEmpty()) {
@@ -61,21 +92,6 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
                 }
             }
         }
-
-        items = arrayOf<String>(
-            getString(R.string.camera),
-            getString(R.string.gallery),
-            getString(R.string.cancel_)
-        )
-
-        binding.submitBtn.setOnClickListener {
-            lifecycleScope.launchWhenStarted {
-                viewModel.saveForm(url!!, hashMap).collect {
-
-                }
-            }
-        }
-
     }
 
     private fun setAdsTypeSpinnerData() {
@@ -89,7 +105,7 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
         binding.spinner.apply {
             adsTypeSpinner.setAdapter(arrayAdapter)
             adsTypeSpinner.onItemSelectedListener = this@SellActivity
-            label.text=getString(R.string.ads_types)
+            label.text = getString(R.string.ads_types)
             root.visibility = VISIBLE
 
         }
@@ -99,7 +115,7 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
         lifecycleScope.launchWhenStarted {
             viewModel.getCreateForm(type!!).collect {
                 if (!it.form.isNullOrEmpty()) {
-                    url=it.url
+                    url = it.url
                     setFormViews(it.form)
                 }
             }
@@ -158,7 +174,7 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
                 )
             } else {
 
-                startActivityForResult(Intent(this, MapsActivity::class.java),MapRequest)
+                startActivityForResult(Intent(this, MapsActivity::class.java), MapRequest)
             }
         }
     }
@@ -334,14 +350,13 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-            }
-            else if (requestCode == MapRequest){
-                lat=data!!.extras!!.getDouble("lat")
-                lng=data!!.extras!!.getDouble("lng")
-                setHashMapValues("latitude","$lat")
-                setHashMapValues("longitude","$lng")
-               val placename=data!!.extras!!.getString("placeName")
-                binding.placeNme.text=placename
+            } else if (requestCode == MapRequest) {
+                lat = data!!.extras!!.getDouble("lat")
+                lng = data!!.extras!!.getDouble("lng")
+                setHashMapValues("latitude", "$lat")
+                setHashMapValues("longitude", "$lng")
+                val placename = data!!.extras!!.getString("placeName")
+                binding.placeNme.text = placename
             }
         }
     }
@@ -360,9 +375,6 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
     }
 
 
-
-
-
     fun setHashMapValues(key: String, value: String) {
         if (value.isNullOrEmpty())
             hashMap.remove(key)
@@ -377,10 +389,10 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
         getForm(typeList.get(position).name)
         binding.container.removeAllViews()
         binding.mapContainer.visibility = GONE
-        binding.placeNme.text=""
+        binding.placeNme.text = ""
         hashMap.clear()
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
-     }
+    }
 }

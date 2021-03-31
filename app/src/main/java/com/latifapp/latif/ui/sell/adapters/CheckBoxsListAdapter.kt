@@ -34,6 +34,7 @@ class CheckBoxsListAdapter(val list:List<OptionsModel>,val action:CheckBoxAction
             for (s in selectedTexts){
                 txt+="$s,"
             }
+            if (txt.isNotEmpty())
             txt = txt.substring(0, txt.length - 1)
             action.getChecked(txt)
         }

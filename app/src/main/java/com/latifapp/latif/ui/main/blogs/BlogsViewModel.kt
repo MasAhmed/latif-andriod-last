@@ -3,6 +3,7 @@ package com.latifapp.latif.ui.main.blogs
 import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.viewModelScope
+import com.latifapp.latif.data.local.AppPrefsStorage
 import com.latifapp.latif.data.models.BlogsModel
 import com.latifapp.latif.data.models.CategoryModel
 import com.latifapp.latif.network.ResultWrapper
@@ -15,7 +16,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class BlogsViewModel @Inject constructor(val repo: DataRepo) : BaseViewModel("en") {
+class BlogsViewModel @Inject constructor(val repo: DataRepo, appPrefsStorage: AppPrefsStorage):BaseViewModel(appPrefsStorage) {
     var page = 0
     fun getListOfBlogs(): StateFlow<List<BlogsModel>> {
         val flow_ = MutableStateFlow<List<BlogsModel>>(arrayListOf())
@@ -42,6 +43,23 @@ class BlogsViewModel @Inject constructor(val repo: DataRepo) : BaseViewModel("en
             when (result) {
                 is ResultWrapper.Success -> {
                     flow_.value = result.value!!
+                }
+                else -> getErrorMsg(result)
+            }
+            loader.value = false
+        }
+        return flow_
+    }
+
+    suspend fun getSearchBlogs(txt:String) : StateFlow<List<BlogsModel>> {
+        page=0
+        val flow_ = MutableStateFlow<List<BlogsModel>>(arrayListOf())
+        loader.value = true
+       val job= viewModelScope.launch(Dispatchers.IO) {
+            val result = repo.getSearchBlogs(txt)
+            when (result) {
+                is ResultWrapper.Success -> {
+                    flow_.value = result.value.response.data!!
                 }
                 else -> getErrorMsg(result)
             }

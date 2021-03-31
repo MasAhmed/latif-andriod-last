@@ -1,17 +1,13 @@
 package com.latifapp.latif.ui.main.blogs
 
-import android.opengl.Visibility
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.viewModels
+import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.latifapp.latif.R
 import com.latifapp.latif.data.models.BlogsModel
 import com.latifapp.latif.databinding.FragmentBlogsBinding
 import com.latifapp.latif.ui.base.BaseFragment
@@ -19,11 +15,7 @@ import com.latifapp.latif.ui.main.home.MainActivity
 import com.latifapp.latif.ui.main.pets.PetsAdapter
 import com.latifapp.latif.utiles.Utiles
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.toolbar.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -36,9 +28,7 @@ class BlogsFragment : BaseFragment<BlogsViewModel, FragmentBlogsBinding>(),
     private val petsAdapter = PetsAdapter()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as MainActivity).searchBtn.setOnClickListener {
-            Utiles.log_D("snnsnsnnsns","ssnsnsn")
-        }
+        setSearchView()
 
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(context)
@@ -58,6 +48,40 @@ class BlogsFragment : BaseFragment<BlogsViewModel, FragmentBlogsBinding>(),
         getBlogs()
         getBlogsCategoryList()
 
+    }
+
+    private fun setSearchView() {
+        (activity as MainActivity).searchview.apply {
+            setOnCloseListener(SearchView.OnCloseListener {
+                return@OnCloseListener false
+            })
+            setOnQueryTextListener(object : OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return false
+                }
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    if (newText.isNullOrEmpty())
+                        getBlogs()
+                    else getSearchBlogs(newText)
+                    return false
+                }
+
+            })
+
+        }
+    }
+
+    private fun getSearchBlogs(newText: String) {
+        isLoadingData = true // to prevent scroll
+        adapter_.list.clear()
+        adapter_.notifyDataSetChanged()
+        lifecycleScope.launchWhenStarted {
+            viewModel.getSearchBlogs(newText).collect {
+                if (!it.isNullOrEmpty()) {
+                    adapter_.list = it as MutableList<BlogsModel>
+                }
+            }
+        }
     }
 
     override fun selectedCategory(id: Int) {

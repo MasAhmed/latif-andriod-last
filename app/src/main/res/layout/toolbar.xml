@@ -20,14 +20,16 @@
             android:layout_height="35dp"
             android:layout_centerVertical="true"
             android:padding="4dp"
-            app:srcCompat="@drawable/ic_menu" />
+            app:srcCompat="@drawable/ic_menu"
+            android:layout_marginEnd="10dp"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <ImageView
                 android:layout_width="30dp"
@@ -48,12 +50,18 @@
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/searchBtn"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
             android:padding="4dp"
-            app:srcCompat="@drawable/ic_search" />
+            app:srcCompat="@drawable/ic_search"
+            android:backgroundTint="@color/white"
+            app:dividerPadding="5dp"
+            app:iconifiedByDefault="true"
+
+             />
     </RelativeLayout>
 </androidx.appcompat.widget.Toolbar>

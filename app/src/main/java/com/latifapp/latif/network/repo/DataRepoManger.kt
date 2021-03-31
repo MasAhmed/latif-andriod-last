@@ -13,6 +13,10 @@ class DataRepoManger @Inject constructor(val apis: NetworkApis) : DataRepo {
         return safeApiCall { apis.getBlogs(page) }
     }
 
+    override suspend fun getSearchBlogs(txt: String): ResultWrapper<ResponseModel<List<BlogsModel>>> {
+        return safeApiCall { apis.getSearchBlogs(txt) }
+    }
+
     override suspend fun getBlogsCategoryList(): ResultWrapper<List<CategoryModel>> {
         return safeApiCall { apis.getBlogsCategoryList() }
     }

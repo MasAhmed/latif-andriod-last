@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.snackbar.Snackbar
 import com.latifapp.latif.R
+import com.latifapp.latif.utiles.Utiles
 
 open interface BaseView<B: ViewBinding> {
 
@@ -17,7 +18,7 @@ open interface BaseView<B: ViewBinding> {
      fun showLoader()
      fun hideLoader()
 
-     fun toastMsg(msg: String,view: View,context:Context) {
+     fun toastMsg_Warning(msg: String, view: View, context:Context) {
         try {
             val snackbar = Snackbar.make(
                 view, msg,
@@ -36,6 +37,28 @@ open interface BaseView<B: ViewBinding> {
             textView.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_info, 0, 0, 0)
             snackbar.show()
         } catch (e: Exception) {
+        }
+    }
+     fun toastMsg_Success(msg: String, view: View, context:Context) {
+        try {
+            val snackbar = Snackbar.make(
+                view, msg,
+                Snackbar.LENGTH_LONG
+            ).setAction("Action", null)
+            snackbar.setActionTextColor(Color.BLUE)
+            val snackbarView = snackbar.view
+            snackbarView.setBackgroundResource(R.drawable.green_bg)
+            val textView =
+                snackbarView.findViewById(com.google.android.material.R.id.snackbar_text) as TextView
+            textView.setTextColor(ContextCompat.getColor(context, R.color.white))
+            textView.textSize = 15f
+            textView.gravity = Gravity.CENTER
+            textView.maxLines = 1
+            textView.compoundDrawablePadding= 20
+            textView.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_success, 0, 0, 0)
+            snackbar.show()
+        } catch (e: Exception) {
+            Utiles.log_D("Exception",e)
         }
     }
 }
