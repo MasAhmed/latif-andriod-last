@@ -10,6 +10,7 @@ import com.latifapp.latif.network.ResultWrapper
 import com.latifapp.latif.network.repo.DataRepo
 import com.latifapp.latif.network.safeApiCall
 import com.latifapp.latif.ui.base.BaseViewModel
+import com.latifapp.latif.utiles.Utiles.onSearchDebounce
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -55,16 +56,19 @@ class BlogsViewModel @Inject constructor(val repo: DataRepo, appPrefsStorage: Ap
         page=0
         val flow_ = MutableStateFlow<List<BlogsModel>>(arrayListOf())
         loader.value = true
-       val job= viewModelScope.launch(Dispatchers.IO) {
-            val result = repo.getSearchBlogs(txt)
-            when (result) {
-                is ResultWrapper.Success -> {
-                    flow_.value = result.value.response.data!!
+        onSearchDebounce(500L, viewModelScope, {
+            viewModelScope.launch(Dispatchers.IO) {
+                val result = repo.getSearchBlogs(txt)
+                when (result) {
+                    is ResultWrapper.Success -> {
+                        flow_.value = result.value.response.data!!
+                    }
+                    else -> getErrorMsg(result)
                 }
-                else -> getErrorMsg(result)
+                loader.value = false
             }
-            loader.value = false
-        }
+        })
+
         return flow_
     }
 

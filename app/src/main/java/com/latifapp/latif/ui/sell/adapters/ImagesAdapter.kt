@@ -4,7 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.latifapp.latif.R
 import com.latifapp.latif.databinding.PetImageItemBinding
+import com.latifapp.latif.utiles.Utiles
 import java.io.File
 
 class ImagesAdapter : RecyclerView.Adapter<ImagesAdapter.MyViewHolder>() {
@@ -25,7 +27,10 @@ class ImagesAdapter : RecyclerView.Adapter<ImagesAdapter.MyViewHolder>() {
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
-        Glide.with(holder.itemView.context).load(File(list.get(position))).into(holder.binding.image)
+        Utiles.log_D("ssjsjsjsjjs", list.get(position)+" "+list.size)
+        Glide.with(holder.itemView.context).load(list.get(position))
+            .placeholder(R.drawable.placeholder).error(R.drawable.placeholder)
+            .into(holder.binding.image)
 
     }
 

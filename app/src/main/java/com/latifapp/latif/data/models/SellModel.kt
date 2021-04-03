@@ -18,4 +18,4 @@ data class SaveformModelRequest(
     val userAds: List<UserAds>
 
 )
-data class UserAds( val id: String?, val value: String?)
+data class UserAds( val id: String?, val value: Any?)

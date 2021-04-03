@@ -81,10 +81,10 @@ object Permissions {
         requestID: Int
     ) {
         val alertBuilder = AlertDialog.Builder(context)
-        alertBuilder.setCancelable(true)
+        alertBuilder.setCancelable(false)
         alertBuilder.setTitle("Permission necessary")
         alertBuilder.setMessage(message)
-        //request permission to allow
+         //request permission to allow
         alertBuilder.setPositiveButton(
             android.R.string.ok
         ) { dialog: DialogInterface?, which: Int ->

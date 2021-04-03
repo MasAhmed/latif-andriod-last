@@ -48,8 +48,8 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
     private var items = arrayOf<String>()
     private var lat = 0.0
     private var lng = 0.0
-    private lateinit var liveData: MutableLiveData<MutableList<String>>
-    private val hashMap: MutableMap<String, String> = mutableMapOf()
+    private lateinit var liveData: MutableLiveData<String>
+    private val hashMap: MutableMap<String, Any> = mutableMapOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,24 +63,24 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
         getAdsType()
 
         binding.submitBtn.setOnClickListener {
-           submitAdForm()
+            submitAdForm()
         }
 
     }
 
     private fun submitAdForm() {
         if (hashMap.isNullOrEmpty())
-            toastMsg_Warning(getString(R.string.addFormValue),binding.root,this)
+            toastMsg_Warning(getString(R.string.addFormValue), binding.root, this)
         else
-        lifecycleScope.launchWhenStarted {
-            viewModel.saveForm(url!!, hashMap).observe(this@SellActivity, Observer {
-                if (!it.msg.isNullOrEmpty()) {
-                    toastMsg_Success(it.msg, binding.root, this@SellActivity)
+            lifecycleScope.launchWhenStarted {
+                viewModel.saveForm(url!!, hashMap).observe(this@SellActivity, Observer {
+                    if (!it.msg.isNullOrEmpty()) {
+                        toastMsg_Success(it.msg, binding.root, this@SellActivity)
 
-                }
-                onBackPressed()
-            })
-        }
+                    }
+                    onBackPressed()
+                })
+            }
     }
 
     private fun getAdsType() {
@@ -112,6 +112,8 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
     }
 
     private fun getForm(type: String?) {
+
+
         lifecycleScope.launchWhenStarted {
             viewModel.getCreateForm(type!!).collect {
                 if (!it.form.isNullOrEmpty()) {
@@ -184,9 +186,10 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
         val view = CustomImage(this, model.label!!, object :
             CustomParentView.ViewAction<ImageView> {
             override fun getActionId(imageView: ImageView) {
-                liveData = MutableLiveData<MutableList<String>>()
+                liveData = MutableLiveData<String>()
                 liveData.observe(this@SellActivity, Observer {
-                    Glide.with(this@SellActivity).load(File(it.get(0))).into(imageView)
+                    Glide.with(this@SellActivity).load(it).into(imageView)
+                    setHashMapValues(model.name!!,it)
                 })
                 choose(false)
             }
@@ -196,14 +199,17 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
 
     private fun createImagesList(model: RequireModel) {
         val adapter = ImagesAdapter()
+        val listOfImages= mutableListOf<String>()
         val view = CustomImagesList(this, model.label!!, adapter, object :
             CustomParentView.ViewAction<View> {
             override fun getActionId(btn: View) {
-                liveData = MutableLiveData<MutableList<String>>()
+                liveData = MutableLiveData<String>()
                 liveData.observe(this@SellActivity, Observer {
-                    adapter.list.addAll(it)
+                    adapter.list.add(it)
                     adapter.notifyDataSetChanged()
-                })
+                 //   listOfImages.add(it)
+                  //  hashMap.put(model.name!!, listOfImages)
+                 })
                 choose(true)
             }
         })
@@ -289,7 +295,7 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
             .setProgressBarColor("#4CAF50") //  ProgressBar color
             .setBackgroundColor("#212121") //  Background color
             .setCameraOnly(false) //  Camera mode
-            .setMultipleMode(isMultiple) //  Select multiple images or single image
+            .setMultipleMode(false) //  Select multiple images or single image
             .setFolderMode(true) //  Folder mode
             .setShowCamera(false) //  Show camera button
             .setDoneTitle("Done") //  Done button title
@@ -298,7 +304,7 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
             .setRequestCode(galleryRequest) //  Set request code, default Config.RC_PICK_IMAGES
             .setKeepScreenOn(true)
             .setSavePath("latif")
-            .setMaxSize(4)
+            .setMaxSize(1)
             .start()
     }
 
@@ -344,7 +350,11 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
                         Utiles.log_D("dndnddd,dkkdkd2", path)
                         list.add(path)
                     }
-                    liveData.postValue(list)
+                    for (image in list)
+                        viewModel.uploadImage(image).observe(this, Observer {
+                            if (!it.isNullOrEmpty() && !it.equals("-1"))
+                                liveData.postValue(it)
+                        })
 
 
                 } catch (e: Exception) {

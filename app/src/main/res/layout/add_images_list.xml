@@ -37,10 +37,11 @@
         />
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         tools:itemCount="1"
         android:layout_gravity="center"
         tools:listitem="@layout/pet_image_item"
-        android:id="@+id/imagesList"/>
+        android:id="@+id/imagesList"
+    />
 </LinearLayout>
 </LinearLayout>

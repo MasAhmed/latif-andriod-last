@@ -8,7 +8,7 @@ interface DataRepo {
     suspend fun getSearchBlogs(txt: String):ResultWrapper<ResponseModel<List<BlogsModel>>>
     suspend fun getBlogsCategoryList(): ResultWrapper<List<CategoryModel>>
     suspend fun getAdsTypeList(): ResultWrapper<ResponseModel<List<AdsTypeModel>>>
-    suspend fun getCreateForm(type: String): ResultWrapper<SellFormModel>
+    suspend fun getCreateForm(type: String): ResultWrapper<ResponseModel<SellFormModel>>
    suspend fun saveForm(url: String, model: SaveformModelRequest): ResultWrapper<ResponseModel<SellFormModel>>
 
 }

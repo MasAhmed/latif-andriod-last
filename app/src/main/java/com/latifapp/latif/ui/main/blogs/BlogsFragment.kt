@@ -60,6 +60,8 @@ class BlogsFragment : BaseFragment<BlogsViewModel, FragmentBlogsBinding>(),
                     return false
                 }
                 override fun onQueryTextChange(newText: String?): Boolean {
+                    adapter_.list.clear()
+                    adapter_.notifyDataSetChanged()
                     if (newText.isNullOrEmpty())
                         getBlogs()
                     else getSearchBlogs(newText)
@@ -73,10 +75,9 @@ class BlogsFragment : BaseFragment<BlogsViewModel, FragmentBlogsBinding>(),
 
     private fun getSearchBlogs(newText: String) {
         isLoadingData = true // to prevent scroll
-        adapter_.list.clear()
-        adapter_.notifyDataSetChanged()
         lifecycleScope.launchWhenStarted {
             viewModel.getSearchBlogs(newText).collect {
+                adapter_.list.clear()
                 if (!it.isNullOrEmpty()) {
                     adapter_.list = it as MutableList<BlogsModel>
                 }
@@ -87,6 +88,7 @@ class BlogsFragment : BaseFragment<BlogsViewModel, FragmentBlogsBinding>(),
     override fun selectedCategory(id: Int) {
         if (id == -1) {
             //get all blogs
+         //   getBlogs()
         } else {
 
         }

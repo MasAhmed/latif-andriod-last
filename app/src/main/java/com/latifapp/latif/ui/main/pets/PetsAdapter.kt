@@ -12,11 +12,11 @@ import com.latifapp.latif.databinding.PetItemLayoutBinding
 import com.latifapp.latif.databinding.SelectedPetItemBinding
 import com.latifapp.latif.ui.auth.signup.fragments.interests.InterestsAdapter
 
-class PetsAdapter( ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class PetsAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val SELECT_ITEM = 0
     private val UN_SELECT_ITEM = 1
     private var selectedPosition = -1
-     var  action:CategoryActions?=null
+    var action: CategoryActions? = null
     val list = mutableListOf<CategoryModel>()
 
     class MyViewHolder constructor(val binding: PetItemLayoutBinding) :
@@ -47,17 +47,18 @@ class PetsAdapter( ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is MyViewHolder)
+        if (holder is MyViewHolder) {
             holder.itemView.setOnClickListener {
                 holder.binding.rootv.apply {
                     selectedPosition = position
                     notifyDataSetChanged()
                     action?.selectedCategory(list.get(position).id!!)
                 }
-                holder.binding.text.text=list.get(position).name
 
-            }else if (holder is SelectedMyViewHolder){
-            holder.binding.text.text=list.get(position).name
+            }
+            holder.binding.text.text = list.get(position).name
+        } else if (holder is SelectedMyViewHolder) {
+            holder.binding.text.text = list.get(position).name
             holder.itemView.setOnClickListener {
                 holder.binding.rootv.apply {
                     selectedPosition = -1
@@ -65,12 +66,12 @@ class PetsAdapter( ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     action?.selectedCategory(-1)
                 }
             }
-            }
+        }
     }
 
     override fun getItemCount(): Int = list.size
 
-    interface CategoryActions{
-        fun selectedCategory(id:Int)
+    interface CategoryActions {
+        fun selectedCategory(id: Int)
     }
 }

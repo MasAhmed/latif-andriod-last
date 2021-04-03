@@ -17,7 +17,7 @@ class CustomImagesList (context_: Context, label: String, val adapter: ImagesAda
 
         binding.apply {
             val params = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
             params.setMargins(0, 40, 0, 5)

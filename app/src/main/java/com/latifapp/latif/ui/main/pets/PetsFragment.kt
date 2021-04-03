@@ -86,7 +86,7 @@ class PetsFragment : Fragment() {
 
         // Add a marker in Sydney and move the camera
 
-        if (!Permissions.checkLocationPermissions(requireContext())) {
+        if (!Permissions.checkLocationPermissions(requireActivity())) {
             Permissions.showPermissionsDialog(
                 activity,
                 "Request Location permission Is Needed",

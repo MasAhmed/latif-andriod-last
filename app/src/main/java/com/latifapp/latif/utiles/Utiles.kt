@@ -10,9 +10,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.io.IOException
 import java.util.*
 
@@ -37,4 +35,15 @@ object Utiles {
     }
 
 
+    private var debounceJob: Job? = null
+    fun onSearchDebounce(
+        waitMs: Long = 500L,
+        coroutineScope: CoroutineScope,
+        destinationFunction: () -> Unit
+    ) {
+        debounceJob?.cancel()
+        debounceJob = coroutineScope.launch {
+            delay(waitMs)
+            destinationFunction()
+        }}
 }
