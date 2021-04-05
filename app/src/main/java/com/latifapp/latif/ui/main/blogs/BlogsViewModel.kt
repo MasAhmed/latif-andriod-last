@@ -43,7 +43,7 @@ class BlogsViewModel @Inject constructor(val repo: DataRepo, appPrefsStorage: Ap
             val result = repo.getBlogsCategoryList()
             when (result) {
                 is ResultWrapper.Success -> {
-                    flow_.value = result.value!!
+                    flow_.value = result.value.response.data!!
                 }
                 else -> getErrorMsg(result)
             }

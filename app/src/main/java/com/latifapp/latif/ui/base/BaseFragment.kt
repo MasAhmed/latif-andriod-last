@@ -27,7 +27,8 @@ open abstract class BaseFragment<viewmodel : BaseViewModel, viewbinding : ViewBi
         savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = setBindingView(inflater)
+        if (!::binding.isInitialized)
+            binding = setBindingView(inflater)
         return binding.getRoot()
     }
 
@@ -48,9 +49,9 @@ open abstract class BaseFragment<viewmodel : BaseViewModel, viewbinding : ViewBi
                     else hideLoader()
                 }
 
+            }
         }
     }
-}
 
 
 }

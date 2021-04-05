@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -17,52 +18,65 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.latifapp.latif.R
+import com.latifapp.latif.databinding.ActivityLoginBinding
 import com.latifapp.latif.databinding.FragmentPetsBinding
+import com.latifapp.latif.ui.base.BaseFragment
 import com.latifapp.latif.ui.main.pets.bottomDialog.BottomDialogFragment
 import com.latifapp.latif.ui.sell.SellActivity
+import com.latifapp.latif.utiles.AppConstants
 import com.latifapp.latif.utiles.GpsUtils
 import com.latifapp.latif.utiles.Permissions
 import com.latifapp.latif.utiles.Utiles
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
-class PetsFragment : Fragment() {
+class PetsFragment : BaseFragment<PetsViewModel, FragmentPetsBinding>(),
+    PetsAdapter.CategoryActions {
 
+    private var mapFragment: SupportMapFragment? = null
     private var mMap: GoogleMap? = null
-    private lateinit var binding: FragmentPetsBinding
+    private val petsAdapter = PetsAdapter()
 
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentPetsBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
-        mapFragment?.getMapAsync(callback)
+        if (mapFragment == null) {
+            mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
+            mapFragment?.getMapAsync(callback)
 
-        binding.recyclerView.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = PetsAdapter()
-        }
+            binding.recyclerView.apply {
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                adapter = petsAdapter
+                petsAdapter.action = this@PetsFragment
+            }
 
-        binding.pin.setOnClickListener {
-            Utiles.log_D("dndndndndndn", "HERE")
+            binding.pin.setOnClickListener {
+                Utiles.log_D("dndndndndndn", "HERE")
 
-            childFragmentManager.let {
-                BottomDialogFragment().apply {
-                    show(it, tag)
+                childFragmentManager.let {
+                    BottomDialogFragment().apply {
+                        show(it, tag)
+                    }
                 }
             }
-        }
 
-        binding.sellBtn.setOnClickListener {
-            startActivity(Intent(activity, SellActivity::class.java))
+            binding.sellBtn.setOnClickListener {
+                startActivity(Intent(activity, SellActivity::class.java))
+            }
+
+            getCategoriesList()
+        }
+    }
+
+    private fun getCategoriesList() {
+        lifecycleScope.launchWhenStarted {
+            viewModel.getCategoriesList(AppConstants.PETS).collect {
+                if (!it.isNullOrEmpty()) {
+                    petsAdapter.list.addAll(it)
+                    petsAdapter.notifyDataSetChanged()
+                }
+            }
         }
     }
 
@@ -102,11 +116,26 @@ class PetsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         turnGPSOn()
+        mapFragment?.onResume()
     }
 
+    override fun onStart() {
+        super.onStart()
+        mapFragment?.onStart()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mapFragment?.onPause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mapFragment?.onDestroy()
+    }
 
     private fun moveToLocation(location: Location?) {
-        if (location!=null) {
+        if (location != null) {
             Utiles.log_D("ddnndndndndn", "${location}\n $mMap")
             mMap?.animateCamera(
                 CameraUpdateFactory.newLatLngZoom(
@@ -123,5 +152,21 @@ class PetsFragment : Fragment() {
     private fun turnGPSOn() {
         GpsUtils(activity).turnGPSOn { isGPSEnable, mlocation -> // turn on GPS
         }
+    }
+
+    override fun setBindingView(inflater: LayoutInflater): FragmentPetsBinding {
+        return FragmentPetsBinding.inflate(inflater)
+    }
+
+    override fun showLoader() {
+
+    }
+
+    override fun hideLoader() {
+
+    }
+
+    override fun selectedCategory(id: Int) {
+
     }
 }
