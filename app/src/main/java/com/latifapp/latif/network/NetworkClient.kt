@@ -2,6 +2,7 @@ package com.example.postsapplication.network
 
 import android.util.Log
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import com.latifapp.latif.utiles.Utiles
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,7 +26,7 @@ import javax.net.ssl.X509TrustManager
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkClient {
-    val BASE_URL = "https://jsonplaceholder.typicode.com/"
+    val BASE_URL = "https://latifapp.herokuapp.com/"
     private val TIMEOUT_MIN = 2
 
 
@@ -107,7 +108,7 @@ object NetworkClient {
             )
             builder.build()
         } catch (e: Exception) {
-            Log.d("jcjcjcjcjjcj", e.toString())
+            Utiles.log_D("jcjcjcjcjjcj", e.toString())
             throw RuntimeException(e)
         }
     }

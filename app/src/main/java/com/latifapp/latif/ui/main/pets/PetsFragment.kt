@@ -1,74 +1,172 @@
 package com.latifapp.latif.ui.main.pets
 
-import android.app.ProgressDialog.show
-import android.graphics.drawable.GradientDrawable
-import androidx.fragment.app.Fragment
-
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-
+import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.latifapp.latif.R
+import com.latifapp.latif.databinding.ActivityLoginBinding
 import com.latifapp.latif.databinding.FragmentPetsBinding
+import com.latifapp.latif.ui.base.BaseFragment
 import com.latifapp.latif.ui.main.pets.bottomDialog.BottomDialogFragment
+import com.latifapp.latif.ui.sell.SellActivity
+import com.latifapp.latif.utiles.AppConstants
+import com.latifapp.latif.utiles.GpsUtils
+import com.latifapp.latif.utiles.Permissions
+import com.latifapp.latif.utiles.Utiles
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 
-class PetsFragment : Fragment() {
+@AndroidEntryPoint
+class PetsFragment : BaseFragment<PetsViewModel, FragmentPetsBinding>(),
+    PetsAdapter.CategoryActions {
 
-    private lateinit var binding: FragmentPetsBinding
+    private var mapFragment: SupportMapFragment? = null
+    private var mMap: GoogleMap? = null
+    private val petsAdapter = PetsAdapter()
 
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-         binding=FragmentPetsBinding.inflate(inflater,container,false)
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
-        mapFragment?.getMapAsync(callback)
+        if (mapFragment == null) {
+            mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
+            mapFragment?.getMapAsync(callback)
 
-        binding.recyclerView.apply {
-            layoutManager=LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false)
-            adapter=PetsAdapter()
+            binding.recyclerView.apply {
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                adapter = petsAdapter
+                petsAdapter.action = this@PetsFragment
+            }
+
+            binding.pin.setOnClickListener {
+                Utiles.log_D("dndndndndndn", "HERE")
+
+                childFragmentManager.let {
+                    BottomDialogFragment().apply {
+                        show(it, tag)
+                    }
+                }
+            }
+
+            binding.sellBtn.setOnClickListener {
+                startActivity(Intent(activity, SellActivity::class.java))
+            }
+
+            getCategoriesList()
         }
+    }
 
-        binding.pin.setOnClickListener {
-            Log.d("dndndndndndn","HERE")
-
-            childFragmentManager.let {
-                BottomDialogFragment().apply {
-                    show(it, tag)
+    private fun getCategoriesList() {
+        lifecycleScope.launchWhenStarted {
+            viewModel.getCategoriesList(AppConstants.PETS).collect {
+                if (!it.isNullOrEmpty()) {
+                    petsAdapter.list.addAll(it)
+                    petsAdapter.notifyDataSetChanged()
                 }
             }
         }
     }
 
+    @SuppressLint("MissingPermission")
+    private fun setupmap() {
+
+        val fusedLocationProviderClient =
+            LocationServices.getFusedLocationProviderClient(context)
+        val task =
+            fusedLocationProviderClient.lastLocation
+        task.addOnSuccessListener { location: Location ->
+
+            moveToLocation(location)
+        }
+    }
+
+    @SuppressLint("MissingPermission")
     private val callback = OnMapReadyCallback { googleMap ->
-        /**
-         * Manipulates the map once available.
-         * This callback is triggered when the map is ready to be used.
-         * This is where we can add markers or lines, add listeners or move the camera.
-         * In this case, we just add a marker near Sydney, Australia.
-         * If Google Play services is not installed on the device, the user will be prompted to
-         * install it inside the SupportMapFragment. This method will only be triggered once the
-         * user has installed Google Play services and returned to the app.
-         */
-        val sydney = LatLng(30.0512724,31.1867696)
-         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+
+        mMap = googleMap
+
+        // Add a marker in Sydney and move the camera
+
+        if (!Permissions.checkLocationPermissions(requireActivity())) {
+            Permissions.showPermissionsDialog(
+                activity,
+                "Request Location permission Is Needed",
+                Permissions.locationManifestPermissionsList,
+                0
+            )
+        } else {
+            mMap?.setMyLocationEnabled(true)
+            setupmap()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        turnGPSOn()
+        mapFragment?.onResume()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        mapFragment?.onStart()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mapFragment?.onPause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mapFragment?.onDestroy()
+    }
+
+    private fun moveToLocation(location: Location?) {
+        if (location != null) {
+            Utiles.log_D("ddnndndndndn", "${location}\n $mMap")
+            mMap?.animateCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                    LatLng(
+                        location!!.latitude,
+                        location!!.longitude
+                    ), 15f
+                )
+            )
+        }
+    }
+
+
+    private fun turnGPSOn() {
+        GpsUtils(activity).turnGPSOn { isGPSEnable, mlocation -> // turn on GPS
+        }
+    }
+
+    override fun setBindingView(inflater: LayoutInflater): FragmentPetsBinding {
+        return FragmentPetsBinding.inflate(inflater)
+    }
+
+    override fun showLoader() {
+
+    }
+
+    override fun hideLoader() {
+
+    }
+
+    override fun selectedCategory(id: Int) {
 
     }
 }

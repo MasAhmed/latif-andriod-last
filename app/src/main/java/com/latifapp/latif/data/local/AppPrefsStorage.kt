@@ -10,6 +10,7 @@ import com.latifapp.latif.data.local.PreferenceConstants.Companion.USER_ID_PREFS
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -21,12 +22,12 @@ class AppPrefsStorage  @Inject constructor(
     private val dataStore: DataStore<Preferences> =
         context.createDataStore(name = "AppPrefStorage")
 
-    private suspend fun <T> DataStore<Preferences>.setValue(
+    public suspend fun <T> setValue(
         key: Preferences.Key<T>,
         value: T
     ) {
 
-        this.edit { preferences ->
+        dataStore.edit { preferences ->
             // save the value in prefs
             preferences[key] = value
         }
@@ -39,15 +40,17 @@ class AppPrefsStorage  @Inject constructor(
      * @throws Exception if there is some error in getting the value
      * @return [Flow] of [T]
      */
-    private fun <T> DataStore<Preferences>.getValueAsFlow(
+    public fun <T> getValueAsFlow(
         key: Preferences.Key<T>,
         defaultValue: T
     ): Flow<T> {
-        return this.data.catch { exception ->
+        return dataStore.data.catch { exception ->
                 emit(emptyPreferences())
         }.map { preferences ->
             // return the default value if it doesn't exist in the storage
             preferences[key] ?: defaultValue
         }
     }
+
+
 }

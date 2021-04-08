@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:hint="@string/ads_types"
+        android:fontFamily="@font/poppins_regular"
+        android:id="@+id/adsTypeSpinner"
+        android:layout_marginBottom="5dp"
+        android:inputType="none"
+        android:gravity="center_vertical"
+        android:background="@drawable/bg_drop_down"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+         android:textSize="14sp"
+         />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:layout_constraintTop_toTopOf="@id/adsTypeSpinner"
+        app:layout_constraintBottom_toTopOf="@id/adsTypeSpinner"
+        app:layout_constraintStart_toStartOf="@id/adsTypeSpinner"
+        app:layout_constraintEnd_toEndOf="@id/adsTypeSpinner"
+        app:layout_constraintHorizontal_bias="0.05"
+        android:textColor="@color/yellow_orange"
+        android:text="label"
+        android:fontFamily="@font/poppins_bold"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:includeFontPadding="false"
+        android:id="@+id/label"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -20,7 +20,8 @@
     <ImageView
         android:layout_width="24dp"
         android:layout_height="24dp"
-        app:srcCompat="@drawable/ic_cat"
+        app:srcCompat="@drawable/ic_image"
+        android:id="@+id/image"
         />
     <TextView
         android:layout_width="wrap_content"
@@ -30,10 +31,15 @@
         android:text="Cats"
         android:textColor="@color/white"
         android:fontFamily="@font/poppins_regular"
-        android:textSize="14sp"
+        android:textSize="13sp"
+        android:autoSizeMaxTextSize="13sp"
+        android:autoSizeMinTextSize="8sp"
+        android:autoSizeStepGranularity="1sp"
+        android:autoSizeTextType="uniform"
         android:layout_gravity="center"
         android:gravity="center"
         android:layout_marginTop="3dp"
+        android:id="@+id/text"
         />
 </LinearLayout>
 </LinearLayout>

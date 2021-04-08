@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
@@ -14,23 +16,24 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation
 import com.latifapp.latif.R
 import com.latifapp.latif.databinding.ActivityMainBinding
+import com.latifapp.latif.ui.base.BaseActivity
 import com.latifapp.latif.ui.filter.FilterActivity
 import com.latifapp.latif.ui.main.profile.ProfileActivity
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
 import kotlin.coroutines.coroutineContext
-
-class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedListener,
+@AndroidEntryPoint
+class MainActivity : BaseActivity<MainViewModel,ActivityMainBinding>(), NavController.OnDestinationChangedListener,
     MenuAdapter.MenuAction, BottomNavItemsAdapter.Action {
     private val bottomAdapter=BottomNavItemsAdapter(this@MainActivity)
     private lateinit var navigation: NavController
-    private lateinit var binding: ActivityMainBinding
+    public lateinit var searchview:SearchView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        searchview=binding.toolbar.searchBtn
 
          navigation = Navigation.findNavController(
             this,
@@ -109,4 +112,14 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
              4 -> navigation.navigate(R.id.nav_chat_fragments)
          }
     }
+
+    override fun setBindingView(inflater: LayoutInflater): ActivityMainBinding {
+        return ActivityMainBinding.inflate(layoutInflater)
+    }
+
+    override fun showLoader() {
+     }
+
+    override fun hideLoader() {
+     }
 }
