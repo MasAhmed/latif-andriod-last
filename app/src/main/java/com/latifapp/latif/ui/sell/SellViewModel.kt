@@ -12,6 +12,7 @@ import com.latifapp.latif.data.models.*
 import com.latifapp.latif.network.ResultWrapper
 import com.latifapp.latif.network.repo.DataRepo
 import com.latifapp.latif.ui.base.BaseViewModel
+import com.latifapp.latif.ui.base.CategoriesViewModel
 import com.latifapp.latif.utiles.Utiles
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,8 +22,8 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
-class SellViewModel @Inject constructor(val repo: DataRepo, appPrefsStorage: AppPrefsStorage) :
-    BaseViewModel(appPrefsStorage) {
+class SellViewModel @Inject constructor( repo: DataRepo, appPrefsStorage: AppPrefsStorage) :
+    CategoriesViewModel(appPrefsStorage,repo) {
 
     private val flow_ = MutableStateFlow<List<AdsTypeModel>>(arrayListOf())
     private var adType = ""
@@ -132,6 +133,8 @@ class SellViewModel @Inject constructor(val repo: DataRepo, appPrefsStorage: App
 
         return livedata
     }
+
+
 
 
 }

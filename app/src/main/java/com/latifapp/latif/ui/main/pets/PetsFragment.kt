@@ -18,8 +18,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.latifapp.latif.R
-import com.latifapp.latif.databinding.ActivityLoginBinding
-import com.latifapp.latif.databinding.FragmentPetsBinding
+ import com.latifapp.latif.databinding.FragmentPetsBinding
 import com.latifapp.latif.ui.base.BaseFragment
 import com.latifapp.latif.ui.main.pets.bottomDialog.BottomDialogFragment
 import com.latifapp.latif.ui.sell.SellActivity
@@ -28,7 +27,13 @@ import com.latifapp.latif.utiles.GpsUtils
 import com.latifapp.latif.utiles.Permissions
 import com.latifapp.latif.utiles.Utiles
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import java.lang.Exception
+import kotlin.coroutines.coroutineContext
 
 @AndroidEntryPoint
 class PetsFragment : BaseFragment<PetsViewModel, FragmentPetsBinding>(),
@@ -44,7 +49,7 @@ class PetsFragment : BaseFragment<PetsViewModel, FragmentPetsBinding>(),
         if (mapFragment == null) {
             mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
             mapFragment?.getMapAsync(callback)
-
+            Utiles.setMyLocationPositionInBottom(mapFragment?.view)
             binding.recyclerView.apply {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 adapter = petsAdapter
@@ -87,10 +92,14 @@ class PetsFragment : BaseFragment<PetsViewModel, FragmentPetsBinding>(),
             LocationServices.getFusedLocationProviderClient(context)
         val task =
             fusedLocationProviderClient.lastLocation
-        task.addOnSuccessListener { location: Location ->
 
-            moveToLocation(location)
+        task.addOnCompleteListener{
+            val location=task.result
+            if (location != null)
+                moveToLocation(location)
         }
+
+
     }
 
     @SuppressLint("MissingPermission")
@@ -109,7 +118,7 @@ class PetsFragment : BaseFragment<PetsViewModel, FragmentPetsBinding>(),
             )
         } else {
             mMap?.setMyLocationEnabled(true)
-            setupmap()
+            //setupmap()
         }
     }
 
@@ -150,8 +159,21 @@ class PetsFragment : BaseFragment<PetsViewModel, FragmentPetsBinding>(),
 
 
     private fun turnGPSOn() {
-        GpsUtils(activity).turnGPSOn { isGPSEnable, mlocation -> // turn on GPS
-        }
+        if (!Permissions.checkLocationPermissions(requireContext())) {
+            Permissions.showPermissionsDialog(
+                requireContext(),
+                "Request Location permission Is Needed",
+                Permissions.locationManifestPermissionsList,
+                0
+            )
+        } else
+            GpsUtils(activity).turnGPSOn { isGPSEnable, mlocation -> // turn on GPS
+                Utiles.log_D("fnnfnfnfnnf",isGPSEnable)
+                if (isGPSEnable)
+                    setupmap()
+
+
+            }
     }
 
     override fun setBindingView(inflater: LayoutInflater): FragmentPetsBinding {

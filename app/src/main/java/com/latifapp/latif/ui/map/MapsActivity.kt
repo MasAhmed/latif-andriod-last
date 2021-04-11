@@ -71,7 +71,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             )
         } else {
             mMap.setMyLocationEnabled(true)
-            setupmap()
         }
         mMap.setOnCameraIdleListener {
             locTxt.setText(R.string.loading)
@@ -100,6 +99,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     @SuppressLint("MissingPermission")
     private fun turnGPSOn() {
         GpsUtils(this).turnGPSOn { isGPSEnable, mlocation -> // turn on GPS
+            if (isGPSEnable)setupmap()
 
         }
     }
@@ -110,10 +110,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             LocationServices.getFusedLocationProviderClient(this)
         val task =
             fusedLocationProviderClient.lastLocation
-        task.addOnSuccessListener { location: Location ->
-
-            moveToLocation(location)
-        }
+        if (task!=null)
+            task.addOnCompleteListener{
+                val location=task.result
+                if (location != null)
+                    moveToLocation(location)
+            }
     }
 
     private fun moveToLocation(location: Location) {

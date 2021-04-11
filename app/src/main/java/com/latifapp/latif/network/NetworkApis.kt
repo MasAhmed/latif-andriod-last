@@ -15,7 +15,7 @@ interface NetworkApis {
     suspend fun getSearchBlogs(@Path("keyword") txt: String): ResponseModel<List<BlogsModel>>
 
     @GET("api/public/blogCategory")
-    suspend fun getBlogsCategoryList(): ResponseModel<List<CategoryModel>>
+    suspend fun getBlogsCategoryList(): ResponseModel<List<CategoryItemsModel>>
 
     @GET("api/public/category")
     suspend fun getCategoryList(): ResponseModel<List<BlogsModel>>
@@ -24,9 +24,13 @@ interface NetworkApis {
     suspend fun getAdsTypeList(): ResponseModel<List<AdsTypeModel>>
     @GET("api/public/cat-by-adType/type={type}")
     suspend fun getCatsTypeList(@Path("type") type:Int): ResponseModel<List<CategoryModel>>
+    @GET
+    suspend fun getCatsTypeListUrl(@Url url: String): ResponseModel<List<CategoryModel>>
 
     @GET("api/public/ads/get-create-form")
     suspend fun getCreateForm(@Query("adType") type: String): ResponseModel<SellFormModel>
+    @GET("api/public/ads/get-filter-form")
+    suspend fun createFilterForm(@Query("adType") type: String): ResponseModel<SellFormModel>
 
     @POST
     suspend fun saveForm(

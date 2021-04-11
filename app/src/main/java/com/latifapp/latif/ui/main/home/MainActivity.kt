@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.widget.ImageView
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.lifecycleScope
@@ -18,6 +19,7 @@ import com.latifapp.latif.R
 import com.latifapp.latif.databinding.ActivityMainBinding
 import com.latifapp.latif.ui.base.BaseActivity
 import com.latifapp.latif.ui.filter.FilterActivity
+import com.latifapp.latif.ui.filter.FilterFormActivity
 import com.latifapp.latif.ui.main.profile.ProfileActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -29,7 +31,7 @@ class MainActivity : BaseActivity<MainViewModel,ActivityMainBinding>(), NavContr
     MenuAdapter.MenuAction, BottomNavItemsAdapter.Action {
     private val bottomAdapter=BottomNavItemsAdapter(this@MainActivity)
     private lateinit var navigation: NavController
-    public lateinit var searchview:SearchView
+    public lateinit var searchview:ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,8 +41,8 @@ class MainActivity : BaseActivity<MainViewModel,ActivityMainBinding>(), NavContr
             this,
             R.id.fragment_container
         )
-        binding.toolbar.searchBtn.setOnClickListener {
-            startActivity(Intent(this@MainActivity,FilterActivity::class.java))
+        searchview.setOnClickListener {
+            startActivity(Intent(this@MainActivity, FilterFormActivity::class.java))
         }
 
         setBottomBarNav()

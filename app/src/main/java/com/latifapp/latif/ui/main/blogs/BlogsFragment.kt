@@ -1,5 +1,6 @@
 package com.latifapp.latif.ui.main.blogs
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.latifapp.latif.data.models.BlogsModel
 import com.latifapp.latif.databinding.FragmentBlogsBinding
 import com.latifapp.latif.ui.base.BaseFragment
+import com.latifapp.latif.ui.filter.FilterActivity
+import com.latifapp.latif.ui.filter.FilterFormActivity
 import com.latifapp.latif.ui.main.home.MainActivity
 import com.latifapp.latif.ui.main.pets.PetsAdapter
 import com.latifapp.latif.utiles.Utiles
@@ -20,12 +23,12 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class BlogsFragment : BaseFragment<BlogsViewModel, FragmentBlogsBinding>(),
-    PetsAdapter.CategoryActions {
+     PetsCategoryAdapter.CategoryActions {
     private var isLoadingData: Boolean = true
 
     @Inject
     lateinit var adapter_: BlogsAdapter
-    private val petsAdapter = PetsAdapter()
+    private val petsAdapter = PetsCategoryAdapter()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setSearchView()
@@ -51,26 +54,29 @@ class BlogsFragment : BaseFragment<BlogsViewModel, FragmentBlogsBinding>(),
     }
 
     private fun setSearchView() {
-        (activity as MainActivity).searchview.apply {
-            setOnCloseListener(SearchView.OnCloseListener {
-                return@OnCloseListener false
-            })
-            setOnQueryTextListener(object : OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    return false
-                }
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    adapter_.list.clear()
-                    adapter_.notifyDataSetChanged()
-                    if (newText.isNullOrEmpty())
-                        getBlogs()
-                    else getSearchBlogs(newText)
-                    return false
-                }
-
-            })
-
+        (activity as MainActivity).searchview.setOnClickListener {
+            startActivity(Intent(activity, FilterFormActivity::class.java))
         }
+//        (activity as MainActivity).searchview.apply {
+//            setOnCloseListener(SearchView.OnCloseListener {
+//                return@OnCloseListener false
+//            })
+//            setOnQueryTextListener(object : OnQueryTextListener {
+//                override fun onQueryTextSubmit(query: String?): Boolean {
+//                    return false
+//                }
+//                override fun onQueryTextChange(newText: String?): Boolean {
+//                    adapter_.list.clear()
+//                    adapter_.notifyDataSetChanged()
+//                    if (newText.isNullOrEmpty())
+//                        getBlogs()
+//                    else getSearchBlogs(newText)
+//                    return false
+//                }
+//
+//            })
+//
+//        }
     }
 
     private fun getSearchBlogs(newText: String) {

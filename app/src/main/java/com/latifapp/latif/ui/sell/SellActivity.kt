@@ -134,10 +134,22 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
                 "dropdown" -> createSpinner(model_)
                 "radiobutton" -> createRadioButtonGroup(model_)
                 "map" -> createMapBtn(model_)
+                "url_option" -> getUrlInfo(model_)
                 else -> createEditText(model_)
 
 
             }
+    }
+
+    private fun getUrlInfo(model_: RequireModel) {
+        lifecycleScope.launchWhenStarted {
+            viewModel.getUrlInfo(model_).observe(this@SellActivity, Observer {
+                if (it != null)
+                    createSpinner(it)
+            })
+
+
+        }
     }
 
 
@@ -189,7 +201,7 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
                 liveData = MutableLiveData<String>()
                 liveData.observe(this@SellActivity, Observer {
                     Glide.with(this@SellActivity).load(it).into(imageView)
-                    setHashMapValues(model.name!!,it)
+                    setHashMapValues(model.name!!, it)
                 })
                 choose(false)
             }
@@ -199,7 +211,7 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
 
     private fun createImagesList(model: RequireModel) {
         val adapter = ImagesAdapter()
-        val listOfImages= mutableListOf<String>()
+        val listOfImages = mutableListOf<String>()
         val view = CustomImagesList(this, model.label!!, adapter, object :
             CustomParentView.ViewAction<View> {
             override fun getActionId(btn: View) {
@@ -207,9 +219,9 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
                 liveData.observe(this@SellActivity, Observer {
                     adapter.list.add(it)
                     adapter.notifyDataSetChanged()
-                 //   listOfImages.add(it)
-                  //  hashMap.put(model.name!!, listOfImages)
-                 })
+                    //   listOfImages.add(it)
+                    //  hashMap.put(model.name!!, listOfImages)
+                })
                 choose(true)
             }
         })
@@ -218,7 +230,6 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
         binding.container.addView(view.getView())
 
     }
-
 
     fun createEditText(model: RequireModel) {
         if (model.label.isNullOrEmpty()) return
