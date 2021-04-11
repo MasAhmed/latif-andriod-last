@@ -17,12 +17,17 @@ class DataRepoManger @Inject constructor(val apis: NetworkApis) : DataRepo {
         return safeApiCall { apis.getSearchBlogs(txt) }
     }
 
-    override suspend fun getBlogsCategoryList(): ResultWrapper<ResponseModel<List<CategoryModel>>> {
+    override suspend fun getBlogsCategoryList(): ResultWrapper<ResponseModel<List<CategoryItemsModel>>> {
         return safeApiCall { apis.getBlogsCategoryList() }
     }
 
     override suspend fun getCategoriesList(type:Int): ResultWrapper<ResponseModel<List<CategoryModel>>> {
         return safeApiCall { apis.getCatsTypeList(type) }
+    }
+
+    override suspend fun getCategoriesListFromUrl(url: String): ResultWrapper<ResponseModel<List<CategoryModel>>> {
+
+        return safeApiCall { apis.getCatsTypeListUrl(url) }
     }
 
     override suspend fun getAdsTypeList(): ResultWrapper<ResponseModel<List<AdsTypeModel>>> {

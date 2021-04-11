@@ -20,12 +20,12 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class BlogsFragment : BaseFragment<BlogsViewModel, FragmentBlogsBinding>(),
-    PetsAdapter.CategoryActions {
+     PetsCategoryAdapter.CategoryActions {
     private var isLoadingData: Boolean = true
 
     @Inject
     lateinit var adapter_: BlogsAdapter
-    private val petsAdapter = PetsAdapter()
+    private val petsAdapter = PetsCategoryAdapter()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setSearchView()

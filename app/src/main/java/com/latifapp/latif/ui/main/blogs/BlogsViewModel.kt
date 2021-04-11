@@ -5,6 +5,7 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.viewModelScope
 import com.latifapp.latif.data.local.AppPrefsStorage
 import com.latifapp.latif.data.models.BlogsModel
+import com.latifapp.latif.data.models.CategoryItemsModel
 import com.latifapp.latif.data.models.CategoryModel
 import com.latifapp.latif.network.ResultWrapper
 import com.latifapp.latif.network.repo.DataRepo
@@ -36,8 +37,8 @@ class BlogsViewModel @Inject constructor(val repo: DataRepo, appPrefsStorage: Ap
         return flow_
     }
 
-    fun getBlogsCategoryList(): StateFlow<List<CategoryModel>> {
-        val flow_ = MutableStateFlow<List<CategoryModel>>(arrayListOf())
+    fun getBlogsCategoryList(): StateFlow<List<CategoryItemsModel>> {
+        val flow_ = MutableStateFlow<List<CategoryItemsModel>>(arrayListOf())
         loader.value = true
         viewModelScope.launch(Dispatchers.IO) {
             val result = repo.getBlogsCategoryList()

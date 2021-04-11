@@ -21,7 +21,7 @@ import javax.inject.Inject
 open class BaseViewModel(val appPrefsStorage: AppPrefsStorage) : ViewModel() {
     private val networkErrorMsgEn = "No Connection !!"
     private val networkErrorMsgAr = "لا يوجد اتصال بالشبكة !!"
-    private var lang = ""
+    var lang = ""
     protected var errorMsg = MutableLiveData<String>("")
     public val errorMsg_: LiveData<String>
         get() = errorMsg

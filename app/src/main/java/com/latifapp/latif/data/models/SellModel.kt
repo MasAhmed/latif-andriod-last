@@ -3,11 +3,12 @@ package com.latifapp.latif.data.models
 data class SellFormModel(val url: String?=null,
                      val form:List<RequireModel>?=null)
 data class RequireModel(
-    val type: String?,
-    val required: Boolean?,
+    val type: String?=null,
+    val required: Boolean?=false,
     val multi: Boolean=false,
-    val name: String?,
-    val label: String?,
+    val name: String?=null,
+    val label: String?=null,
+    val url: String?=null,
     val options: List<OptionsModel>?=null
 
 )
