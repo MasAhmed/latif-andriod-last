@@ -154,7 +154,10 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
 
 
     private fun createCheckBoxGroup(model: RequireModel) {
-        val text = CustomCheckBoxGroup(this, model.label!!, model.options!!, object :
+        var header=model.label
+        if (!lang.equals("en"))
+         header=model.label_ar
+        val text = CustomCheckBoxGroup(this, header!!, model.options!!, object :
             CustomParentView.ViewAction<String> {
             override fun getActionId(text: String) {
                 setHashMapValues("${model.name}", "$text")
@@ -165,7 +168,10 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
     }
 
     private fun createRadioButtonGroup(model: RequireModel) {
-        val text = CustomRadioGroup(this, model.label!!, model.options!!, object :
+        var header=model.label
+        if (!lang.equals("en"))
+            header=model.label_ar
+        val text = CustomRadioGroup(this, header!!, model.options!!, object :
             CustomParentView.ViewAction<String> {
             override fun getActionId(text: String) {
                 setHashMapValues("${model.name}", "$text")
@@ -194,8 +200,10 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
     }
 
     private fun createImage(model: RequireModel) {
-
-        val view = CustomImage(this, model.label!!, object :
+        var header=model.label
+        if (!lang.equals("en"))
+            header=model.label_ar
+        val view = CustomImage(this, header!!, object :
             CustomParentView.ViewAction<ImageView> {
             override fun getActionId(imageView: ImageView) {
                 liveData = MutableLiveData<String>()
@@ -212,7 +220,10 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
     private fun createImagesList(model: RequireModel) {
         val adapter = ImagesAdapter()
         val listOfImages = mutableListOf<String>()
-        val view = CustomImagesList(this, model.label!!, adapter, object :
+        var header=model.label
+        if (!lang.equals("en"))
+            header=model.label_ar
+        val view = CustomImagesList(this, header!!, adapter, object :
             CustomParentView.ViewAction<View> {
             override fun getActionId(btn: View) {
                 liveData = MutableLiveData<String>()
@@ -233,8 +244,11 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
 
     fun createEditText(model: RequireModel) {
         if (model.label.isNullOrEmpty()) return
+        var header=model.label
+        if (!lang.equals("en"))
+            header=model.label_ar
         val text =
-            CustomEditText(this, model.label!!, model.type?.toLowerCase().equals("string"), object :
+            CustomEditText(this, header!!, model.type?.toLowerCase().equals("string"), object :
                 CustomParentView.ViewAction<String> {
                 override fun getActionId(text: String) {
                     setHashMapValues("${model.name}", "$text")
@@ -245,8 +259,11 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
     }
 
     fun createSwitch(model: RequireModel) {
+        var header=model.label
+        if (!lang.equals("en"))
+            header=model.label_ar
         setHashMapValues("${model.name}", "false")
-        val switch = CustomSwitch(this, model.label!!, object :
+        val switch = CustomSwitch(this, header!!, object :
             CustomParentView.ViewAction<Boolean> {
             override fun getActionId(isON: Boolean) {
                 setHashMapValues("${model.name}", "$isON")
@@ -257,7 +274,10 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
     }
 
     fun createSpinner(model: RequireModel) {
-        val text = CustomSpinner(this, model.label!!, model.options!!, object :
+        var header=model.label
+        if (!lang.equals("en"))
+            header=model.label_ar
+        val text = CustomSpinner(this, header!!, model.options!!, object :
             CustomParentView.ViewAction<String> {
             override fun getActionId(text: String) {
                 setHashMapValues("${model.name}", "$text")

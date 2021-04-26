@@ -76,6 +76,7 @@ class FilterFormActivity : BaseActivity<FilterViewModel, ActivitySellBinding>(){
     }
 
     private fun setFormViews(form: List<RequireModel>) {
+        Utiles.log_D("nffnnnfnfnf","${lang!="en"}  $lang")
         for (model_ in form)
             when (model_.type?.toLowerCase()) {
                 "boolean" -> createSwitch(model_)
@@ -103,7 +104,10 @@ class FilterFormActivity : BaseActivity<FilterViewModel, ActivitySellBinding>(){
 
 
     private fun createCheckBoxGroup(model: RequireModel) {
-        val text = CustomCheckBoxGroup(this, model.label!!, model.options!!, object :
+        var header=model.label
+        if (lang!="en")
+            header=model.label_ar
+        val text = CustomCheckBoxGroup(this, header!!, model.options!!, object :
             CustomParentView.ViewAction<String> {
             override fun getActionId(text: String) {
                 setHashMapValues("${model.name}", "$text")
@@ -114,7 +118,10 @@ class FilterFormActivity : BaseActivity<FilterViewModel, ActivitySellBinding>(){
     }
 
     private fun createRadioButtonGroup(model: RequireModel) {
-        val text = CustomRadioGroup(this, model.label!!, model.options!!, object :
+        var header=model.label
+        if (lang!="en")
+            header=model.label_ar
+        val text = CustomRadioGroup(this, header!!, model.options!!, object :
             CustomParentView.ViewAction<String> {
             override fun getActionId(text: String) {
                 setHashMapValues("${model.name}", "$text")
@@ -149,8 +156,11 @@ class FilterFormActivity : BaseActivity<FilterViewModel, ActivitySellBinding>(){
 
     fun createEditText(model: RequireModel) {
         if (model.label.isNullOrEmpty()) return
+        var header=model.label
+        if (lang!="en")
+            header=model.label_ar
         val text =
-            CustomEditText(this, model.label!!, model.type?.toLowerCase().equals("string"), object :
+            CustomEditText(this, header, model.type?.toLowerCase().equals("string"), object :
                 CustomParentView.ViewAction<String> {
                 override fun getActionId(text: String) {
                     setHashMapValues("${model.name}", "$text")
@@ -162,7 +172,10 @@ class FilterFormActivity : BaseActivity<FilterViewModel, ActivitySellBinding>(){
 
     fun createSwitch(model: RequireModel) {
         setHashMapValues("${model.name}", "false")
-        val switch = CustomSwitch(this, model.label!!, object :
+        var header=model.label
+        if (lang!="en")
+            header=model.label_ar
+        val switch = CustomSwitch(this, header!!, object :
             CustomParentView.ViewAction<Boolean> {
             override fun getActionId(isON: Boolean) {
                 setHashMapValues("${model.name}", "$isON")
@@ -173,7 +186,10 @@ class FilterFormActivity : BaseActivity<FilterViewModel, ActivitySellBinding>(){
     }
 
     fun createSpinner(model: RequireModel) {
-        val text = CustomSpinner(this, model.label!!, model.options!!, object :
+        var header=model.label
+        if (lang!="en")
+            header=model.label_ar
+        val text = CustomSpinner(this, header!!, model.options!!, object :
             CustomParentView.ViewAction<String> {
             override fun getActionId(text: String) {
                 setHashMapValues("${model.name}", "$text")

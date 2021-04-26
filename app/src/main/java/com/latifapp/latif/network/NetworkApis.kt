@@ -32,6 +32,12 @@ interface NetworkApis {
     @GET("api/public/ads/get-filter-form")
     suspend fun createFilterForm(@Query("adType") type: String): ResponseModel<SellFormModel>
 
+    @GET("api/public/ads/nearest")
+    suspend fun getNearestAds(@Query("type") type: String,
+                              @Query("longitude") longitude: Double,
+                              @Query("latitude") latitude: Double,
+                              @Query("page") page: Int): ResponseModel<List<AdsModel>>
+
     @POST
     suspend fun saveForm(
         @Url url: String,

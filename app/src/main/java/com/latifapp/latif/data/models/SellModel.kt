@@ -7,7 +7,8 @@ data class RequireModel(
     val required: Boolean?=false,
     val multi: Boolean=false,
     val name: String?=null,
-    val label: String?=null,
+    val label: String="",
+    val label_ar: String="",
     val url: String?=null,
     val options: List<OptionsModel>?=null
 

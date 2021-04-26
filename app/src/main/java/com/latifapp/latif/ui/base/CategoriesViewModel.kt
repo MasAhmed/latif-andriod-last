@@ -56,6 +56,7 @@ open class CategoriesViewModel(appPrefsStorage: AppPrefsStorage, val repo: DataR
                         required = model.required,
                         name = model.name,
                         label = model.label,
+                        label_ar = model.label_ar,
                         options = list
                     )
                     withContext(Dispatchers.Main) {

@@ -17,7 +17,7 @@ import com.latifapp.latif.databinding.CustomEdittextLayoutBinding
 
 class CustomEditText(
     context_: Context,
-    label: String,
+    label: String="",
     val isText: Boolean,
     action: ViewAction<String>
 ) : CustomParentView<String>(

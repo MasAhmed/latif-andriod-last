@@ -21,7 +21,10 @@ import javax.inject.Inject
 open class BaseViewModel(val appPrefsStorage: AppPrefsStorage) : ViewModel() {
     private val networkErrorMsgEn = "No Connection !!"
     private val networkErrorMsgAr = "لا يوجد اتصال بالشبكة !!"
-    var lang = ""
+    private var language=""
+    val lang :String
+    get() = language
+
     protected var errorMsg = MutableLiveData<String>("")
     public val errorMsg_: LiveData<String>
         get() = errorMsg
@@ -34,7 +37,8 @@ open class BaseViewModel(val appPrefsStorage: AppPrefsStorage) : ViewModel() {
         viewModelScope.launch {
             if (lang.isEmpty()) {
                 appPrefsStorage.getValueAsFlow(Lang_PREFS, "en").collect {
-                    lang = it
+                    language = it
+                    Utiles.log_D("nffnnnfnfnf11",language+"000000")
                 }
             }
         }

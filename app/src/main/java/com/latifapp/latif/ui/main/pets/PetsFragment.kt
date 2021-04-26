@@ -4,21 +4,20 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.location.Location
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.gms.location.*
+ import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
-import com.latifapp.latif.R
- import com.latifapp.latif.databinding.FragmentPetsBinding
+import com.google.android.gms.maps.model.MarkerOptions
+import com.latifapp.latif.data.models.AdsModel
+import com.latifapp.latif.databinding.FragmentPetsBinding
 import com.latifapp.latif.ui.base.BaseFragment
 import com.latifapp.latif.ui.main.pets.bottomDialog.BottomDialogFragment
 import com.latifapp.latif.ui.sell.SellActivity
@@ -27,17 +26,14 @@ import com.latifapp.latif.utiles.GpsUtils
 import com.latifapp.latif.utiles.Permissions
 import com.latifapp.latif.utiles.Utiles
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
+import kotlinx.android.synthetic.main.activity_maps.*
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import java.lang.Exception
-import kotlin.coroutines.coroutineContext
+import com.latifapp.latif.R
+
 
 @AndroidEntryPoint
 class PetsFragment : BaseFragment<PetsViewModel, FragmentPetsBinding>(),
-    PetsAdapter.CategoryActions {
+    PetsAdapter.CategoryActions  {
 
     private var mapFragment: SupportMapFragment? = null
     private var mMap: GoogleMap? = null
@@ -71,6 +67,18 @@ class PetsFragment : BaseFragment<PetsViewModel, FragmentPetsBinding>(),
             }
 
             getCategoriesList()
+
+        }
+    }
+
+    private fun getPetsList(latLng: LatLng) {
+        lifecycleScope.launchWhenStarted {
+            viewModel.getListOfPets("PETS", latLng.latitude, latLng.longitude).collect {
+                if (it!=null) {
+                    Utiles.log_D("nvnnvnvnvnnvnv", "$it")
+                    setLPetsLocations(it)
+                }
+            }
         }
     }
 
@@ -93,8 +101,8 @@ class PetsFragment : BaseFragment<PetsViewModel, FragmentPetsBinding>(),
         val task =
             fusedLocationProviderClient.lastLocation
 
-        task.addOnCompleteListener{
-            val location=task.result
+        task.addOnCompleteListener {
+            val location = task.result
             if (location != null)
                 moveToLocation(location)
         }
@@ -107,8 +115,6 @@ class PetsFragment : BaseFragment<PetsViewModel, FragmentPetsBinding>(),
 
         mMap = googleMap
 
-        // Add a marker in Sydney and move the camera
-
         if (!Permissions.checkLocationPermissions(requireActivity())) {
             Permissions.showPermissionsDialog(
                 activity,
@@ -119,6 +125,31 @@ class PetsFragment : BaseFragment<PetsViewModel, FragmentPetsBinding>(),
         } else {
             mMap?.setMyLocationEnabled(true)
             //setupmap()
+        }
+
+        mMap?.setOnCameraIdleListener {
+            var latLng = mMap?.cameraPosition?.target
+            if (latLng != null && latLng.latitude != 0.0)
+                getPetsList(latLng)
+        }
+    }
+
+    fun setLPetsLocations(list: List<AdsModel>) {
+        if (mMap != null) {
+            mMap?.clear()
+            list.forEach {
+                val pet = LatLng(it.latitude, it.longitude)
+                var marker = MarkerOptions().position(pet)
+                    .title(it.name) // below line is use to add custom marker on our map.
+//                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.white_ic_loc))
+                mMap?.addMarker(
+                   marker
+                )
+                Utiles.log_D("ndndndndnnd", "${it.latitude}   ${marker.position.latitude}")
+//                mMap?.setOnMapClickListener { latLag->
+//                    Utiles.log_D("ndndndndnnd",it.name)
+//                }
+            }
         }
     }
 
@@ -168,7 +199,7 @@ class PetsFragment : BaseFragment<PetsViewModel, FragmentPetsBinding>(),
             )
         } else
             GpsUtils(activity).turnGPSOn { isGPSEnable, mlocation -> // turn on GPS
-                Utiles.log_D("fnnfnfnfnnf",isGPSEnable)
+                Utiles.log_D("fnnfnfnfnnf", isGPSEnable)
                 if (isGPSEnable)
                     setupmap()
 

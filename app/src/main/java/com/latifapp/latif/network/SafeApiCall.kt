@@ -39,6 +39,7 @@ import javax.inject.Inject
                 val moshiAdapter = Moshi.Builder().build().adapter(ErrorResponse::class.java)
                 moshiAdapter.fromJson(it)
             }
+            ErrorResponse()
         } catch (exception: Exception) {
             ErrorResponse()
         }
