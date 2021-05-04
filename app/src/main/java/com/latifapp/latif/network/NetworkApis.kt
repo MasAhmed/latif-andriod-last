@@ -1,5 +1,6 @@
 package com.example.postsapplication.network
 
+import androidx.annotation.Nullable
 import com.latifapp.latif.data.models.*
 import retrofit2.http.*
 
@@ -36,6 +37,7 @@ interface NetworkApis {
     suspend fun getNearestAds(@Query("type") type: String,
                               @Query("longitude") longitude: Double,
                               @Query("latitude") latitude: Double,
+                              @Nullable @Query("category") category: Int?,
                               @Query("page") page: Int): ResponseModel<List<AdsModel>>
 
     @POST

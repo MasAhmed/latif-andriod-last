@@ -17,7 +17,8 @@ data class OptionsModel(val code: String?,
                         val label: String?)
 data class SaveformModelRequest(
     val type: String?,
-    val userAds: List<UserAds>
+    val userAds: List<UserAds>,
+    val external: Boolean=true,
 
 )
 data class UserAds( val id: String?, val value: Any?)

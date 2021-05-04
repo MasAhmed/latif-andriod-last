@@ -3,22 +3,23 @@ package com.latifapp.latif.ui.main.services
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.postsapplication.network.NetworkClient
 import com.latifapp.latif.R
+import com.latifapp.latif.data.models.CategoryModel
 import com.latifapp.latif.databinding.ClinicItemBinding
 import com.latifapp.latif.databinding.ServicesItemBinding
 import com.latifapp.latif.ui.main.clinic.ClinicAdapter
+import com.latifapp.latif.ui.main.pets.PetsAdapter
 
 class ServiceAdapter : RecyclerView.Adapter<ServiceAdapter.MyViewHolder>() {
-    val list = listOf<ClinicAdapter.Model>(
-        ClinicAdapter.Model(R.string.housing, R.drawable.housing),
-        ClinicAdapter.Model(R.string.hostelry, R.drawable.hostel),
-        ClinicAdapter.Model(R.string.delivery, R.drawable.delivery_man),
-        ClinicAdapter.Model(R.string.shower, R.drawable.shower)
-    )
-
-    class MyViewHolder(val binding: ServicesItemBinding) : RecyclerView.ViewHolder(binding.root) {
-
-    }
+    var list: List<CategoryModel> = mutableListOf()
+        set(value) {
+            field=value
+            notifyDataSetChanged()
+        }
+    var action: PetsAdapter.CategoryActions? = null
+    class MyViewHolder(val binding: ServicesItemBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         return MyViewHolder(
@@ -30,8 +31,21 @@ class ServiceAdapter : RecyclerView.Adapter<ServiceAdapter.MyViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.binding.image.setImageResource(list.get(position).image)
-        holder.binding.title.setText(list.get(position).title)
+        val category = list.get(position).category
+        holder.binding.title.setText(category.name)
+
+        if (!category.icon.isNullOrEmpty()) {
+            var image = category.icon
+            if (!category.isExternalLink)
+                image = NetworkClient.BASE_URL + image
+            Glide.with(holder.itemView.context).load(image)
+                .error(R.drawable.ic_image)
+                .placeholder(R.drawable.ic_image).into(holder.binding.image)
+        }
+
+        holder.itemView.setOnClickListener {
+            action?.selectedCategory(category.id)
+        }
     }
 
     override fun getItemCount(): Int = list.size

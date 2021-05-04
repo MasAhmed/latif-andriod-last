@@ -208,8 +208,9 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
             override fun getActionId(imageView: ImageView) {
                 liveData = MutableLiveData<String>()
                 liveData.observe(this@SellActivity, Observer {
-                    Glide.with(this@SellActivity).load(it).into(imageView)
                     setHashMapValues(model.name!!, it)
+                    Glide.with(this@SellActivity).load(it).into(imageView)
+
                 })
                 choose(false)
             }
@@ -230,8 +231,8 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
                 liveData.observe(this@SellActivity, Observer {
                     adapter.list.add(it)
                     adapter.notifyDataSetChanged()
-                    //   listOfImages.add(it)
-                    //  hashMap.put(model.name!!, listOfImages)
+                      listOfImages.add(it)
+                     hashMap.put(model.name!!, listOfImages)
                 })
                 choose(true)
             }
@@ -420,7 +421,7 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
         if (value.isNullOrEmpty())
             hashMap.remove(key)
         else
-            hashMap.put(key, value)
+            hashMap.put("$key", value)
 
 
         Utiles.log_D("cncnncncncncn", hashMap)

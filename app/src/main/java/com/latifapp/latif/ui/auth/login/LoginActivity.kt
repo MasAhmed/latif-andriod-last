@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import com.latifapp.latif.data.local.PreferenceConstants.Companion.Lang_PREFS
 import com.latifapp.latif.databinding.ActivityLoginBinding
 import com.latifapp.latif.ui.auth.signup.SignUpActivity
@@ -44,9 +45,12 @@ class LoginActivity :BaseActivity<LoginViewModel,ActivityLoginBinding>() {
 
     }
 
+
     override fun showLoader() {
-     }
+       // binding.loader.bar.visibility = View.VISIBLE
+    }
 
     override fun hideLoader() {
-     }
+       // binding.loader.bar.visibility = View.GONE
+    }
 }

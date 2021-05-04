@@ -13,12 +13,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
    />
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        app:srcCompat="@drawable/ic_pin"
-        android:id="@+id/pin"/>
 
 
 
@@ -27,16 +21,16 @@
         android:layout_height="65dp"
         android:background="@drawable/bottom_curve_bg"
         />
+
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:listitem="@layout/pet_item_layout"
-         tools:itemCount="1"
         android:layout_centerHorizontal="true"
-        android:id="@+id/recyclerView"
         android:layout_marginStart="4dp"
         android:layout_marginEnd="4dp"
-        />
+        tools:itemCount="1"
+        tools:listitem="@layout/pet_item_layout" />
 
     <TextView
         android:id="@+id/sellBtn"

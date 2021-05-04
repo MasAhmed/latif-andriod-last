@@ -43,8 +43,9 @@ class DataRepoManger @Inject constructor(val apis: NetworkApis) : DataRepo {
         return safeApiCall { apis.createFilterForm(type) }
     }
 
-    override suspend fun getNearestAds(type: String,lat: Double,lag: Double,page: Int): ResultWrapper<ResponseModel<List<AdsModel>>> {
-        return safeApiCall { apis.getNearestAds(type,lag,lat,page) }
+    override suspend fun getNearestAds(type: String,lat: Double,lag: Double,category: Int?,page: Int): ResultWrapper<ResponseModel<List<AdsModel>>> {
+        return safeApiCall { apis.getNearestAds(type=type,longitude=lag,
+            latitude = lat,category=category,page=page) }
     }
     override suspend fun saveForm(
         url: String,

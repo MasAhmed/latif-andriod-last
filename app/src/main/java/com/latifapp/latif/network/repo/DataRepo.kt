@@ -13,6 +13,6 @@ interface DataRepo {
     suspend fun getCreateForm(type: String): ResultWrapper<ResponseModel<SellFormModel>>
     suspend fun createFilterForm(type: String): ResultWrapper<ResponseModel<SellFormModel>>
    suspend fun saveForm(url: String, model: SaveformModelRequest): ResultWrapper<ResponseModel<SellFormModel>>
-   suspend fun getNearestAds(type: String,lat: Double,lag: Double,page: Int): ResultWrapper<ResponseModel<List<AdsModel>>>
+   suspend fun getNearestAds(type: String,lat: Double,lag: Double,category: Int?,page: Int): ResultWrapper<ResponseModel<List<AdsModel>>>
 
     }

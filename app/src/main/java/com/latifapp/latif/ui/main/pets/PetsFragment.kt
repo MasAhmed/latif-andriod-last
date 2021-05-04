@@ -35,9 +35,14 @@ import com.latifapp.latif.R
 class PetsFragment : BaseFragment<PetsViewModel, FragmentPetsBinding>(),
     PetsAdapter.CategoryActions  {
 
+    private var category: Int?=null
     private var mapFragment: SupportMapFragment? = null
     private var mMap: GoogleMap? = null
     private val petsAdapter = PetsAdapter()
+    companion object{
+        var Latitude_=0.0
+        var Longitude_=0.0
+    }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,15 +57,15 @@ class PetsFragment : BaseFragment<PetsViewModel, FragmentPetsBinding>(),
                 petsAdapter.action = this@PetsFragment
             }
 
-            binding.pin.setOnClickListener {
-                Utiles.log_D("dndndndndndn", "HERE")
-
-                childFragmentManager.let {
-                    BottomDialogFragment().apply {
-                        show(it, tag)
-                    }
-                }
-            }
+//            binding.pin.setOnClickListener {
+//                Utiles.log_D("dndndndndndn", "HERE")
+//
+//                childFragmentManager.let {
+//                    BottomDialogFragment().apply {
+//                        show(it, tag)
+//                    }
+//                }
+//            }
 
             binding.sellBtn.setOnClickListener {
                 startActivity(Intent(activity, SellActivity::class.java))
@@ -71,11 +76,12 @@ class PetsFragment : BaseFragment<PetsViewModel, FragmentPetsBinding>(),
         }
     }
 
-    private fun getPetsList(latLng: LatLng) {
+    private fun getPetsList() {
+
         lifecycleScope.launchWhenStarted {
-            viewModel.getListOfPets("PETS", latLng.latitude, latLng.longitude).collect {
+            viewModel.getItems("PETS",category).collect {
+                viewModel.page=0
                 if (it!=null) {
-                    Utiles.log_D("nvnnvnvnvnnvnv", "$it")
                     setLPetsLocations(it)
                 }
             }
@@ -129,8 +135,11 @@ class PetsFragment : BaseFragment<PetsViewModel, FragmentPetsBinding>(),
 
         mMap?.setOnCameraIdleListener {
             var latLng = mMap?.cameraPosition?.target
-            if (latLng != null && latLng.latitude != 0.0)
-                getPetsList(latLng)
+            if (latLng != null && latLng.latitude != 0.0) {
+                Latitude_=latLng.latitude
+                Longitude_=latLng.longitude
+                getPetsList()
+            }
         }
     }
 
@@ -145,10 +154,14 @@ class PetsFragment : BaseFragment<PetsViewModel, FragmentPetsBinding>(),
                 mMap?.addMarker(
                    marker
                 )
-                Utiles.log_D("ndndndndnnd", "${it.latitude}   ${marker.position.latitude}")
-//                mMap?.setOnMapClickListener { latLag->
-//                    Utiles.log_D("ndndndndnnd",it.name)
+                mMap?.setOnMapClickListener { latLag->
+                    Utiles.log_D("ndndndndnnd",it.name)
+                    //childFragmentManager.let {
+//                    BottomDialogFragment().apply {
+//                        show(it, tag)
+//                    }
 //                }
+                }
             }
         }
     }
@@ -219,7 +232,9 @@ class PetsFragment : BaseFragment<PetsViewModel, FragmentPetsBinding>(),
 
     }
 
-    override fun selectedCategory(id: Int) {
-
+    override fun selectedCategory(id: Int?) {
+        Utiles.log_D("ndndndndnnd", "${id}")
+        category=id
+        getPetsList()
     }
 }

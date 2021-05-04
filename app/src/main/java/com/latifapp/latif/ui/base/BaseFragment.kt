@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import androidx.viewbinding.ViewBinding
 import kotlinx.coroutines.Dispatchers
 
@@ -19,8 +21,8 @@ open abstract class BaseFragment<viewmodel : BaseViewModel, viewbinding : ViewBi
     Fragment(), BaseView<viewbinding> {
     @Inject
     lateinit var viewModel: viewmodel
-    public lateinit var binding: viewbinding
-
+    lateinit var binding: viewbinding
+    lateinit var navController: NavController
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -34,7 +36,7 @@ open abstract class BaseFragment<viewmodel : BaseViewModel, viewbinding : ViewBi
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        navController= Navigation.findNavController(view)
         viewModel.errorMsg_.observe(viewLifecycleOwner, Observer {
             if (it.isNotEmpty())
             // Toast.makeText(context, it, Toast.LENGTH_SHORT).show()

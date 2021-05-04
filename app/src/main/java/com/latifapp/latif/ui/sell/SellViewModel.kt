@@ -67,7 +67,6 @@ class SellViewModel @Inject constructor( repo: DataRepo, appPrefsStorage: AppPre
         val list = mutableListOf<UserAds>()
         for (model in hashMap)
             list.add(UserAds(model.key, model.value))
-
         list.add(UserAds("created_by", "1"))
         val model = SaveformModelRequest(adType, list)
         val flow_ = MutableLiveData<ResponseModel<SellFormModel>>()

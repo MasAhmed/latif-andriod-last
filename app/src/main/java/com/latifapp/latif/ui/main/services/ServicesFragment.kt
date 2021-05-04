@@ -5,43 +5,66 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.latifapp.latif.R
 import com.latifapp.latif.databinding.FragmentServicesBinding
 import com.latifapp.latif.ui.base.BaseFragment
+import com.latifapp.latif.ui.base.CategoriesViewModel
 import com.latifapp.latif.ui.main.blogs.BlogsViewModel
+import com.latifapp.latif.ui.main.pets.PetsAdapter
+import com.latifapp.latif.ui.main.pets.PetsViewModel
+import com.latifapp.latif.utiles.AppConstants
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ServicesFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 @AndroidEntryPoint
-class ServicesFragment : Fragment() {
+class ServicesFragment : BaseFragment<PetsViewModel, FragmentServicesBinding>() {
 
 
-    private lateinit var binding: FragmentServicesBinding
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-         binding =FragmentServicesBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    private val adapter_ = ServiceAdapter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.recyclerView.apply {
-            layoutManager=LinearLayoutManager(context)
-            adapter=ServiceAdapter()
+        setupList()
+    }
+
+    val selectService=object :PetsAdapter.CategoryActions{
+        override fun selectedCategory(id: Int?) {
+            val bundle =Bundle()
+            bundle.putInt("category",id!!)
+            navController.navigate(R.id.nav_services_list_fragments,bundle)
         }
+
+    }
+    private fun setupList() {
+        adapter_.action=selectService
+        binding.recyclerView.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = adapter_
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.getCategoriesList(AppConstants.SERVICE).collect {
+                if (!it.isNullOrEmpty()) {
+                    adapter_.list = (it)
+
+                }
+            }
+        }
+    }
+
+    override fun setBindingView(inflater: LayoutInflater): FragmentServicesBinding {
+        return FragmentServicesBinding.inflate(inflater)
+    }
+
+
+    override fun showLoader() {
+        binding.loader.bar.visibility = View.VISIBLE
+    }
+
+    override fun hideLoader() {
+        binding.loader.bar.visibility = View.GONE
     }
 }

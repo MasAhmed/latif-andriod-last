@@ -239,4 +239,6 @@
         />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
+    <include layout="@layout/loader_"
+        android:id="@+id/loader"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
