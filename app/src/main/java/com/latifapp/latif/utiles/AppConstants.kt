@@ -10,4 +10,12 @@ object AppConstants {
     const val PETS = 1
     const val ACCESSORIES = 2
     const val FOOD = 5
+
+    const val VETERINARY_STR = "VETERINARY"
+    const val DELIVERY_STR = "DELIVERY"
+    const val PET_CARE_STR = "PET_CARE"
+    const val SERVICE_STR = "SERVICE"
+    const val PETS_STR = "PETS"
+    const val ACCESSORIES_STR = "ACCESSORIES"
+    const val FOOD_STR = "FOOD"
 }

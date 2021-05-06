@@ -79,7 +79,7 @@ class PetsFragment : BaseFragment<PetsViewModel, FragmentPetsBinding>(),
     private fun getPetsList() {
 
         lifecycleScope.launchWhenStarted {
-            viewModel.getItems("PETS",category).collect {
+            viewModel.getItems(AppConstants.PETS_STR,category).collect {
                 viewModel.page=0
                 if (it!=null) {
                     setLPetsLocations(it)

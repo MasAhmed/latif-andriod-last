@@ -21,7 +21,6 @@ class CustomSpinner(context_: Context, label: String,val list_: List<OptionsMode
 
     override fun createView() {
         val list:List<String> =list_.map { "${it.label}" }
-
         val spinner= CustomSpinnerLayoutBinding.inflate(LayoutInflater.from(context))
          val arrayAdapter = context?.let {
             ArrayAdapter<String>(

@@ -7,7 +7,8 @@ import retrofit2.http.*
 
 interface NetworkApis {
     @GET("api/public/blogs")
-    suspend fun getBlogs(@Query("page") page: Int): ResponseModel<List<BlogsModel>>
+    suspend fun getBlogs(@Query("page") page: Int,
+                         @Nullable @Query("category") category: Int?): ResponseModel<List<BlogsModel>>
 
     @GET("api/public/blogs/id={id}")
     suspend fun getBlogsWithCategory(@Path("id") id: Int): ResponseModel<List<BlogsModel>>
@@ -40,9 +41,17 @@ interface NetworkApis {
                               @Nullable @Query("category") category: Int?,
                               @Query("page") page: Int): ResponseModel<List<AdsModel>>
 
+    @GET("api/public/ads/ad-by-Id")
+    suspend fun getAdDetails(@Nullable @Query("id") id: Int?): ResponseModel<AdsModel>
     @POST
     suspend fun saveForm(
         @Url url: String,
         @Body model: SaveformModelRequest
     ): ResponseModel<SellFormModel>
+
+    @POST
+    suspend fun saveFilter(
+        @Url url: String,
+        @Body model: SaveformModelRequest
+    ): ResponseModel<List<AdsModel>>
 }

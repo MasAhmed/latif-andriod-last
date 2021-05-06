@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,13 +8,18 @@
     android:background="@drawable/details_bg"
     android:padding="16dp"
     >
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/container"
+
+    >
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:drawableStart="@drawable/ic_loc"
-        android:text="Cairo"
         android:textColor="@color/sunset_orange"
         android:drawablePadding="5dp"
         android:gravity="bottom"
@@ -36,7 +41,6 @@
         app:layout_constraintStart_toEndOf="@id/backBtn"
         app:layout_constraintTop_toBottomOf="@id/menuBtn"
         app:layout_constraintEnd_toStartOf="@id/menuBtn"
-         android:text="Dog Name"
         android:gravity="center"
         android:textColor="@color/sunset_orange"
          android:fontFamily="@font/poppins_bold"
@@ -120,7 +124,7 @@
         app:layout_constraintHorizontal_bias="0"
         android:fontFamily="@font/poppins_regular"
         android:textColor="@color/black"
-        android:text="Breed"
+
         android:id="@+id/breedTxt"/>
     <TextView
         android:layout_width="wrap_content"
@@ -132,7 +136,7 @@
          android:textSize="14sp"
         android:fontFamily="@font/poppins_regular"
         android:textColor="@color/black"
-        android:text="Origin"
+
         android:id="@+id/originTxt"/>
     <ImageView
         android:layout_width="40dp"
@@ -154,8 +158,7 @@
         android:layout_marginTop="20dp"
         android:textSize="13sp"
         android:fontFamily="@font/poppins_regular"
-         android:text="Proin ex ipsum, facilisis id tincidunt sed, vulputate in lacus. Donec pharetra faucibus leo, vitae vestibulum leo scelerisque eu. Nam enim dolor, porta at ex ut, eleifend tristique metus. Integer sit amet auctor ligula, vel dictum orci. Nam feugiat interdum nisl. Ut id velit ac ante maximus gravida. Vivamus lobortis vestibulum mauris a mollis. Nunc mollis tempus lorem eu pulvinar. Quisque mollis blandit aliquam. Nulla finibus gravida dignissim. Sed viverra mattis dictum. In ultricies tellus in auctor semper. Sed blandit arcu sem, vitae eleifend dui iaculis non."
-        android:id="@+id/descriptionTxt"
+         android:id="@+id/descriptionTxt"
         />
 
     <TextView
@@ -169,7 +172,7 @@
         android:textSize="14sp"
         android:textColor="@color/black"
         android:fontFamily="@font/poppins_regular"
-        android:text="Location: 221 Gesr El-Swiss"
+
         android:id="@+id/locationTxt"/>
     <androidx.cardview.widget.CardView
         android:layout_width="0dp"
@@ -212,8 +215,7 @@
         app:layout_constraintTop_toBottomOf="@id/mapCard"
         android:layout_marginTop="30dp"
         android:layout_marginStart="10dp"
-         android:text="Seller Name"
-        android:textSize="16sp"
+         android:textSize="16sp"
         android:fontFamily="@font/poppins_bold"
         android:id="@+id/sellerNameTxt"
         />
@@ -222,7 +224,6 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@id/sellerNameTxt"
         app:layout_constraintTop_toBottomOf="@id/sellerNameTxt"
-          android:text="Joined since Dec, 2020"
         android:textSize="14sp"
         android:fontFamily="@font/poppins_regular"
         android:id="@+id/joinedDateTxt"
@@ -232,13 +233,14 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@id/sellerNameTxt"
         app:layout_constraintTop_toBottomOf="@id/joinedDateTxt"
-         android:text="Placed 3 ads"
         android:textSize="14sp"
         android:fontFamily="@font/poppins_regular"
         android:id="@+id/numAdsTxt"
         />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
     <include layout="@layout/loader_"
         android:id="@+id/loader"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

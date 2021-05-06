@@ -29,6 +29,7 @@
             android:layout_centerInParent="true"
             android:gravity="center"
             android:orientation="horizontal"
+            android:id="@+id/titleContainer"
         >
 
             <ImageView
@@ -67,5 +68,21 @@
             app:iconifiedByDefault="true"
 
              />
+
+        <SearchView
+            android:id="@+id/searchView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="30dp"
+            app:srcCompat="@drawable/ic_search"
+            android:backgroundTint="@color/white"
+            app:queryBackground="@color/cornflower_lilac"
+            app:dividerPadding="5dp"
+            android:padding="9dp"
+            android:queryHint="@string/Search"
+            app:iconifiedByDefault="true"
+            android:visibility="gone"/>
     </RelativeLayout>
 </androidx.appcompat.widget.Toolbar>

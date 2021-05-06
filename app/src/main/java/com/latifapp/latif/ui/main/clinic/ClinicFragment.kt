@@ -1,5 +1,6 @@
 package com.latifapp.latif.ui.main.clinic
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,10 +11,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.latifapp.latif.R
 import com.latifapp.latif.databinding.FragmentClinicBinding
 import com.latifapp.latif.ui.base.BaseFragment
+import com.latifapp.latif.ui.filter.FilterFormActivity
 import com.latifapp.latif.ui.main.blogs.BlogsViewModel
+import com.latifapp.latif.ui.main.home.MainActivity
 import com.latifapp.latif.ui.main.pets.PetsAdapter
 import com.latifapp.latif.ui.main.services.ServiceViewModel
 import com.latifapp.latif.utiles.AppConstants
+import com.latifapp.latif.utiles.AppConstants.PET_CARE_STR
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
@@ -32,9 +36,13 @@ class ClinicFragment : BaseFragment<ServiceViewModel, FragmentClinicBinding>() {
             binding.recyclerView.apply {
                 layoutManager = LinearLayoutManager(context)
                 adapter = clinicAdapter
+
             }
 
+
             getCategories()
+
+
         }
     }
 

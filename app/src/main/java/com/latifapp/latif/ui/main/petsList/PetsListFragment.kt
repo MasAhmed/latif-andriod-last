@@ -1,5 +1,6 @@
 package com.latifapp.latif.ui.main.petsList
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,10 +14,12 @@ import com.latifapp.latif.data.models.AdsModel
 import com.latifapp.latif.databinding.FragmentPetsBinding
 import com.latifapp.latif.databinding.FragmentPetsListBinding
 import com.latifapp.latif.ui.base.BaseFragment
+import com.latifapp.latif.ui.details.DetailsActivity
 import com.latifapp.latif.ui.main.blogs.BlogsViewModel
 import com.latifapp.latif.ui.main.pets.PetsAdapter
 import com.latifapp.latif.ui.main.pets.PetsViewModel
 import com.latifapp.latif.utiles.AppConstants
+import com.latifapp.latif.utiles.AppConstants.PETS_STR
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
@@ -42,7 +45,13 @@ class PetsListFragment : BaseFragment<PetsViewModel, FragmentPetsListBinding>() 
             adapter = this@PetsListFragment.adapter
             addOnScrollListener(scrollListener)
         }
-
+        adapter.action= object : PetsListAdapter.Action{
+            override fun onAdClick(id: Int?) {
+                val intent =Intent(activity,DetailsActivity::class.java)
+                intent.putExtra("ID",id)
+                startActivity(intent)
+            }
+        }
         getPetsList()
     }
 
@@ -61,7 +70,7 @@ class PetsListFragment : BaseFragment<PetsViewModel, FragmentPetsListBinding>() 
     private fun getPetsList() {
 
         lifecycleScope.launchWhenStarted {
-            viewModel.getItems("PETS", category).collect {
+            viewModel.getItems(PETS_STR, category).collect {
                 if (it != null) {
                     adapter.list = it as MutableList<AdsModel>
                     if (it.isNotEmpty())

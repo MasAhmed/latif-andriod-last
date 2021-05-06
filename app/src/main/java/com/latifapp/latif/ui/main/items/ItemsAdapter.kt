@@ -8,10 +8,10 @@ import com.example.postsapplication.network.NetworkClient
 import com.latifapp.latif.R
 import com.latifapp.latif.data.models.AdsModel
 import com.latifapp.latif.databinding.ItemViewLayoutBinding
-import com.latifapp.latif.databinding.PetItemViewBinding
 import com.latifapp.latif.ui.main.petsList.PetsListAdapter
 
-class ItemsAdapter : RecyclerView.Adapter<ItemsAdapter.MyViewHolder>() {
+class ItemsAdapter() : RecyclerView.Adapter<ItemsAdapter.MyViewHolder>() {
+    var action: PetsListAdapter.Action? =null
     var list: MutableList<AdsModel> = arrayListOf()
         set(value) {
             field.addAll( value)
@@ -42,6 +42,9 @@ class ItemsAdapter : RecyclerView.Adapter<ItemsAdapter.MyViewHolder>() {
             Glide.with(holder.itemView.context).load(image)
                 .error(R.drawable.ic_image)
                 .placeholder(R.drawable.ic_image).into(holder.binding.image)
+        holder.itemView.setOnClickListener {
+            action?.onAdClick(model.id)
+        }
     }
 
     override fun getItemCount(): Int =list.size

@@ -4,13 +4,11 @@ import com.example.postsapplication.network.NetworkApis
 import com.latifapp.latif.data.models.*
 import com.latifapp.latif.network.ResultWrapper
 import com.latifapp.latif.network.safeApiCall
-import com.latifapp.latif.utiles.Utiles
-import java.net.URLEncoder
 import javax.inject.Inject
 
 class DataRepoManger @Inject constructor(val apis: NetworkApis) : DataRepo {
-    override suspend fun getBlogsList(page: Int): ResultWrapper<ResponseModel<List<BlogsModel>>> {
-        return safeApiCall { apis.getBlogs(page) }
+    override suspend fun getBlogsList(page: Int,category: Int?): ResultWrapper<ResponseModel<List<BlogsModel>>> {
+        return safeApiCall { apis.getBlogs(page,category) }
     }
 
     override suspend fun getSearchBlogs(txt: String): ResultWrapper<ResponseModel<List<BlogsModel>>> {
@@ -47,11 +45,23 @@ class DataRepoManger @Inject constructor(val apis: NetworkApis) : DataRepo {
         return safeApiCall { apis.getNearestAds(type=type,longitude=lag,
             latitude = lat,category=category,page=page) }
     }
+
+    override suspend fun getAdDetails(id: Int?): ResultWrapper<ResponseModel<AdsModel>> {
+        return safeApiCall { apis.getAdDetails(id) }
+    }
+
     override suspend fun saveForm(
         url: String,
         model: SaveformModelRequest
     ): ResultWrapper<ResponseModel<SellFormModel>> {
 
         return safeApiCall { apis.saveForm("$url", model) }
+    }
+
+    override suspend fun saveFilter(
+        url: String,
+        model: SaveformModelRequest
+    ): ResultWrapper<ResponseModel<List<AdsModel>>> {
+        return safeApiCall { apis.saveFilter("$url", model) }
     }
 }

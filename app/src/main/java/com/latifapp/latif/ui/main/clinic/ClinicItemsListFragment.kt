@@ -1,5 +1,6 @@
 package com.latifapp.latif.ui.main.clinic
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.latifapp.latif.data.models.AdsModel
 import com.latifapp.latif.databinding.FragmentServicesBinding
 import com.latifapp.latif.ui.base.BaseFragment
+import com.latifapp.latif.ui.details.DetailsActivity
 import com.latifapp.latif.ui.main.petsList.PetsListAdapter
+import com.latifapp.latif.utiles.AppConstants
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
@@ -37,6 +40,13 @@ class ClinicItemsListFragment :BaseFragment<ClinicItemsViewMode, FragmentService
             adapter = this@ClinicItemsListFragment.adapter
             addOnScrollListener(scrollListener)
         }
+        adapter.action= object : PetsListAdapter.Action{
+            override fun onAdClick(id: Int?) {
+                val intent = Intent(activity, DetailsActivity::class.java)
+                intent.putExtra("ID",id)
+                startActivity(intent)
+            }
+        }
        getClinicList()
     }
 
@@ -55,7 +65,7 @@ class ClinicItemsListFragment :BaseFragment<ClinicItemsViewMode, FragmentService
 
     private fun getClinicList() {
         lifecycleScope.launchWhenStarted {
-            viewModel.getItems("PET_CARE", category).collect {
+            viewModel.getItems(AppConstants.PET_CARE_STR, category).collect {
                 if (it != null) {
                     adapter.list = it as MutableList<AdsModel>
                     if (it.isNotEmpty())

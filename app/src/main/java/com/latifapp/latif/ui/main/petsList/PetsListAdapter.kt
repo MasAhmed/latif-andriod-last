@@ -12,9 +12,10 @@ import kotlinx.android.synthetic.main.pet_item_view.view.*
 
 
 class PetsListAdapter : RecyclerView.Adapter<PetsListAdapter.MyViewHolder>() {
+    var action: Action? = null
     var list: MutableList<AdsModel> = arrayListOf()
         set(value) {
-            field.addAll( value)
+            field.addAll(value)
             notifyDataSetChanged()
         }
 
@@ -44,8 +45,15 @@ class PetsListAdapter : RecyclerView.Adapter<PetsListAdapter.MyViewHolder>() {
                 .error(R.drawable.ic_image)
                 .placeholder(R.drawable.ic_image).into(holder.binding.image)
 
-}
+        holder.itemView.setOnClickListener {
+            action?.onAdClick(model.id)
+        }
 
-override fun getItemCount(): Int = list.size
+    }
 
+    override fun getItemCount(): Int = list.size
+
+    interface Action {
+        fun onAdClick(id: Int?)
+    }
 }

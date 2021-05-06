@@ -64,7 +64,7 @@ class PetsCategoryAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             holder.binding.rootv.apply {
                 selectedPosition = -1
                 notifyDataSetChanged()
-                action?.selectedCategory(-1)
+                action?.selectedCategory(null)
             }
         }
         if (!category.iconSelect.isNullOrEmpty()) {
@@ -103,6 +103,6 @@ class PetsCategoryAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun getItemCount(): Int = list.size
 
     interface CategoryActions {
-        fun selectedCategory(id: Int)
+        fun selectedCategory(id: Int?)
     }
 }

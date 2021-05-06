@@ -1,53 +1,55 @@
 package com.latifapp.latif.ui.main.home
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.ImageView
-import androidx.appcompat.widget.SearchView
+import android.widget.SearchView
 import androidx.core.view.GravityCompat
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.etebarian.meowbottomnavigation.MeowBottomNavigation
 import com.latifapp.latif.R
 import com.latifapp.latif.databinding.ActivityMainBinding
 import com.latifapp.latif.ui.base.BaseActivity
-import com.latifapp.latif.ui.filter.FilterActivity
 import com.latifapp.latif.ui.filter.FilterFormActivity
 import com.latifapp.latif.ui.main.profile.ProfileActivity
+import com.latifapp.latif.utiles.AppConstants
+import com.latifapp.latif.utiles.AppConstants.PETS_STR
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
-import kotlin.coroutines.coroutineContext
+
 @AndroidEntryPoint
 class MainActivity : BaseActivity<MainViewModel,ActivityMainBinding>(), NavController.OnDestinationChangedListener,
     MenuAdapter.MenuAction, BottomNavItemsAdapter.Action {
     private val bottomAdapter=BottomNavItemsAdapter(this@MainActivity)
     private lateinit var navigation: NavController
-    public lateinit var searchview:ImageView
-
+    public lateinit var searchBtn:ImageView
+    public lateinit var searchView:SearchView
+    private var type=""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        searchview=binding.toolbar.searchBtn
+        searchBtn=binding.toolbar.searchBtn
+        searchView=binding.toolbar.searchView
 
          navigation = Navigation.findNavController(
             this,
             R.id.fragment_container
         )
-        searchview.setOnClickListener {
-            startActivity(Intent(this@MainActivity, FilterFormActivity::class.java))
-        }
+
 
         setBottomBarNav()
         navigation.addOnDestinationChangedListener(this)
         setMenu()
+         searchBtn.setOnClickListener {
+            val intent =Intent(this, FilterFormActivity::class.java)
+            intent.putExtra("type", type)
+            startActivity(intent)
+        }
     }
 
     private fun setBottomBarNav() {
@@ -80,12 +82,36 @@ class MainActivity : BaseActivity<MainViewModel,ActivityMainBinding>(), NavContr
         destination: NavDestination,
         arguments: Bundle?
     ) {
+        searchView.visibility= GONE
+        searchBtn.visibility= VISIBLE
+        binding.toolbar.titleContainer.visibility=VISIBLE
         when (destination.id) {
-            R.id.pets_fragments -> bottomAdapter.show(0)
-            R.id.items_fragments -> bottomAdapter.show(1)
-            R.id.clinic_fragments -> bottomAdapter.show(2)
-            R.id.services_fragments -> bottomAdapter.show(3)
-            R.id.chat_fragments -> bottomAdapter.show(4)
+
+            R.id.pets_fragments -> {
+                bottomAdapter.show(0)
+                type=PETS_STR
+            }
+            R.id.items_fragments -> {
+                bottomAdapter.show(1)
+                type=AppConstants.ACCESSORIES_STR
+            }
+            R.id.clinic_fragments -> {
+                bottomAdapter.show(2)
+                type = AppConstants.PET_CARE_STR
+            }
+            R.id.services_fragments -> {
+                bottomAdapter.show(3)
+                type=AppConstants.SERVICE_STR
+            }
+            R.id.chat_fragments -> {
+                bottomAdapter.show(4)
+                searchBtn.visibility=GONE
+            }
+            R.id.blogs_fragments -> {
+                searchView.visibility= VISIBLE
+                searchBtn.visibility=GONE
+                binding.toolbar.titleContainer.visibility=GONE
+            }
         }
     }
 

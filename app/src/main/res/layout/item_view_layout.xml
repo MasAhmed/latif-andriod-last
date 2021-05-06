@@ -30,6 +30,7 @@
             android:textColor="@color/sunset_orange"
             android:textSize="10sp"
             android:text="• NEW"
+            android:visibility="gone"
             android:fontFamily="@font/poppins_regular"
             app:layout_constraintTop_toBottomOf="@id/petName"
             app:layout_constraintStart_toStartOf="parent"
@@ -60,16 +61,21 @@
             android:layout_marginTop="4dp"
             />
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="@color/yellow_orange"
             android:textSize="13sp"
-            android:text="nndmd djkdj dodjjd"
-            android:fontFamily="@font/poppins_regular"
+             android:fontFamily="@font/poppins_regular"
             app:layout_constraintTop_toBottomOf="@id/priceTxt"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/reportBtn"
+            app:layout_constraintHorizontal_bias="0"
+            android:includeFontPadding="false"
+            android:ellipsize="end"
+            android:maxLines="2"
             android:id="@+id/locTxt"
             android:layout_marginTop="4dp"
+
             />
 
         <ImageView
@@ -89,6 +95,7 @@
              android:fontFamily="@font/poppins_regular"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/hidBtn"
+            app:layout_constraintTop_toTopOf="@id/locTxt"
             android:background="@drawable/select_bg"
             android:drawableStart="@drawable/ic_report_white"
             android:drawableTint="@color/white"

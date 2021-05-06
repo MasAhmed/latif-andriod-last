@@ -12,4 +12,12 @@ data class BlogsModel(
     val user: UserModel?,
 )
 
-data class UserModel(val id: Int?,val email: String?,val firstName: String?,val lastName: String?,val address: String?,val phone: String?)
+data class UserModel(
+    val id: Int?,
+    val email: String?,
+    val firstName: String?,
+    val lastName: String?,
+    val address: String?,
+    val phone: String?,
+    val avatar: String?
+)

@@ -9,33 +9,38 @@ import android.view.View
 
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
- import com.latifapp.latif.R
- import com.latifapp.latif.data.models.RequireModel
+import com.latifapp.latif.R
+import com.latifapp.latif.data.models.RequireModel
 import com.latifapp.latif.databinding.ActivitySellBinding
 import com.latifapp.latif.ui.base.BaseActivity
+import com.latifapp.latif.ui.main.pets.PetsFragment
 import com.latifapp.latif.ui.map.MapsActivity
 import com.latifapp.latif.ui.sell.SellViewModel
- import com.latifapp.latif.ui.sell.views.*
+import com.latifapp.latif.ui.sell.views.*
 import com.latifapp.latif.utiles.Permissions
 import com.latifapp.latif.utiles.Utiles
 
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import java.io.Serializable
 
 @AndroidEntryPoint
-class FilterFormActivity : BaseActivity<FilterViewModel, ActivitySellBinding>(){
+class FilterFormActivity : BaseActivity<FilterViewModel, ActivitySellBinding>() {
 
+    private var filterHasMap: Boolean = false
     private var url: String? = ""
     private var lat = 0.0
     private var lng = 0.0
     private val hashMap: MutableMap<String, Any> = mutableMapOf()
+    private var type:String? = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.backBtn.setOnClickListener { onBackPressed() }
         binding.title.setText(R.string.filter)
         binding.submitBtn.setText(R.string.filter)
-        getForm("PETS")
+        type=intent.extras?.getString("type")
+        getForm(type)
 
         binding.submitBtn.setOnClickListener {
             submitAdForm()
@@ -46,20 +51,22 @@ class FilterFormActivity : BaseActivity<FilterViewModel, ActivitySellBinding>(){
     private fun submitAdForm() {
         if (hashMap.isNullOrEmpty())
             toastMsg_Warning(getString(R.string.addFormValue), binding.root, this)
-        else
-            lifecycleScope.launchWhenStarted {
-                viewModel.saveForm(url!!, hashMap).observe(this@FilterFormActivity, Observer {
-                    if (!it.msg.isNullOrEmpty()) {
-                        toastMsg_Success(it.msg, binding.root, this@FilterFormActivity)
-
-                    }
-                    onBackPressed()
-                })
+        else if (lat == null || lat == 0.0) {
+            if (filterHasMap)
+                toastMsg_Warning(getString(R.string.plz_add_location), binding.root, this)
+            else {
+                lat = PetsFragment.Latitude_
+                lng = PetsFragment.Longitude_
+                setLocation()
             }
+        } else {
+            val intent = Intent(this, FilterActivity::class.java)
+            intent.putExtra("url", url)
+            intent.putExtra("type", type)
+            intent.putExtra("hashMap", hashMap as Serializable)
+            startActivity(intent)
+        }
     }
-
-
-
 
 
     private fun getForm(type: String?) {
@@ -76,7 +83,7 @@ class FilterFormActivity : BaseActivity<FilterViewModel, ActivitySellBinding>(){
     }
 
     private fun setFormViews(form: List<RequireModel>) {
-        Utiles.log_D("nffnnnfnfnf","${lang!="en"}  $lang")
+        Utiles.log_D("nffnnnfnfnf", "${lang != "en"}  $lang")
         for (model_ in form)
             when (model_.type?.toLowerCase()) {
                 "boolean" -> createSwitch(model_)
@@ -104,9 +111,9 @@ class FilterFormActivity : BaseActivity<FilterViewModel, ActivitySellBinding>(){
 
 
     private fun createCheckBoxGroup(model: RequireModel) {
-        var header=model.label
-        if (lang!="en")
-            header=model.label_ar
+        var header = model.label
+        if (lang != "en")
+            header = model.label_ar
         val text = CustomCheckBoxGroup(this, header!!, model.options!!, object :
             CustomParentView.ViewAction<String> {
             override fun getActionId(text: String) {
@@ -118,9 +125,9 @@ class FilterFormActivity : BaseActivity<FilterViewModel, ActivitySellBinding>(){
     }
 
     private fun createRadioButtonGroup(model: RequireModel) {
-        var header=model.label
-        if (lang!="en")
-            header=model.label_ar
+        var header = model.label
+        if (lang != "en")
+            header = model.label_ar
         val text = CustomRadioGroup(this, header!!, model.options!!, object :
             CustomParentView.ViewAction<String> {
             override fun getActionId(text: String) {
@@ -132,6 +139,7 @@ class FilterFormActivity : BaseActivity<FilterViewModel, ActivitySellBinding>(){
     }
 
     private fun createMapBtn(model: RequireModel) {
+        filterHasMap = true
         binding.mapContainer.visibility = View.VISIBLE
         binding.mapBtn.setOnClickListener {
             // intent to map
@@ -153,12 +161,11 @@ class FilterFormActivity : BaseActivity<FilterViewModel, ActivitySellBinding>(){
     }
 
 
-
     fun createEditText(model: RequireModel) {
         if (model.label.isNullOrEmpty()) return
-        var header=model.label
-        if (lang!="en")
-            header=model.label_ar
+        var header = model.label
+        if (lang != "en")
+            header = model.label_ar
         val text =
             CustomEditText(this, header, model.type?.toLowerCase().equals("string"), object :
                 CustomParentView.ViewAction<String> {
@@ -171,10 +178,9 @@ class FilterFormActivity : BaseActivity<FilterViewModel, ActivitySellBinding>(){
     }
 
     fun createSwitch(model: RequireModel) {
-        setHashMapValues("${model.name}", "false")
-        var header=model.label
-        if (lang!="en")
-            header=model.label_ar
+        var header = model.label
+        if (lang != "en")
+            header = model.label_ar
         val switch = CustomSwitch(this, header!!, object :
             CustomParentView.ViewAction<Boolean> {
             override fun getActionId(isON: Boolean) {
@@ -186,9 +192,9 @@ class FilterFormActivity : BaseActivity<FilterViewModel, ActivitySellBinding>(){
     }
 
     fun createSpinner(model: RequireModel) {
-        var header=model.label
-        if (lang!="en")
-            header=model.label_ar
+        var header = model.label
+        if (lang != "en")
+            header = model.label_ar
         val text = CustomSpinner(this, header!!, model.options!!, object :
             CustomParentView.ViewAction<String> {
             override fun getActionId(text: String) {
@@ -200,19 +206,22 @@ class FilterFormActivity : BaseActivity<FilterViewModel, ActivitySellBinding>(){
     }
 
 
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == Permissions.MapRequest) {
                 lat = data!!.extras!!.getDouble("lat")
                 lng = data!!.extras!!.getDouble("lng")
-                setHashMapValues("latitude", "$lat")
-                setHashMapValues("longitude", "$lng")
+                setLocation()
                 val placename = data!!.extras!!.getString("placeName")
                 binding.placeNme.text = placename
             }
         }
+    }
+
+    private fun setLocation() {
+        setHashMapValues("latitude", "$lat")
+        setHashMapValues("longitude", "$lng")
     }
 
     override fun setBindingView(inflater: LayoutInflater): ActivitySellBinding {
@@ -238,7 +247,6 @@ class FilterFormActivity : BaseActivity<FilterViewModel, ActivitySellBinding>(){
 
         Utiles.log_D("cncnncncncncn", hashMap)
     }
-
 
 
 }
