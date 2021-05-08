@@ -2,6 +2,7 @@ package com.latifapp.latif.network.repo
 
 import com.latifapp.latif.data.models.*
 import com.latifapp.latif.network.ResultWrapper
+import retrofit2.http.Query
 
 interface DataRepo {
     suspend fun getBlogsList(page:Int,category: Int?): ResultWrapper<ResponseModel<List<BlogsModel>>>
@@ -18,5 +19,6 @@ interface DataRepo {
     suspend fun getNearestAds(type: String,lat: Double,lag: Double,category: Int?,page: Int): ResultWrapper<ResponseModel<List<AdsModel>>>
    suspend fun getAdDetails(id: Int?): ResultWrapper<ResponseModel<AdsModel>>
     suspend fun createBlog(createBlogsModel: CreateBlogsModel) : ResultWrapper<ResponseModel<BlogsModel>>
-
+    suspend fun getDetailsOfBlog(id: Int?): ResultWrapper<ResponseModel<BlogsModel>>
+    suspend fun getSubscribeList(page: Int): ResultWrapper<ResponseModel<List<SubscribeModel>>>
 }

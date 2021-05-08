@@ -10,12 +10,15 @@ data class BlogsModel(
     val category: String?,
     val description: String?,
     val image: String?,
+    val images: List<String>?,
     val path: String?,
     val createdDate: String?,
+    val externalLink: Boolean,
     val user: UserModel?,
 )
 
 data class CreateBlogsModel(
+    val userId: Int,
     val title: String?,
     val category: Int?,
     val description: String?,
@@ -33,5 +36,7 @@ data class UserModel(
     val lastName: String?,
     val address: String?,
     val phone: String?,
-    val avatar: String?
+    val avatar: String?,
+    val adsCount: Int?,
+    val registrationDate: String?
 ): Parcelable

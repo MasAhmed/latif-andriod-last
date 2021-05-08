@@ -110,6 +110,6 @@
         app:popUpTo="@id/pets_fragments" />
     <fragment
         android:id="@+id/blogs_fragments"
-        android:name="com.latifapp.latif.ui.main.blogs.BlogsFragment"
+        android:name="com.latifapp.latif.ui.main.blogs.blogsList.BlogsFragment"
         tools:layout="@layout/fragment_blogs" />
 </navigation>

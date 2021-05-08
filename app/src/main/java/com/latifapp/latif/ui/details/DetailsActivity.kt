@@ -108,12 +108,13 @@ class DetailsActivity() : BaseActivity<DetailsViewModel, ActivityDetailsBinding>
 
     private fun setSellerInfo(createdBy: UserModel?, external: Boolean) {
         binding.sellerNameTxt.text = "${createdBy?.firstName} ${createdBy?.lastName}"
+        binding.joinedDateTxt.text = "${getString(R.string.joinedDate)} ${createdBy?.registrationDate}"
+        binding.numAdsTxt.text = "${getString(R.string.myAds)}: ${createdBy?.adsCount}"
         phoneNum = createdBy?.phone
         val image =createdBy?.avatar
         if (!image.isNullOrEmpty()) {
             var imagePath=image
-            if (!external)
-                imagePath= NetworkClient.BASE_URL +imagePath
+
             Glide.with(this).load(imagePath)
                 .error(R.drawable.ic_image)
                 .placeholder(R.drawable.ic_image).into(binding.profilePic)
@@ -130,8 +131,7 @@ class DetailsActivity() : BaseActivity<DetailsViewModel, ActivityDetailsBinding>
             binding.baseImage.visibility=GONE
         else{
             var imagePath=image
-            if (!externalLink)
-                imagePath= NetworkClient.BASE_URL +imagePath
+
             Glide.with(this).load(imagePath)
                 .error(R.drawable.ic_image)
                 .placeholder(R.drawable.ic_image).into(binding.baseImage)

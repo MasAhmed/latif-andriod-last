@@ -97,7 +97,8 @@ class CreateBlogViewModel @Inject constructor(
                 title = title,
                 category = blogCategoryID,
                 description = description,
-                extrnImage = imagesList
+                extrnImage = imagesList,
+                userId = 1
             )
             viewModelScope.launch(Dispatchers.IO) {
                 val result = repo.createBlog(CreateBlogsModel)

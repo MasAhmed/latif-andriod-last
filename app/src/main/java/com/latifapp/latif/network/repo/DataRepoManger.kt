@@ -19,6 +19,10 @@ class DataRepoManger @Inject constructor(val apis: NetworkApis) : DataRepo {
         return safeApiCall { apis.getBlogsCategoryList() }
     }
 
+    override suspend fun getDetailsOfBlog(id: Int?): ResultWrapper<ResponseModel<BlogsModel>> {
+        return safeApiCall { apis.getBlogDetails(id) }
+    }
+
     override suspend fun getCategoriesList(type:Int): ResultWrapper<ResponseModel<List<CategoryModel>>> {
         return safeApiCall { apis.getCatsTypeList(type) }
     }
@@ -60,6 +64,10 @@ class DataRepoManger @Inject constructor(val apis: NetworkApis) : DataRepo {
     ): ResultWrapper<ResponseModel<SellFormModel>> {
 
         return safeApiCall { apis.saveForm("$url", model) }
+    }
+
+    override suspend fun getSubscribeList(page: Int): ResultWrapper<ResponseModel<List<SubscribeModel>>> {
+        return safeApiCall { apis.getSubscribeList(page) }
     }
 
     override suspend fun saveFilter(

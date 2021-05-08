@@ -1,17 +1,13 @@
 package com.latifapp.latif.ui.main.services
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.latifapp.latif.R
 import com.latifapp.latif.databinding.FragmentServicesBinding
 import com.latifapp.latif.ui.base.BaseFragment
-import com.latifapp.latif.ui.base.CategoriesViewModel
-import com.latifapp.latif.ui.main.blogs.BlogsViewModel
 import com.latifapp.latif.ui.main.pets.PetsAdapter
 import com.latifapp.latif.ui.main.pets.PetsViewModel
 import com.latifapp.latif.utiles.AppConstants

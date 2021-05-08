@@ -13,11 +13,13 @@
         android:background="@drawable/details_bg"
         android:gravity="center"
         >
-        <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            app:srcCompat="@drawable/ic_image"
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/ic_image"
             android:id="@+id/image"
+            app:riv_corner_radius="5dp"
+            android:scaleType="centerCrop"
             />
         <TextView
             android:layout_width="wrap_content"
@@ -62,8 +64,8 @@
                 android:textColor="@color/yellow_orange"
                 android:fontFamily="@font/poppins_regular"
                 android:gravity="center"
-                android:textSize="14sp"
-                android:autoSizeMaxTextSize="14sp"
+                android:textSize="12sp"
+                android:autoSizeMaxTextSize="12sp"
                 android:autoSizeMinTextSize="7sp"
                 android:autoSizeStepGranularity="1sp"
                 android:autoSizeTextType="uniform"

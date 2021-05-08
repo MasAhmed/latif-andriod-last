@@ -9,8 +9,6 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.latifapp.latif.R
 import com.latifapp.latif.databinding.FragmentRegisterBinding
-import com.latifapp.latif.ui.base.BaseFragment
-import com.latifapp.latif.ui.main.blogs.BlogsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 // TODO: Rename parameter arguments, choose names that match

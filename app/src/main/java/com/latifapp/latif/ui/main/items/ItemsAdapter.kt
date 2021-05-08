@@ -36,12 +36,12 @@ class ItemsAdapter() : RecyclerView.Adapter<ItemsAdapter.MyViewHolder>() {
         holder.binding.locTxt.text = "${model.short_description}"
 
         var image = model.image
-        if (!model.external_link)
-            image = NetworkClient.BASE_URL + image
+
         if (!image.isNullOrEmpty())
             Glide.with(holder.itemView.context).load(image)
                 .error(R.drawable.ic_image)
                 .placeholder(R.drawable.ic_image).into(holder.binding.image)
+        else holder.binding.image.setImageResource(R.drawable.ic_image)
         holder.itemView.setOnClickListener {
             action?.onAdClick(model.id)
         }

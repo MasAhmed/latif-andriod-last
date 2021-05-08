@@ -2,12 +2,17 @@ package com.latifapp.latif.ui.main.pets
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -17,9 +22,14 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.maps.android.ui.IconGenerator
+import com.latifapp.latif.R
 import com.latifapp.latif.data.models.AdsModel
+import com.latifapp.latif.databinding.CustomMarkserBinding
 import com.latifapp.latif.databinding.FragmentPetsBinding
 import com.latifapp.latif.ui.base.BaseFragment
+import com.latifapp.latif.ui.main.home.MainActivity
+import com.latifapp.latif.ui.main.pets.bottomDialog.BottomDialogFragment
+import com.latifapp.latif.ui.map.MapsUtiles
 import com.latifapp.latif.ui.sell.SellActivity
 import com.latifapp.latif.utiles.AppConstants
 import com.latifapp.latif.utiles.GpsUtils
@@ -28,8 +38,6 @@ import com.latifapp.latif.utiles.Utiles
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_maps.*
 import kotlinx.coroutines.flow.collect
-import  com.latifapp.latif.R
-import com.latifapp.latif.ui.main.pets.bottomDialog.BottomDialogFragment
 
 
 @AndroidEntryPoint
@@ -85,7 +93,7 @@ class PetsFragment : BaseFragment<PetsViewModel, FragmentPetsBinding>(),
                 viewModel.page=0
                 if (it!=null) {
                     mapSets.addAll(it)
-                    Utiles.log_D("ncncncnncncncn","${mapSets.size}")
+                    Utiles.log_D("ncncncnncncncn", "${mapSets.size}")
                     setLPetsLocations()
                 }
             }
@@ -143,24 +151,41 @@ class PetsFragment : BaseFragment<PetsViewModel, FragmentPetsBinding>(),
                 Latitude_=latLng.latitude
                 Longitude_=latLng.longitude
                 getPetsList()
+                getCityName_(latLng)
             }
         }
+    }
+
+    private fun getCityName_(latLng: LatLng) {
+
+        MapsUtiles.getCityName(requireContext(), latLng, "en").observe(
+            viewLifecycleOwner,
+            Observer {
+                if (!it.isNullOrEmpty()) {
+                    val city = it.replace("Governorate", "")
+                    (activity as MainActivity).toolBarTitle.text = city
+                }
+            })
     }
 
     fun setLPetsLocations() {
         if (mMap != null) {
            mMap?.clear()
-            mapSets.forEach {adsModel->
+            mapSets.forEach { adsModel->
                 val pet = LatLng(adsModel.latitude, adsModel.longitude)
                 val iconGenerator = IconGenerator(context)
-                 val inflatedView = View.inflate(context, R.layout.custom_markser, null)
-
-                iconGenerator.setContentView(inflatedView)
+                 val inflatedViewBinding = CustomMarkserBinding.inflate(layoutInflater)
+//                val imageView=inflatedViewBinding.image
+//                if (!adsModel.image.isNullOrEmpty()) {
+//                    Glide.with(requireActivity()).load(adsModel.image).into(imageView)
+//                    imageView.visibility = View.VISIBLE
+//                }
+                val TRANSPARENT_DRAWABLE: Drawable = ColorDrawable(Color.TRANSPARENT)
+                iconGenerator.setBackground(TRANSPARENT_DRAWABLE)
+                iconGenerator.setContentView(inflatedViewBinding.root)
                 var marker = MarkerOptions().position(pet)
                     .title(adsModel.name) // below line is use to add custom marker on our map.
                     .icon(BitmapDescriptorFactory.fromBitmap(iconGenerator.makeIcon()))
-
-
 
                 mMap?.addMarker(
                     marker

@@ -73,4 +73,5 @@
     <string name="categories">Categories</string>
     <string name="required">Required</string>
     <string name="blogIsAdded">your Blog is added successully</string>
+    <string name="joinedDate">Joined date:</string>
 </resources>

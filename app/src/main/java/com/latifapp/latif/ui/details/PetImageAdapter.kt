@@ -28,12 +28,11 @@ class PetImageAdapter(val images: List<ImagesModel>?) :
         val image =images?.get(position)
         if (!image?.image.isNullOrEmpty()) {
             var imagePath=image?.image
-            if (!image?.external_link!!)
-                imagePath= NetworkClient.BASE_URL +imagePath
+
             Glide.with(holder.itemView.context).load(imagePath)
                 .error(R.drawable.ic_image)
                 .placeholder(R.drawable.ic_image).into(holder.binding.image)
-        }
+        }else holder.binding.image.setImageResource(R.drawable.ic_image)
     }
 
     override fun getItemCount(): Int {

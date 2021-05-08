@@ -2,20 +2,15 @@ package com.latifapp.latif.ui.main.petsList
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.latifapp.latif.R
 import com.latifapp.latif.data.models.AdsModel
-import com.latifapp.latif.databinding.FragmentPetsBinding
 import com.latifapp.latif.databinding.FragmentPetsListBinding
 import com.latifapp.latif.ui.base.BaseFragment
 import com.latifapp.latif.ui.details.DetailsActivity
-import com.latifapp.latif.ui.main.blogs.BlogsViewModel
 import com.latifapp.latif.ui.main.pets.PetsAdapter
 import com.latifapp.latif.ui.main.pets.PetsViewModel
 import com.latifapp.latif.utiles.AppConstants

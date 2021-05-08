@@ -56,10 +56,10 @@ class CreateBlogActivity : BaseActivity<CreateBlogViewModel,ActivityCreateBlogBi
             val description=binding.descriptionEx.text.toString()
             binding.titleEx.setError(null)
             binding.descriptionEx.setError(null)
-            if (title.isNullOrEmpty())
+            if (title.isNullOrEmpty()&&title.length<3)
             {
                 binding.titleEx.setError(getString(R.string.required))
-            }else if (description.isNullOrEmpty())
+            }else if (description.isNullOrEmpty()&&title.length<5)
             {
                 binding.descriptionEx.setError(getString(R.string.required))
             }

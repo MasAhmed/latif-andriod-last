@@ -7,6 +7,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.ImageView
 import android.widget.SearchView
+import android.widget.TextView
 import androidx.core.view.GravityCompat
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -18,6 +19,7 @@ import com.latifapp.latif.databinding.ActivityMainBinding
 import com.latifapp.latif.ui.base.BaseActivity
 import com.latifapp.latif.ui.filter.FilterFormActivity
 import com.latifapp.latif.ui.main.profile.ProfileActivity
+import com.latifapp.latif.ui.subscribe.SubscribeActivity
 import com.latifapp.latif.utiles.AppConstants
 import com.latifapp.latif.utiles.AppConstants.PETS_STR
 import com.latifapp.latif.utiles.Utiles
@@ -31,11 +33,13 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(), NavCont
     private lateinit var navigation: NavController
     public lateinit var searchBtn:ImageView
     public lateinit var searchView:SearchView
+    public lateinit var toolBarTitle:TextView
     private var type=""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         searchBtn=binding.toolbar.searchBtn
         searchView=binding.toolbar.searchView
+        toolBarTitle=binding.toolbar.title
 
          navigation = Navigation.findNavController(
              this,
@@ -125,6 +129,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(), NavCont
             MenuAdapter.MenuEnum.pets -> navigation.navigate(R.id.nav_pets_list_fragments)
             MenuAdapter.MenuEnum.items -> navigation.navigate(R.id.nav_items_fragments)
             MenuAdapter.MenuEnum.service -> navigation.navigate(R.id.nav_services_fragments)
+            MenuAdapter.MenuEnum.subscribe -> startActivity(Intent(this,SubscribeActivity::class.java))
          }
 
         runBlocking {

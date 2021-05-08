@@ -44,9 +44,9 @@
                 android:layout_gravity="center"
                 android:fontFamily="@font/poppins_regular"
                 android:gravity="center"
-                android:text="Cairo"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
+                 android:textColor="@color/white"
+                android:textSize="20sp"
+                android:id="@+id/title"/>
         </LinearLayout>
 
         <View

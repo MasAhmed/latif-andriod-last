@@ -7,10 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
-import com.latifapp.latif.R
 import com.latifapp.latif.databinding.FragmentInterestsBinding
-import com.latifapp.latif.ui.base.BaseFragment
-import com.latifapp.latif.ui.main.blogs.BlogsViewModel
 import com.latifapp.latif.ui.main.home.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 

@@ -131,7 +131,7 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
                 "file" -> createImage(model_)
                 "files" -> createImagesList(model_)
                 "select" -> createCheckBoxGroup(model_)
-                "dropdown" -> createSpinner(model_)
+               "dropdown" -> createSpinner(model_)
                 "radiobutton" -> createRadioButtonGroup(model_)
                 "map" -> createMapBtn(model_)
                 "url_option" -> getUrlInfo(model_)
@@ -144,6 +144,7 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
     private fun getUrlInfo(model_: RequireModel) {
         lifecycleScope.launchWhenStarted {
             viewModel.getUrlInfo(model_).observe(this@SellActivity, Observer {
+
                 if (it != null)
                     createSpinner(it)
             })
@@ -285,6 +286,7 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
             }
         }
         )
+        Utiles.log_D("smsmmsmsmsmsms","$text")
         binding.container.addView(text.getView())
     }
 

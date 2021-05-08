@@ -36,12 +36,11 @@ class ServiceAdapter : RecyclerView.Adapter<ServiceAdapter.MyViewHolder>() {
 
         if (!category.icon.isNullOrEmpty()) {
             var image = category.icon
-            if (!category.isExternalLink)
-                image = NetworkClient.BASE_URL + image
+
             Glide.with(holder.itemView.context).load(image)
                 .error(R.drawable.ic_image)
                 .placeholder(R.drawable.ic_image).into(holder.binding.image)
-        }
+        }else holder.binding.image.setImageResource(R.drawable.ic_image)
 
         holder.itemView.setOnClickListener {
             action?.selectedCategory(category.id)
