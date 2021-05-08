@@ -12,7 +12,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/container"
-
+    android:visibility="gone"
     >
     <TextView
         android:layout_width="wrap_content"
@@ -70,13 +70,23 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             >
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:layout_width="0dp"
+                android:layout_height="180dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="20dp"
+                android:id="@+id/baseImage"
+                app:riv_corner_radius="10dp"
+                />
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/baseImage"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:id="@+id/recyclerView"
         tools:itemCount="5"/>
     <TextView
@@ -148,10 +158,23 @@
         app:layout_constraintTop_toTopOf="@id/dateTxt"
         android:background="@drawable/ic_rectangle"
         android:id="@+id/callBtn"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/priceTxt"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                android:layout_marginTop="3dp"
+                tools:itemCount="4"
+                tools:listitem="@layout/extra_item"
+                android:id="@+id/extraList"
+                />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/priceTxt"
+        app:layout_constraintTop_toBottomOf="@id/extraList"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
@@ -189,6 +212,13 @@
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_pin"
+            android:layout_gravity="center"
+            android:paddingBottom="30dp"
             />
     </androidx.cardview.widget.CardView>
 

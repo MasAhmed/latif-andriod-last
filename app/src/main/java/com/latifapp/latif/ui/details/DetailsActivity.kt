@@ -1,17 +1,26 @@
 package com.latifapp.latif.ui.details
 
 import android.content.Intent
+import android.location.Location
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.*
+import android.view.View.GONE
 import android.widget.PopupWindow
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.postsapplication.network.NetworkClient
+import com.example.postsapplication.network.NetworkClient.BASE_URL
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
 import com.latifapp.latif.R
+import com.latifapp.latif.data.models.ExtraModel
 import com.latifapp.latif.data.models.ImagesModel
 import com.latifapp.latif.data.models.UserModel
 import com.latifapp.latif.databinding.ActivityDetailsBinding
@@ -19,14 +28,18 @@ import com.latifapp.latif.databinding.CallDialogBinding
 import com.latifapp.latif.databinding.TopOptionMenuBinding
 import com.latifapp.latif.ui.base.BaseActivity
 import com.latifapp.latif.ui.details.dialog.ReportDialogFragment
+import com.latifapp.latif.utiles.Utiles
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class DetailsActivity : BaseActivity<DetailsViewModel, ActivityDetailsBinding>() {
+class DetailsActivity() : BaseActivity<DetailsViewModel, ActivityDetailsBinding>(),
+    OnMapReadyCallback {
+    private var mMap: GoogleMap?=null
     private var phoneNum: String?=""
     private lateinit var topMenuPopUp: PopupWindow
     private lateinit var callPopUp: PopupWindow
     private var id :Int?=null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -36,7 +49,9 @@ class DetailsActivity : BaseActivity<DetailsViewModel, ActivityDetailsBinding>()
 
 
         }
-
+        val mapFragment = supportFragmentManager
+            .findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
         id= intent.extras?.getInt("ID")
         getDetails()
 
@@ -59,17 +74,36 @@ class DetailsActivity : BaseActivity<DetailsViewModel, ActivityDetailsBinding>()
         viewModel.getAdDetails(id).observe(this, Observer {
             if (it != null) {
 
-                setListOfImages(it.images)
+                setListOfImages(it.images,it.image,it.external_link)
 
                 binding.container.visibility = View.VISIBLE
                 binding.dateTxt.text = it.created_at
                 binding.priceTxt.text = "${it.price} EGP"
                 binding.petName.text = it.name
                 binding.descriptionTxt.text = it.description
+                moveToLocation(it.latitude,it.longitude)
                 setSellerInfo(it.createdBy, it.external_link)
+                if (!it.extra.isNullOrEmpty())
+                setExtraList(it.extra)
 
             }
         })
+    }
+    private fun moveToLocation( lat:Double,lag:Double) {
+         mMap?.animateCamera(
+            CameraUpdateFactory.newLatLngZoom(
+                LatLng(
+                   lat,
+                    lag
+                ), 16f
+            )
+        )
+    }
+    private fun setExtraList(extra: List<ExtraModel>) {
+        binding.extraList.apply {
+            layoutManager=LinearLayoutManager(this@DetailsActivity)
+            adapter=ExtraAdapter(extra)
+        }
     }
 
     private fun setSellerInfo(createdBy: UserModel?, external: Boolean) {
@@ -86,11 +120,21 @@ class DetailsActivity : BaseActivity<DetailsViewModel, ActivityDetailsBinding>()
         }
     }
 
-    private fun setListOfImages(images: List<ImagesModel>?) {
+    private fun setListOfImages(images: List<ImagesModel>?, image: String?, externalLink: Boolean) {
         binding.recyclerView.apply {
             layoutManager =
                 LinearLayoutManager(this@DetailsActivity, LinearLayoutManager.HORIZONTAL, false)
             adapter = PetImageAdapter(images)
+        }
+        if (image.isNullOrEmpty())
+            binding.baseImage.visibility=GONE
+        else{
+            var imagePath=image
+            if (!externalLink)
+                imagePath= NetworkClient.BASE_URL +imagePath
+            Glide.with(this).load(imagePath)
+                .error(R.drawable.ic_image)
+                .placeholder(R.drawable.ic_image).into(binding.baseImage)
         }
     }
 
@@ -109,6 +153,15 @@ class DetailsActivity : BaseActivity<DetailsViewModel, ActivityDetailsBinding>()
                 true
             }
             popupBinding.shareBtn.setOnClickListener {
+                val url="https://latifapp.com?adsID=$id"
+                val sendIntent: Intent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    putExtra(Intent.EXTRA_TEXT, url)
+                    type = "text/plain"
+                }
+
+                val shareIntent = Intent.createChooser(sendIntent, null)
+                startActivity(shareIntent)
                 topMenuPopUp.dismiss()
             }
             popupBinding.reportBtn.setOnClickListener {
@@ -164,6 +217,10 @@ class DetailsActivity : BaseActivity<DetailsViewModel, ActivityDetailsBinding>()
 
     override fun hideLoader() {
         binding.loader.bar.visibility=View.GONE
+    }
+
+    override fun onMapReady(mMap: GoogleMap?) {
+        this.mMap=mMap;
     }
 
 

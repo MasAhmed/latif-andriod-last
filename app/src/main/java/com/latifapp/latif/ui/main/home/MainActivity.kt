@@ -20,11 +20,12 @@ import com.latifapp.latif.ui.filter.FilterFormActivity
 import com.latifapp.latif.ui.main.profile.ProfileActivity
 import com.latifapp.latif.utiles.AppConstants
 import com.latifapp.latif.utiles.AppConstants.PETS_STR
+import com.latifapp.latif.utiles.Utiles
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.runBlocking
 
 @AndroidEntryPoint
-class MainActivity : BaseActivity<MainViewModel,ActivityMainBinding>(), NavController.OnDestinationChangedListener,
+class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(), NavController.OnDestinationChangedListener,
     MenuAdapter.MenuAction, BottomNavItemsAdapter.Action {
     private val bottomAdapter=BottomNavItemsAdapter(this@MainActivity)
     private lateinit var navigation: NavController
@@ -37,9 +38,9 @@ class MainActivity : BaseActivity<MainViewModel,ActivityMainBinding>(), NavContr
         searchView=binding.toolbar.searchView
 
          navigation = Navigation.findNavController(
-            this,
-            R.id.fragment_container
-        )
+             this,
+             R.id.fragment_container
+         )
 
 
         setBottomBarNav()
@@ -54,7 +55,7 @@ class MainActivity : BaseActivity<MainViewModel,ActivityMainBinding>(), NavContr
 
     private fun setBottomBarNav() {
         binding.bottomNavRecyclerView.apply {
-            layoutManager=GridLayoutManager(this@MainActivity,5)
+            layoutManager=GridLayoutManager(this@MainActivity, 5)
             adapter=bottomAdapter
         }
     }
@@ -89,11 +90,11 @@ class MainActivity : BaseActivity<MainViewModel,ActivityMainBinding>(), NavContr
 
             R.id.pets_fragments -> {
                 bottomAdapter.show(0)
-                type=PETS_STR
+                type = PETS_STR
             }
             R.id.items_fragments -> {
                 bottomAdapter.show(1)
-                type=AppConstants.ACCESSORIES_STR
+                type = AppConstants.ACCESSORIES_STR
             }
             R.id.clinic_fragments -> {
                 bottomAdapter.show(2)
@@ -101,16 +102,16 @@ class MainActivity : BaseActivity<MainViewModel,ActivityMainBinding>(), NavContr
             }
             R.id.services_fragments -> {
                 bottomAdapter.show(3)
-                type=AppConstants.SERVICE_STR
+                type = AppConstants.SERVICE_STR
             }
             R.id.chat_fragments -> {
                 bottomAdapter.show(4)
-                searchBtn.visibility=GONE
+                searchBtn.visibility = GONE
             }
             R.id.blogs_fragments -> {
-                searchView.visibility= VISIBLE
-                searchBtn.visibility=GONE
-                binding.toolbar.titleContainer.visibility=GONE
+                searchView.visibility = VISIBLE
+                searchBtn.visibility = GONE
+                binding.toolbar.titleContainer.visibility = GONE
             }
         }
     }
@@ -118,7 +119,8 @@ class MainActivity : BaseActivity<MainViewModel,ActivityMainBinding>(), NavContr
     override fun menuClick(enum: MenuAdapter.MenuEnum) {
         when (enum) {
             MenuAdapter.MenuEnum.profile -> startActivity(
-                Intent(this, ProfileActivity::class.java))
+                Intent(this, ProfileActivity::class.java)
+            )
             MenuAdapter.MenuEnum.blogs -> navigation.navigate(R.id.nav_blogs_fragments)
             MenuAdapter.MenuEnum.pets -> navigation.navigate(R.id.nav_pets_list_fragments)
             MenuAdapter.MenuEnum.items -> navigation.navigate(R.id.nav_items_fragments)
@@ -150,4 +152,11 @@ class MainActivity : BaseActivity<MainViewModel,ActivityMainBinding>(), NavContr
 
     override fun hideLoader() {
      }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        if (intent.data != null) {
+            Utiles.log_D("cncnncncncnncn","${intent.data?.query}  ${intent.data?.encodedQuery}")
+        }
+    }
 }

@@ -11,10 +11,11 @@ interface NetworkApis {
                          @Nullable @Query("category") category: Int?): ResponseModel<List<BlogsModel>>
 
     @GET("api/public/blogs/id={id}")
-    suspend fun getBlogsWithCategory(@Path("id") id: Int): ResponseModel<List<BlogsModel>>
+    suspend fun getBlogsDetails(@Path("id") id: Int): ResponseModel<List<BlogsModel>>
 
     @GET("api/public/blogs/keyword={keyword}")
-    suspend fun getSearchBlogs(@Path("keyword") txt: String): ResponseModel<List<BlogsModel>>
+    suspend fun getSearchBlogs(@Path("keyword") txt: String,
+                               @Query("page") page: Int): ResponseModel<List<BlogsModel>>
 
     @GET("api/public/blogCategory")
     suspend fun getBlogsCategoryList(): ResponseModel<List<CategoryItemsModel>>
@@ -54,4 +55,7 @@ interface NetworkApis {
         @Url url: String,
         @Body model: SaveformModelRequest
     ): ResponseModel<List<AdsModel>>
+
+    @POST("api/public/blogs/create")
+    suspend fun createBlog(@Body body:CreateBlogsModel):ResponseModel<BlogsModel>
 }

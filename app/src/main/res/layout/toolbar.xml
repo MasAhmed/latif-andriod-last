@@ -81,8 +81,8 @@
             app:queryBackground="@color/cornflower_lilac"
             app:dividerPadding="5dp"
             android:padding="9dp"
+            android:theme="@style/WallSearchView"
             android:queryHint="@string/Search"
-            app:iconifiedByDefault="true"
-            android:visibility="gone"/>
+             android:visibility="gone"/>
     </RelativeLayout>
 </androidx.appcompat.widget.Toolbar>

@@ -1,6 +1,11 @@
 package com.latifapp.latif.data.models
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+import java.io.Serializable
+
 data class AdsTypeModel(val id:Int?,val name:String?,val nameAr:String?)
+@Parcelize
 data class AdsModel(
     val id: Int?,
     val name: String?,
@@ -16,8 +21,16 @@ data class AdsModel(
     val stock: String?,
     val latitude: Double=0.0,
     val longitude: Double=0.0,
-    val external_link: Boolean,
-    val createdBy: UserModel?
-)
+    val external_link: Boolean=false,
+    val createdBy: UserModel?,
+    val extra: List<ExtraModel>?
+):Parcelable
 
-data class ImagesModel(val id:Int,val image:String,val external_link:Boolean)
+data class ExtraModel(
+    val name: String?,
+    val name_ar: String?,
+    val value: Any?
+):Serializable
+
+@Parcelize
+data class ImagesModel(val id:Int,val image:String,val external_link:Boolean=false):Parcelable

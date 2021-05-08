@@ -50,12 +50,12 @@ class BlogsViewModel @Inject constructor(val repo: DataRepo, appPrefsStorage: Ap
     }
 
     suspend fun getSearchBlogs(txt:String) : StateFlow<List<BlogsModel>> {
-        page=0
+
         val flow_ = MutableStateFlow<List<BlogsModel>>(arrayListOf())
         loader.value = true
         onSearchDebounce(500L, viewModelScope, {
             viewModelScope.launch(Dispatchers.IO) {
-                val result = repo.getSearchBlogs(txt)
+                val result = repo.getSearchBlogs(txt,page)
                 when (result) {
                     is ResultWrapper.Success -> {
                         flow_.value = result.value.response.data!!

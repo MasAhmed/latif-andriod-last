@@ -66,4 +66,11 @@
     <string name="plz_add_location">Please add location</string>
     <string name="noAds">No Ads</string>
     <string name="Search">Search</string>
+    <string name="createBlog">Create blog</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="create">Create</string>
+    <string name="categories">Categories</string>
+    <string name="required">Required</string>
+    <string name="blogIsAdded">your Blog is added successully</string>
 </resources>

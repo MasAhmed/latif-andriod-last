@@ -1,5 +1,8 @@
 package com.latifapp.latif.data.models
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
 
 data class BlogsModel(
     val id: Int?,
@@ -12,6 +15,17 @@ data class BlogsModel(
     val user: UserModel?,
 )
 
+data class CreateBlogsModel(
+    val title: String?,
+    val category: Int?,
+    val description: String?,
+    val images: List<String>?=null,
+    val extrnImage: List<String>?,
+    val _external: Boolean=true,
+
+)
+
+@Parcelize
 data class UserModel(
     val id: Int?,
     val email: String?,
@@ -20,4 +34,4 @@ data class UserModel(
     val address: String?,
     val phone: String?,
     val avatar: String?
-)
+): Parcelable

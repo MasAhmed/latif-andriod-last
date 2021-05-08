@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
- import com.google.android.gms.location.*
+import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -16,10 +16,10 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.maps.android.ui.IconGenerator
 import com.latifapp.latif.data.models.AdsModel
 import com.latifapp.latif.databinding.FragmentPetsBinding
 import com.latifapp.latif.ui.base.BaseFragment
-import com.latifapp.latif.ui.main.pets.bottomDialog.BottomDialogFragment
 import com.latifapp.latif.ui.sell.SellActivity
 import com.latifapp.latif.utiles.AppConstants
 import com.latifapp.latif.utiles.GpsUtils
@@ -28,13 +28,15 @@ import com.latifapp.latif.utiles.Utiles
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_maps.*
 import kotlinx.coroutines.flow.collect
-import com.latifapp.latif.R
+import  com.latifapp.latif.R
+import com.latifapp.latif.ui.main.pets.bottomDialog.BottomDialogFragment
 
 
 @AndroidEntryPoint
 class PetsFragment : BaseFragment<PetsViewModel, FragmentPetsBinding>(),
     PetsAdapter.CategoryActions  {
 
+    private val mapSets= mutableSetOf<AdsModel>()
     private var category: Int?=null
     private var mapFragment: SupportMapFragment? = null
     private var mMap: GoogleMap? = null
@@ -79,10 +81,12 @@ class PetsFragment : BaseFragment<PetsViewModel, FragmentPetsBinding>(),
     private fun getPetsList() {
 
         lifecycleScope.launchWhenStarted {
-            viewModel.getItems(AppConstants.PETS_STR,category).collect {
+            viewModel.getItems(AppConstants.PETS_STR, category).collect {
                 viewModel.page=0
                 if (it!=null) {
-                    setLPetsLocations(it)
+                    mapSets.addAll(it)
+                    Utiles.log_D("ncncncnncncncn","${mapSets.size}")
+                    setLPetsLocations()
                 }
             }
         }
@@ -143,24 +147,38 @@ class PetsFragment : BaseFragment<PetsViewModel, FragmentPetsBinding>(),
         }
     }
 
-    fun setLPetsLocations(list: List<AdsModel>) {
+    fun setLPetsLocations() {
         if (mMap != null) {
-            mMap?.clear()
-            list.forEach {
-                val pet = LatLng(it.latitude, it.longitude)
+           mMap?.clear()
+            mapSets.forEach {adsModel->
+                val pet = LatLng(adsModel.latitude, adsModel.longitude)
+                val iconGenerator = IconGenerator(context)
+                 val inflatedView = View.inflate(context, R.layout.custom_markser, null)
+
+                iconGenerator.setContentView(inflatedView)
                 var marker = MarkerOptions().position(pet)
-                    .title(it.name) // below line is use to add custom marker on our map.
-//                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.white_ic_loc))
+                    .title(adsModel.name) // below line is use to add custom marker on our map.
+                    .icon(BitmapDescriptorFactory.fromBitmap(iconGenerator.makeIcon()))
+
+
+
                 mMap?.addMarker(
-                   marker
-                )
-                mMap?.setOnMapClickListener { latLag->
-                    Utiles.log_D("ndndndndnnd",it.name)
-                    //childFragmentManager.let {
-//                    BottomDialogFragment().apply {
-//                        show(it, tag)
-//                    }
-//                }
+                    marker
+                )?.tag =(adsModel)
+
+                mMap?.setOnMarkerClickListener { marker->
+                    val model=marker.tag as AdsModel
+                    if (model!=null) {
+                        val bundle = Bundle()
+                        bundle.putParcelable("model", model)
+                        childFragmentManager.let {
+                            BottomDialogFragment().apply {
+                                arguments = bundle
+                                show(it, tag)
+                            }
+                        }
+                    }
+                    true
                 }
             }
         }
@@ -235,6 +253,8 @@ class PetsFragment : BaseFragment<PetsViewModel, FragmentPetsBinding>(),
     override fun selectedCategory(id: Int?) {
         Utiles.log_D("ndndndndnnd", "${id}")
         category=id
+        mMap?.clear()
+        mapSets.clear()
         getPetsList()
     }
 }

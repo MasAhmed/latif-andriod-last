@@ -12,6 +12,7 @@ import com.latifapp.latif.data.models.BlogsModel
 import com.latifapp.latif.databinding.FragmentBlogsBinding
 import com.latifapp.latif.ui.base.BaseFragment
 import com.latifapp.latif.ui.filter.FilterFormActivity
+import com.latifapp.latif.ui.main.blogs.createBlog.CreateBlogActivity
 import com.latifapp.latif.ui.main.home.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -42,7 +43,10 @@ class BlogsFragment : BaseFragment<BlogsViewModel, FragmentBlogsBinding>(),
             adapter = petsAdapter
             petsAdapter.action = this@BlogsFragment
         }
-
+        binding.sellBtn.setOnClickListener {
+            val intent = Intent(activity, CreateBlogActivity::class.java)
+            startActivityForResult(intent, 2)
+        }
 
 
         getBlogs()
@@ -60,9 +64,9 @@ class BlogsFragment : BaseFragment<BlogsViewModel, FragmentBlogsBinding>(),
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     return false
                 }
+
                 override fun onQueryTextChange(newText: String?): Boolean {
-                    adapter_.list.clear()
-                    adapter_.notifyDataSetChanged()
+                    selectedCategory(category)
                     if (newText.isNullOrEmpty())
                         getBlogs()
                     else getSearchBlogs(newText)
@@ -74,8 +78,9 @@ class BlogsFragment : BaseFragment<BlogsViewModel, FragmentBlogsBinding>(),
         }
     }
 
+
     private fun getSearchBlogs(newText: String) {
-        isLoadingData = true // to prevent scroll
+
         lifecycleScope.launchWhenStarted {
             viewModel.getSearchBlogs(newText).collect {
                 adapter_.list.clear()
