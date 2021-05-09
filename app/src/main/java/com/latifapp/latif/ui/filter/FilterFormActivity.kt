@@ -51,15 +51,17 @@ class FilterFormActivity : BaseActivity<FilterViewModel, ActivitySellBinding>() 
     private fun submitAdForm() {
         if (hashMap.isNullOrEmpty())
             toastMsg_Warning(getString(R.string.addFormValue), binding.root, this)
-        else if (lat == null || lat == 0.0) {
-            if (filterHasMap)
-                toastMsg_Warning(getString(R.string.plz_add_location), binding.root, this)
-            else {
-                lat = PetsFragment.Latitude_
-                lng = PetsFragment.Longitude_
-                setLocation()
-            }
-        } else {
+//        else if (lat == null || lat == 0.0) {
+//            if (filterHasMap)
+//                toastMsg_Warning(getString(R.string.plz_add_location), binding.root, this)
+//            else {
+//                lat = PetsFragment.Latitude_
+//                lng = PetsFragment.Longitude_
+//                setLocation()
+//            }
+//        }
+
+        else {
             val intent = Intent(this, FilterActivity::class.java)
             intent.putExtra("url", url)
             intent.putExtra("type", type)
@@ -167,7 +169,7 @@ class FilterFormActivity : BaseActivity<FilterViewModel, ActivitySellBinding>() 
         if (lang != "en")
             header = model.label_ar
         val text =
-            CustomEditText(this, header, model.type?.toLowerCase().equals("string"), object :
+            CustomEditText(this, header, model.type?.toLowerCase().equals("string"),false, object :
                 CustomParentView.ViewAction<String> {
                 override fun getActionId(text: String) {
                     setHashMapValues("${model.name}", "$text")

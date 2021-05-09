@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 import java.io.Serializable
 
-data class AdsTypeModel(val id:Int?,val name:String?,val nameAr:String?)
+data class AdsTypeModel(val id:Int?,val name:String?,val code:String?,val nameAr:String?)
 @Parcelize
 data class AdsModel(
     val id: Int?,

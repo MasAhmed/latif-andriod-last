@@ -135,6 +135,7 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
                 "radiobutton" -> createRadioButtonGroup(model_)
                 "map" -> createMapBtn(model_)
                 "url_option" -> getUrlInfo(model_)
+                "text" -> createEditText(model_,true)
                 else -> createEditText(model_)
 
 
@@ -244,13 +245,13 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
 
     }
 
-    fun createEditText(model: RequireModel) {
+    fun createEditText(model: RequireModel, isMultiLine:Boolean=false) {
         if (model.label.isNullOrEmpty()) return
         var header=model.label
         if (!lang.equals("en"))
             header=model.label_ar
         val text =
-            CustomEditText(this, header!!, model.type?.toLowerCase().equals("string"), object :
+            CustomEditText(this, header!!, model.type?.toLowerCase().equals("string"),isMultiLine, object :
                 CustomParentView.ViewAction<String> {
                 override fun getActionId(text: String) {
                     setHashMapValues("${model.name}", "$text")
@@ -430,7 +431,7 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        getForm(typeList.get(position).name)
+        getForm(typeList.get(position).code)
         binding.container.removeAllViews()
         binding.mapContainer.visibility = GONE
         binding.placeNme.text = ""

@@ -10,6 +10,7 @@ import android.view.View.GONE
 import android.widget.PopupWindow
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.postsapplication.network.NetworkClient
@@ -101,7 +102,7 @@ class DetailsActivity() : BaseActivity<DetailsViewModel, ActivityDetailsBinding>
     }
     private fun setExtraList(extra: List<ExtraModel>) {
         binding.extraList.apply {
-            layoutManager=LinearLayoutManager(this@DetailsActivity)
+            layoutManager=GridLayoutManager(this@DetailsActivity,2)
             adapter=ExtraAdapter(extra)
         }
     }
@@ -127,15 +128,7 @@ class DetailsActivity() : BaseActivity<DetailsViewModel, ActivityDetailsBinding>
                 LinearLayoutManager(this@DetailsActivity, LinearLayoutManager.HORIZONTAL, false)
             adapter = PetImageAdapter(images)
         }
-        if (image.isNullOrEmpty())
-            binding.baseImage.visibility=GONE
-        else{
-            var imagePath=image
 
-            Glide.with(this).load(imagePath)
-                .error(R.drawable.ic_image)
-                .placeholder(R.drawable.ic_image).into(binding.baseImage)
-        }
     }
 
     private fun topMenuDialogShow(view: View?) {
@@ -221,6 +214,7 @@ class DetailsActivity() : BaseActivity<DetailsViewModel, ActivityDetailsBinding>
 
     override fun onMapReady(mMap: GoogleMap?) {
         this.mMap=mMap;
+        mMap?.getUiSettings()?.setScrollGesturesEnabled(false);
     }
 
 

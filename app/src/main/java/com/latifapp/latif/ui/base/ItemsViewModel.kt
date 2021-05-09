@@ -16,7 +16,7 @@ import javax.inject.Inject
 open class ItemsViewModel(appPrefsStorage: AppPrefsStorage, repo: DataRepo) :
     CategoriesViewModel(appPrefsStorage,repo) {
     var page = 0
-    fun getItems(type: String, category: Int? = null): StateFlow<List<AdsModel>> {
+    fun getItems(type: String?, category: Int? = null): StateFlow<List<AdsModel>> {
         val flow_ = MutableStateFlow<List<AdsModel>>(arrayListOf())
         loader.value = true
         viewModelScope.launch(Dispatchers.IO) {

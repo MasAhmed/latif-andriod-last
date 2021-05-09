@@ -51,20 +51,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 >
-                <com.makeramen.roundedimageview.RoundedImageView
-                    android:layout_width="0dp"
-                    android:layout_height="180dp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:layout_marginTop="20dp"
-                    android:id="@+id/baseImage"
-                    app:riv_corner_radius="10dp"
-                    />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/baseImage"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginTop="10dp"

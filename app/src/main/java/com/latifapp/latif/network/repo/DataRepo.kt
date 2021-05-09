@@ -16,7 +16,7 @@ interface DataRepo {
    suspend fun saveForm(url: String, model: SaveformModelRequest): ResultWrapper<ResponseModel<SellFormModel>>
     suspend fun saveFilter(url: String, model: SaveformModelRequest): ResultWrapper<ResponseModel<List<AdsModel>>>
 
-    suspend fun getNearestAds(type: String,lat: Double,lag: Double,category: Int?,page: Int): ResultWrapper<ResponseModel<List<AdsModel>>>
+    suspend fun getNearestAds(type: String?,lat: Double,lag: Double,category: Int?,page: Int): ResultWrapper<ResponseModel<List<AdsModel>>>
    suspend fun getAdDetails(id: Int?): ResultWrapper<ResponseModel<AdsModel>>
     suspend fun createBlog(createBlogsModel: CreateBlogsModel) : ResultWrapper<ResponseModel<BlogsModel>>
     suspend fun getDetailsOfBlog(id: Int?): ResultWrapper<ResponseModel<BlogsModel>>

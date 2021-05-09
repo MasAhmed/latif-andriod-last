@@ -1,6 +1,7 @@
 package com.latifapp.latif.ui
 
 import android.app.Application
+import androidx.appcompat.app.AppCompatDelegate
 import com.cloudinary.android.MediaManager
 import dagger.hilt.android.HiltAndroidApp
 
@@ -9,5 +10,6 @@ class MyApp :Application() {
     override fun onCreate() {
         super.onCreate()
         MediaManager.init(this)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
     }
 }

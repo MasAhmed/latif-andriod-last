@@ -62,15 +62,7 @@ class BlogDetailsActivity : BaseActivity<BolgDetailsViewModel,ActivityBlogDetail
                 LinearLayoutManager(this@BlogDetailsActivity, LinearLayoutManager.HORIZONTAL, false)
             adapter = BlogImagesAdapter(images)
         }
-        if (image.isNullOrEmpty())
-            binding.baseImage.visibility= View.GONE
-        else{
-            var imagePath=image
 
-            Glide.with(this).load(imagePath)
-                .error(R.drawable.ic_image)
-                .placeholder(R.drawable.ic_image).into(binding.baseImage)
-        }
     }
     private fun setSellerInfo(createdBy: UserModel?, external: Boolean) {
         binding.sellerNameTxt.text = "${createdBy?.firstName} ${createdBy?.lastName}"

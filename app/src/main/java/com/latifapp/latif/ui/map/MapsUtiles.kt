@@ -46,14 +46,16 @@ object MapsUtiles {
             try {
                 val addresses: List<Address> =
                     geocoder.getFromLocation(latlng.latitude, latlng.longitude, 1)
-                val obj: Address? = addresses?.get(0)
-                // val add = obj?.getSubThoroughfare()+","+obj?.
+                if (!addresses.isNullOrEmpty()) {
+                    val obj: Address? = addresses?.get(0)
+                    // val add = obj?.getSubThoroughfare()+","+obj?.
 
-                var add = obj?.adminArea
+                    var add = obj?.adminArea
 
 
-                Log.e("IGA", "Address" + add)
-                liveData.postValue(add)
+                    Log.e("IGA", "Address" + add)
+                    liveData.postValue(add)
+                }
             } catch (e: IOException) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
