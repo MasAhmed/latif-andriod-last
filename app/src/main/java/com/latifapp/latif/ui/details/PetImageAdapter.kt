@@ -11,6 +11,8 @@ import com.latifapp.latif.databinding.PetImageItemBinding
 
 class PetImageAdapter(val images: List<ImagesModel>?) :
     RecyclerView.Adapter<PetImageAdapter.MyViewHolder>() {
+
+    var action:Actions?=null
     class MyViewHolder(val binding: PetImageItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
     }
@@ -33,10 +35,18 @@ class PetImageAdapter(val images: List<ImagesModel>?) :
                 .error(R.drawable.ic_image)
                 .placeholder(R.drawable.ic_image).into(holder.binding.image)
         }else holder.binding.image.setImageResource(R.drawable.ic_image)
+
+        holder.itemView.setOnClickListener {
+            action?.onImageClick("${image?.image}")
+        }
     }
 
     override fun getItemCount(): Int {
         return if (images.isNullOrEmpty()) 0
         else images.size
+    }
+
+    interface Actions{
+        fun onImageClick(image:String)
     }
 }

@@ -1,20 +1,16 @@
 package com.latifapp.latif.ui.details
 
 import android.content.Intent
-import android.location.Location
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.*
-import android.view.View.GONE
 import android.widget.PopupWindow
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.example.postsapplication.network.NetworkClient
-import com.example.postsapplication.network.NetworkClient.BASE_URL
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -27,14 +23,17 @@ import com.latifapp.latif.data.models.UserModel
 import com.latifapp.latif.databinding.ActivityDetailsBinding
 import com.latifapp.latif.databinding.CallDialogBinding
 import com.latifapp.latif.databinding.TopOptionMenuBinding
+import com.latifapp.latif.ui.ZoomingImageActivity
 import com.latifapp.latif.ui.base.BaseActivity
 import com.latifapp.latif.ui.details.dialog.ReportDialogFragment
-import com.latifapp.latif.utiles.Utiles
+import com.latifapp.latif.ui.main.chat.chatPage.ChatPageActivity
+import com.latifapp.latif.ui.main.pets.PetsFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class DetailsActivity() : BaseActivity<DetailsViewModel, ActivityDetailsBinding>(),
-    OnMapReadyCallback {
+    OnMapReadyCallback, PetImageAdapter.Actions {
+    private var adapter_: PetImageAdapter?=null
     private var mMap: GoogleMap?=null
     private var phoneNum: String?=""
     private lateinit var topMenuPopUp: PopupWindow
@@ -56,6 +55,7 @@ class DetailsActivity() : BaseActivity<DetailsViewModel, ActivityDetailsBinding>
         id= intent.extras?.getInt("ID")
         getDetails()
 
+
         binding.callBtn.setOnClickListener {
             callDialogShow(it)
         }
@@ -75,34 +75,42 @@ class DetailsActivity() : BaseActivity<DetailsViewModel, ActivityDetailsBinding>
         viewModel.getAdDetails(id).observe(this, Observer {
             if (it != null) {
 
-                setListOfImages(it.images,it.image,it.external_link)
+                setListOfImages(it.images, it.image, it.external_link)
 
                 binding.container.visibility = View.VISIBLE
                 binding.dateTxt.text = it.created_at
                 binding.priceTxt.text = "${it.price} EGP"
                 binding.petName.text = it.name
                 binding.descriptionTxt.text = it.description
-                moveToLocation(it.latitude,it.longitude)
+                moveToLocation(it.latitude, it.longitude)
                 setSellerInfo(it.createdBy, it.external_link)
                 if (!it.extra.isNullOrEmpty())
-                setExtraList(it.extra)
+                    setExtraList(it.extra)
 
             }
         })
     }
-    private fun moveToLocation( lat:Double,lag:Double) {
+    private fun moveToLocation(lat: Double, lag: Double) {
          mMap?.animateCamera(
-            CameraUpdateFactory.newLatLngZoom(
-                LatLng(
-                   lat,
-                    lag
-                ), 16f
+             CameraUpdateFactory.newLatLngZoom(
+                 LatLng(
+                     lat,
+                     lag
+                 ), 16f
+             )
+         )
+        binding.mabBtn.setOnClickListener{
+            val intent = Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("http://maps.google.com/maps?saddr=${PetsFragment.Latitude_},${PetsFragment.Longitude_}" +
+                        "&daddr=${lat},${lag}")
             )
-        )
+            startActivity(intent)
+        }
     }
     private fun setExtraList(extra: List<ExtraModel>) {
         binding.extraList.apply {
-            layoutManager=GridLayoutManager(this@DetailsActivity,2)
+            layoutManager=GridLayoutManager(this@DetailsActivity, 2)
             adapter=ExtraAdapter(extra)
         }
     }
@@ -126,7 +134,9 @@ class DetailsActivity() : BaseActivity<DetailsViewModel, ActivityDetailsBinding>
         binding.recyclerView.apply {
             layoutManager =
                 LinearLayoutManager(this@DetailsActivity, LinearLayoutManager.HORIZONTAL, false)
-            adapter = PetImageAdapter(images)
+            adapter_=PetImageAdapter(images)
+            adapter_?.action=this@DetailsActivity
+            adapter = adapter_
         }
 
     }
@@ -181,16 +191,17 @@ class DetailsActivity() : BaseActivity<DetailsViewModel, ActivityDetailsBinding>
             callPopUp.setFocusable(true)
             callPopUp.setOutsideTouchable(true)
             popupBinding.smsBtn.setOnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW,Uri.parse("sms:${Uri.parse(phoneNum)}"))
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("sms:${Uri.parse(phoneNum)}"))
                 startActivity(intent)
                 callPopUp.dismiss()
             }
             popupBinding.callBtn.setOnClickListener {
-                val intent = Intent(Intent.ACTION_DIAL,Uri.parse("tel:${Uri.parse(phoneNum)}"))
+                val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:${Uri.parse(phoneNum)}"))
                 startActivity(intent)
                 callPopUp.dismiss()
             }
             popupBinding.chatBtn.setOnClickListener {
+                startActivity(Intent(this, ChatPageActivity::class.java))
                 callPopUp.dismiss()
             }
         }
@@ -215,6 +226,12 @@ class DetailsActivity() : BaseActivity<DetailsViewModel, ActivityDetailsBinding>
     override fun onMapReady(mMap: GoogleMap?) {
         this.mMap=mMap;
         mMap?.getUiSettings()?.setScrollGesturesEnabled(false);
+    }
+
+    override fun onImageClick(image: String) {
+        val intent =Intent(this,ZoomingImageActivity::class.java)
+        intent.putExtra("image",image)
+        startActivity(intent)
     }
 
 

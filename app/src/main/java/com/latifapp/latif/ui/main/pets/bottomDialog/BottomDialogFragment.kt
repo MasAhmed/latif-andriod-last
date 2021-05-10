@@ -13,13 +13,14 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.latifapp.latif.R
 import com.latifapp.latif.data.models.AdsModel
 import com.latifapp.latif.databinding.FragmentBottomDialogBinding
+import com.latifapp.latif.ui.ZoomingImageActivity
 import com.latifapp.latif.ui.details.DetailsActivity
 import com.latifapp.latif.ui.details.PetImageAdapter
 import kotlinx.android.synthetic.main.fragment_bottom_dialog.*
 
 
 
-class BottomDialogFragment : BottomSheetDialogFragment() {
+class BottomDialogFragment : BottomSheetDialogFragment(), PetImageAdapter.Actions {
 
 
     private lateinit var binding: FragmentBottomDialogBinding
@@ -44,7 +45,9 @@ class BottomDialogFragment : BottomSheetDialogFragment() {
         val adsModel: AdsModel? =arguments?.getParcelable("model")
         binding.recyclerView.apply {
             layoutManager=LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
-            adapter= PetImageAdapter(adsModel?.images)
+            val adapter_=PetImageAdapter(adsModel?.images)
+            adapter_.action=this@BottomDialogFragment
+            adapter= adapter_
         }
         binding.title.text=adsModel?.name
         binding.dateTxt.text=adsModel?.created_at
@@ -64,5 +67,11 @@ class BottomDialogFragment : BottomSheetDialogFragment() {
             startActivity(intent)
         }
      }
+
+    override fun onImageClick(image: String) {
+        val intent =Intent(activity, ZoomingImageActivity::class.java)
+        intent.putExtra("image",image)
+        startActivity(intent)
+    }
 
 }

@@ -213,6 +213,10 @@
             android:layout_gravity="center"
             android:paddingBottom="30dp"
             />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/mabBtn"/>
     </androidx.cardview.widget.CardView>
 
     <com.makeramen.roundedimageview.RoundedImageView

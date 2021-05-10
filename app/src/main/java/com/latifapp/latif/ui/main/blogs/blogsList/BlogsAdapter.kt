@@ -18,6 +18,7 @@ class BlogsAdapter @Inject constructor() : RecyclerView.Adapter<BlogsAdapter.MyV
             notifyDataSetChanged()
 
         }
+
     var action: PetsListAdapter.Action? = null
     class MyViewHolder(val binding: BlogItemBinding) : RecyclerView.ViewHolder(binding.root) {
 

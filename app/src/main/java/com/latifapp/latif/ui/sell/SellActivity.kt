@@ -330,7 +330,7 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
             .setProgressBarColor("#4CAF50") //  ProgressBar color
             .setBackgroundColor("#212121") //  Background color
             .setCameraOnly(false) //  Camera mode
-            .setMultipleMode(false) //  Select multiple images or single image
+            .setMultipleMode(isMultiple) //  Select multiple images or single image
             .setFolderMode(true) //  Folder mode
             .setShowCamera(false) //  Show camera button
             .setDoneTitle("Done") //  Done button title
@@ -339,7 +339,7 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
             .setRequestCode(galleryRequest) //  Set request code, default Config.RC_PICK_IMAGES
             .setKeepScreenOn(true)
             .setSavePath("latif")
-            .setMaxSize(1)
+            .setMaxSize(4)
             .start()
     }
 

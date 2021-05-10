@@ -19,13 +19,15 @@ import com.latifapp.latif.data.models.ImagesModel
 import com.latifapp.latif.data.models.UserModel
 import com.latifapp.latif.databinding.ActivityBlogDetailsBinding
 import com.latifapp.latif.databinding.CallDialogBinding
+import com.latifapp.latif.ui.ZoomingImageActivity
 import com.latifapp.latif.ui.base.BaseActivity
-import com.latifapp.latif.ui.base.BaseViewModel
 import com.latifapp.latif.ui.details.PetImageAdapter
+
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class BlogDetailsActivity : BaseActivity<BolgDetailsViewModel,ActivityBlogDetailsBinding>() {
+class BlogDetailsActivity : BaseActivity<BolgDetailsViewModel,ActivityBlogDetailsBinding>(),
+    PetImageAdapter.Actions {
 
     private var phoneNum: String?=""
     private lateinit var callPopUp: PopupWindow
@@ -60,7 +62,9 @@ class BlogDetailsActivity : BaseActivity<BolgDetailsViewModel,ActivityBlogDetail
         binding.recyclerView.apply {
             layoutManager =
                 LinearLayoutManager(this@BlogDetailsActivity, LinearLayoutManager.HORIZONTAL, false)
-            adapter = BlogImagesAdapter(images)
+            var adapter_ = BlogImagesAdapter(images)
+            adapter_.action=this@BlogDetailsActivity
+            adapter = adapter_
         }
 
     }
@@ -119,5 +123,11 @@ class BlogDetailsActivity : BaseActivity<BolgDetailsViewModel,ActivityBlogDetail
 
     override fun hideLoader() {
         binding.loader.bar.visibility= View.GONE
+    }
+
+    override fun onImageClick(image: String) {
+        val intent =Intent(this, ZoomingImageActivity::class.java)
+        intent.putExtra("image",image)
+        startActivity(intent)
     }
 }

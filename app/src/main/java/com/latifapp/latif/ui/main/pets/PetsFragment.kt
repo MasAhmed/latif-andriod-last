@@ -1,10 +1,7 @@
 package com.latifapp.latif.ui.main.pets
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
@@ -13,26 +10,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
-import com.cloudinary.Util
-import com.cloudinary.android.MediaManager
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import com.google.maps.android.ui.IconGenerator
+import com.latifapp.latif.R
 import com.latifapp.latif.data.models.AdsModel
 import com.latifapp.latif.databinding.CustomMarkserBinding
 import com.latifapp.latif.databinding.FragmentPetsBinding
@@ -41,12 +31,8 @@ import com.latifapp.latif.ui.main.home.MainActivity
 import com.latifapp.latif.ui.main.pets.bottomDialog.BottomDialogFragment
 import com.latifapp.latif.ui.map.MapsUtiles
 import com.latifapp.latif.ui.sell.SellActivity
-import com.latifapp.latif.utiles.AppConstants
-import com.latifapp.latif.utiles.GpsUtils
-import com.latifapp.latif.utiles.Permissions
-import com.latifapp.latif.utiles.Utiles
-import com.latifapp.latif.R
-
+import com.latifapp.latif.utiles.*
+import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_maps.*
 import kotlinx.coroutines.flow.collect
@@ -54,7 +40,7 @@ import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class PetsFragment : BaseFragment<PetsViewModel, FragmentPetsBinding>(),
-    PetsAdapter.CategoryActions, RequestListener<Drawable> {
+    PetsAdapter.CategoryActions {
 
     private val mapSets = mutableSetOf<AdsModel>()
     private var category: Int? = null
@@ -66,7 +52,8 @@ class PetsFragment : BaseFragment<PetsViewModel, FragmentPetsBinding>(),
         var Latitude_ = 0.0
         var Longitude_ = 0.0
     }
-
+    var latitude_map= 0.0
+    var longitude_map = 0.0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -99,25 +86,51 @@ class PetsFragment : BaseFragment<PetsViewModel, FragmentPetsBinding>(),
         }
     }
 
+
+
+
     private fun getPetsList() {
+        var distance =20_000f
+        if (latitude_map!=0.0){
+            // get distance
+            val loc1=Location("loc1")
+            loc1.latitude= Latitude_
+            loc1.longitude= Longitude_
 
-        lifecycleScope.launchWhenStarted {
-            viewModel.getItems(null, category).collect {
-                viewModel.page = 0
-                if (it != null) {
+            val lo2=Location("loc2")
+            lo2.latitude= latitude_map
+            lo2.longitude= longitude_map
 
-                    val set = mutableSetOf<AdsModel>()
-                    set.addAll(it)
-                    Utiles.log_D("ncncncnncncncn", "${mapSets.containsAll(set)} ")
-                    if (!mapSets.containsAll(set)) {
+           distance= loc1.distanceTo(lo2)
 
-                        mapSets.clear()
-                        mapSets.addAll(it)
-                        setLPetsLocations(it)
+            latitude_map= Latitude_
+            longitude_map= Longitude_
+        }
+
+        if (distance>=20_000)
+            lifecycleScope.launchWhenStarted {
+                viewModel.getItems(null, category).collect {
+                    viewModel.page = 0
+                    if (it != null) {
+                        val set = mutableSetOf<AdsModel>()
+                        set.addAll(it)
+                         var list = mapSets
+                        //  if list empty so mapSets is empty and it the first action on map
+                        Utiles.log_D("ncncncnncncncn", "${list.size} \n ${list.minus(set)}")
+                        if (list.isEmpty()) {
+                            list = set
+                            mapSets.addAll(list)
+                        }else // if not so compare old list with new list
+                            list= list.minus(set) as MutableSet<AdsModel>
+
+                        Utiles.log_D("ncncncnncncncn", "${list.size} \n }")
+                        if (!list.isEmpty()) {
+                            mapSets.addAll(list)
+                            setLPetsLocations(mapSets)
+                        }
                     }
                 }
             }
-        }
     }
 
     private fun getCategoriesList() {
@@ -188,43 +201,50 @@ class PetsFragment : BaseFragment<PetsViewModel, FragmentPetsBinding>(),
             })
     }
 
-    fun setLPetsLocations(list: List<AdsModel>) {
-        if (mMap != null) {
-            mMap?.clear()
-            list.forEach { adsModel ->
-                val pet = LatLng(adsModel.latitude, adsModel.longitude)
-//                val iconGenerator = IconGenerator(context)
-//                val inflatedViewBinding = CustomMarkserBinding.inflate(layoutInflater)
-//                val imageView=inflatedViewBinding.image
-//                addImage(imageView, adsModel.image)
-//                val TRANSPARENT_DRAWABLE: Drawable = ColorDrawable(Color.TRANSPARENT)
-//                iconGenerator.setBackground(TRANSPARENT_DRAWABLE)
-//                iconGenerator.setContentView(inflatedViewBinding.root)
-                val bitmap = createStoreMarker(adsModel)
-                var marker = MarkerOptions().position(pet)
-                    .title(adsModel.name) // below line is use to add custom marker on our map.
-                    .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
+    fun setLPetsLocations(list: Set<AdsModel>) {
+        if (mMap!=null) {
+            activity?.runOnUiThread(Runnable {
+                // mMap?.clear()
+                list.forEach { adsModel ->
+                    val pet = LatLng(adsModel.latitude, adsModel.longitude)
+                    val iconGenerator = IconGenerator(context)
+                    val inflatedViewBinding = CustomMarkserBinding.inflate(layoutInflater)
+                    val imageView = inflatedViewBinding.image
+                    addImage(imageView, adsModel.image)
+                    val TRANSPARENT_DRAWABLE: Drawable = ColorDrawable(Color.TRANSPARENT)
+                    iconGenerator.setBackground(TRANSPARENT_DRAWABLE)
+                    iconGenerator.setContentView(inflatedViewBinding.root)
 
-                mMap?.addMarker(
-                    marker
-                )?.tag = (adsModel)
 
-                mMap?.setOnMarkerClickListener { marker ->
-                    val model = marker.tag as AdsModel
-                    if (model != null) {
-                        val bundle = Bundle()
-                        bundle.putParcelable("model", model)
-                        childFragmentManager.let {
-                            BottomDialogFragment().apply {
-                                arguments = bundle
-                                show(it, tag)
+                    var marker = MarkerOptions().position(pet)
+                        .title(adsModel.name)
+                        .icon(BitmapDescriptorFactory.fromBitmap(iconGenerator.makeIcon()))// below line is use to add custom marker on our map.
+                    val mm = mMap?.addMarker(
+                        marker
+                    )
+                    mm?.tag = (adsModel)
+                    val picassoMarker = PicassoMarker(mm, iconGenerator, imageView)
+                    Picasso.get().load(adsModel.image).into(picassoMarker);
+
+                    mMap?.setOnMarkerClickListener { marker ->
+                        val model = marker.tag as AdsModel
+                        if (model != null) {
+                            val bundle = Bundle()
+                            bundle.putParcelable("model", model)
+                            childFragmentManager.let {
+                                BottomDialogFragment().apply {
+                                    arguments = bundle
+                                    show(it, tag)
+                                }
                             }
                         }
+                        true
                     }
-                    true
                 }
-            }
+
+            })
         }
+
     }
 
     private fun addImage(imageView: ImageView, image: String?) {
@@ -232,9 +252,11 @@ class PetsFragment : BaseFragment<PetsViewModel, FragmentPetsBinding>(),
             context?.let {
 
                 Glide.with(it).load("$image")
-                   .placeholder(R.drawable.placeholder).error(R.drawable.placeholder).into(imageView)
+                    .placeholder(R.drawable.placeholder).error(R.drawable.placeholder)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(imageView)
 
-             }
+            }
             imageView.visibility = View.VISIBLE
         }
 
@@ -270,7 +292,7 @@ class PetsFragment : BaseFragment<PetsViewModel, FragmentPetsBinding>(),
                     LatLng(
                         location!!.latitude,
                         location!!.longitude
-                    ), 12f
+                    ), 10f
                 )
             )
         }
@@ -308,7 +330,6 @@ class PetsFragment : BaseFragment<PetsViewModel, FragmentPetsBinding>(),
     }
 
     override fun selectedCategory(id: Int?) {
-        Utiles.log_D("ndndndndnnd", "${id}")
         category = id
         mMap?.clear()
         mapSets.clear()
@@ -316,44 +337,4 @@ class PetsFragment : BaseFragment<PetsViewModel, FragmentPetsBinding>(),
     }
 
 
-    private fun createStoreMarker(adsModel: AdsModel): Bitmap? {
-        val inflatedViewBinding = CustomMarkserBinding.inflate(layoutInflater)
-        val imageView = inflatedViewBinding.image
-        addImage(imageView, adsModel.image)
-        val markerLayout = inflatedViewBinding.root
-        markerLayout.measure(
-            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-        )
-        markerLayout.layout(0, 0, markerLayout.measuredWidth, markerLayout.measuredHeight)
-        val bitmap = Bitmap.createBitmap(
-            markerLayout.measuredWidth,
-            markerLayout.measuredHeight,
-            Bitmap.Config.ARGB_8888
-        )
-        val canvas = Canvas(bitmap)
-        markerLayout.draw(canvas)
-        return bitmap
-    }
-
-    override fun onLoadFailed(
-        e: GlideException?,
-        model: Any?,
-        target: Target<Drawable>?,
-        isFirstResource: Boolean
-    ): Boolean {
-        Utiles.log_D("isFirstResource", "${e}")
-         return false
-    }
-
-    override fun onResourceReady(
-        resource: Drawable?,
-        model: Any?,
-        target: Target<Drawable>?,
-        dataSource: DataSource?,
-        isFirstResource: Boolean
-    ): Boolean {
-        Utiles.log_D("isFirstResource", "${dataSource} ${isFirstResource} ....")
-        return false
-    }
 }

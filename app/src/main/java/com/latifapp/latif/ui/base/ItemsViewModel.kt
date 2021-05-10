@@ -14,27 +14,31 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 open class ItemsViewModel(appPrefsStorage: AppPrefsStorage, repo: DataRepo) :
-    CategoriesViewModel(appPrefsStorage,repo) {
+    CategoriesViewModel(appPrefsStorage, repo) {
     var page = 0
     fun getItems(type: String?, category: Int? = null): StateFlow<List<AdsModel>> {
         val flow_ = MutableStateFlow<List<AdsModel>>(arrayListOf())
         loader.value = true
-        viewModelScope.launch(Dispatchers.IO) {
-            val result = repo.getNearestAds(
-                type = type, lat = PetsFragment.Latitude_,
-                lag = PetsFragment.Longitude_,
-                page = page, category = category
-            )
-            when (result) {
-                is ResultWrapper.Success -> {
-                    Utiles.log_D("nvnnvnvnvnnvnv", "${page}")
-                    flow_.value = result.value.response.data!!
-                    page++
+        Utiles.onSearchDebounce(500L, viewModelScope, {
+            viewModelScope.launch(Dispatchers.IO) {
+                val result = repo.getNearestAds(
+                    type = type, lat = PetsFragment.Latitude_,
+                    lag = PetsFragment.Longitude_,
+                    page = page, category = category
+                )
+                when (result) {
+                    is ResultWrapper.Success -> {
+                        Utiles.log_D("nvnnvnvnvnnvnv", "${page}")
+                        flow_.value = result.value.response.data!!
+                        page++
+                    }
+                    else -> getErrorMsg(result)
                 }
-                else -> getErrorMsg(result)
+                loader.value = false
             }
-            loader.value = false
-        }
+        })
         return flow_
+
+
     }
 }

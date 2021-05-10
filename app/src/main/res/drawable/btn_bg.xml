@@ -6,7 +6,8 @@
                 android:color="@color/pippin"/>
             <corners android:radius="20dp"
                 />
-
+            <padding android:left="15dp"
+                android:right="15dp"/>
         </shape>
     </item>
 

@@ -13,6 +13,7 @@ import com.latifapp.latif.ui.base.BaseFragment
 import com.latifapp.latif.ui.details.DetailsActivity
 import com.latifapp.latif.ui.main.pets.PetsAdapter
 import com.latifapp.latif.ui.main.pets.PetsViewModel
+import com.latifapp.latif.ui.sell.SellActivity
 import com.latifapp.latif.utiles.AppConstants
 import com.latifapp.latif.utiles.AppConstants.PETS_STR
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,6 +31,10 @@ class PetsListFragment : BaseFragment<PetsViewModel, FragmentPetsListBinding>() 
         if (!::adapter.isInitialized) {
             setList()
             getCategoriesList()
+
+            binding.sellBtn.setOnClickListener {
+                startActivity(Intent(activity, SellActivity::class.java))
+            }
         }
     }
 

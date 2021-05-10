@@ -12,6 +12,8 @@ import com.latifapp.latif.ui.details.PetImageAdapter
 
 class BlogImagesAdapter(val images: List<String>?) :
     RecyclerView.Adapter<BlogImagesAdapter.MyViewHolder>() {
+
+    var action: PetImageAdapter.Actions?=null
     class MyViewHolder(val binding: PetImageItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
     }

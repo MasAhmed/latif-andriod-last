@@ -16,6 +16,7 @@ import com.latifapp.latif.ui.main.home.MainActivity
 import com.latifapp.latif.ui.main.pets.PetsAdapter
 import com.latifapp.latif.ui.main.pets.PetsViewModel
 import com.latifapp.latif.ui.main.petsList.PetsListAdapter
+import com.latifapp.latif.ui.sell.SellActivity
 import com.latifapp.latif.utiles.AppConstants
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -35,7 +36,9 @@ class ItemsFragment  : BaseFragment<PetsViewModel,FragmentPetsListBinding>() {
             setList()
             getCategoriesList()
 
-
+            binding.sellBtn.setOnClickListener {
+                startActivity(Intent(activity, SellActivity::class.java))
+            }
         }
     }
 
