@@ -11,5 +11,6 @@
         android:id="@+id/recyclerView"
         tools:listitem="@layout/services_item"
         android:layout_marginTop="10dp"/>
-
+    <include layout="@layout/loader_"
+        android:id="@+id/loader"/>
 </FrameLayout>

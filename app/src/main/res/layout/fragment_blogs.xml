@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".ui.main.blogs.BlogsFragment">
+    tools:context=".ui.main.blogs.blogsList.BlogsFragment">
 
     <View
         android:layout_width="match_parent"
@@ -34,7 +34,25 @@
         tools:listitem="@layout/blog_item"
         android:layout_marginTop="10dp"
         />
-
+    <TextView
+        android:id="@+id/sellBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:minWidth="80dp"
+        android:background="@drawable/btn_bg"
+        android:elevation="3dp"
+        android:fontFamily="@font/poppins_bold"
+        android:gravity="center"
+        android:text="@string/create"
+        android:textAllCaps="false"
+        android:textColor="@color/red"
+        android:textSize="15sp" />
     <include layout="@layout/loader_"
         android:id="@+id/loader"
         />

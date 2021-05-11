@@ -9,7 +9,7 @@ import com.latifapp.latif.databinding.MenuItemBinding
 class MenuAdapter(val action: MenuAction) : RecyclerView.Adapter<MenuAdapter.MyViewHolder>() {
     val list = listOf(
         R.string.pets, R.string.items,
-        R.string.service, R.string.blogs,
+        R.string.service, R.string.blogs,R.string.subscribe,
         R.string.profile
     )
 
@@ -35,7 +35,8 @@ class MenuAdapter(val action: MenuAction) : RecyclerView.Adapter<MenuAdapter.MyV
                 1 -> anEnum = MenuEnum.items
                 2 -> anEnum = MenuEnum.service
                 3 -> anEnum = MenuEnum.blogs
-                4 -> anEnum = MenuEnum.profile
+                4 -> anEnum = MenuEnum.subscribe
+                5 -> anEnum = MenuEnum.profile
             }
             action.menuClick(anEnum)
         }
@@ -44,7 +45,7 @@ class MenuAdapter(val action: MenuAction) : RecyclerView.Adapter<MenuAdapter.MyV
     override fun getItemCount(): Int = list.size
 
     public enum class MenuEnum {
-        pets, items, service, blogs, profile
+        pets, items, service, blogs, profile,subscribe
     }
 
     public interface MenuAction {

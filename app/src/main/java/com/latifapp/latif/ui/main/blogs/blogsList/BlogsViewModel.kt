@@ -1,15 +1,11 @@
-package com.latifapp.latif.ui.main.blogs
+package com.latifapp.latif.ui.main.blogs.blogsList
 
-import android.util.Log
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.viewModelScope
 import com.latifapp.latif.data.local.AppPrefsStorage
 import com.latifapp.latif.data.models.BlogsModel
 import com.latifapp.latif.data.models.CategoryItemsModel
-import com.latifapp.latif.data.models.CategoryModel
 import com.latifapp.latif.network.ResultWrapper
 import com.latifapp.latif.network.repo.DataRepo
-import com.latifapp.latif.network.safeApiCall
 import com.latifapp.latif.ui.base.BaseViewModel
 import com.latifapp.latif.utiles.Utiles.onSearchDebounce
 import kotlinx.coroutines.Dispatchers
@@ -20,11 +16,11 @@ import javax.inject.Inject
 
 class BlogsViewModel @Inject constructor(val repo: DataRepo, appPrefsStorage: AppPrefsStorage):BaseViewModel(appPrefsStorage) {
     var page = 0
-    fun getListOfBlogs(): StateFlow<List<BlogsModel>> {
+    fun getListOfBlogs(category: Int?): StateFlow<List<BlogsModel>> {
         val flow_ = MutableStateFlow<List<BlogsModel>>(arrayListOf())
         loader.value = true
         viewModelScope.launch(Dispatchers.IO) {
-            val result = repo.getBlogsList(page)
+            val result = repo.getBlogsList(page,category)
             when (result) {
                 is ResultWrapper.Success -> {
                     flow_.value = result.value.response.data!!
@@ -45,6 +41,7 @@ class BlogsViewModel @Inject constructor(val repo: DataRepo, appPrefsStorage: Ap
             when (result) {
                 is ResultWrapper.Success -> {
                     flow_.value = result.value.response.data!!
+                    page++
                 }
                 else -> getErrorMsg(result)
             }
@@ -54,12 +51,12 @@ class BlogsViewModel @Inject constructor(val repo: DataRepo, appPrefsStorage: Ap
     }
 
     suspend fun getSearchBlogs(txt:String) : StateFlow<List<BlogsModel>> {
-        page=0
+
         val flow_ = MutableStateFlow<List<BlogsModel>>(arrayListOf())
         loader.value = true
         onSearchDebounce(500L, viewModelScope, {
             viewModelScope.launch(Dispatchers.IO) {
-                val result = repo.getSearchBlogs(txt)
+                val result = repo.getSearchBlogs(txt,page)
                 when (result) {
                     is ResultWrapper.Success -> {
                         flow_.value = result.value.response.data!!

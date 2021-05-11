@@ -1,24 +1,20 @@
 package com.latifapp.latif.ui.sell.views
 
 import android.content.Context
-import android.graphics.Color
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
 import android.view.LayoutInflater
-import android.widget.EditText
 import android.widget.LinearLayout
-import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
-import androidx.core.graphics.drawable.DrawableCompat
-import com.latifapp.latif.R
 import com.latifapp.latif.databinding.CustomEdittextLayoutBinding
+import com.latifapp.latif.utiles.Utiles
 
 
 class CustomEditText(
     context_: Context,
-    label: String,
+    label: String = "",
     val isText: Boolean,
+    val isMultiline: Boolean,
     action: ViewAction<String>
 ) : CustomParentView<String>(
     context_,
@@ -29,17 +25,25 @@ class CustomEditText(
     override fun createView() {
         val editText = CustomEdittextLayoutBinding.inflate(LayoutInflater.from(context))
         view = editText.apply {
-             labeltxt.text="$label "
+            labeltxt.text = "$label "
             editext.hint = label
             val params = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
-             params.setMargins(0, 40, 0, 5)
+            params.setMargins(0, 40, 0, 5)
             root.layoutParams = params
-
             editext.addTextChangedListener(this@CustomEditText)
-            editext.inputType = if (!isText) InputType.TYPE_CLASS_NUMBER else InputType.TYPE_CLASS_TEXT
+            var inputType = InputType.TYPE_CLASS_TEXT
+            if (!isText)
+                inputType = InputType.TYPE_CLASS_NUMBER
+            else if (isMultiline) {
+                inputType =
+                    InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
+
+             }
+            Utiles.log_D("snnsnsnsnsn", "$isMultiline")
+            editext.inputType = inputType
         }.root
 
     }

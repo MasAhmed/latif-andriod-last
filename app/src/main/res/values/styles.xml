@@ -14,7 +14,10 @@
         <item name="android:activityCloseEnterAnimation">@anim/slide_in_left</item>
         <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
     </style>
-
+    <style name="WallSearchView" parent="Widget.AppCompat.SearchView">
+        <item name="iconifiedByDefault">false</item>
+        <item name="colorControlActivated">#fff</item>
+    </style>
     <style name="spinner_style" parent="@android:style/Widget.Spinner">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">40dp</item>

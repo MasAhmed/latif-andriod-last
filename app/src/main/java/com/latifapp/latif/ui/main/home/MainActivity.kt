@@ -1,56 +1,65 @@
 package com.latifapp.latif.ui.main.home
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
-import androidx.appcompat.widget.SearchView
+import android.view.View.GONE
+import android.view.View.VISIBLE
+import android.widget.ImageView
+import android.widget.SearchView
+import android.widget.TextView
 import androidx.core.view.GravityCompat
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.etebarian.meowbottomnavigation.MeowBottomNavigation
 import com.latifapp.latif.R
 import com.latifapp.latif.databinding.ActivityMainBinding
 import com.latifapp.latif.ui.base.BaseActivity
-import com.latifapp.latif.ui.filter.FilterActivity
+import com.latifapp.latif.ui.filter.FilterFormActivity
 import com.latifapp.latif.ui.main.profile.ProfileActivity
+import com.latifapp.latif.ui.subscribe.SubscribeActivity
+import com.latifapp.latif.utiles.AppConstants
+import com.latifapp.latif.utiles.AppConstants.PETS_STR
+import com.latifapp.latif.utiles.Utiles
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
-import kotlin.coroutines.coroutineContext
+
 @AndroidEntryPoint
-class MainActivity : BaseActivity<MainViewModel,ActivityMainBinding>(), NavController.OnDestinationChangedListener,
+class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(), NavController.OnDestinationChangedListener,
     MenuAdapter.MenuAction, BottomNavItemsAdapter.Action {
     private val bottomAdapter=BottomNavItemsAdapter(this@MainActivity)
     private lateinit var navigation: NavController
-    public lateinit var searchview:SearchView
-
+    public lateinit var searchBtn:ImageView
+    public lateinit var searchView:SearchView
+    public lateinit var toolBarTitle:TextView
+    private var type=""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        searchview=binding.toolbar.searchBtn
+        searchBtn=binding.toolbar.searchBtn
+        searchView=binding.toolbar.searchView
+        toolBarTitle=binding.toolbar.title
 
          navigation = Navigation.findNavController(
-            this,
-            R.id.fragment_container
-        )
-        binding.toolbar.searchBtn.setOnClickListener {
-            startActivity(Intent(this@MainActivity,FilterActivity::class.java))
-        }
+             this,
+             R.id.fragment_container
+         )
+
 
         setBottomBarNav()
         navigation.addOnDestinationChangedListener(this)
         setMenu()
+         searchBtn.setOnClickListener {
+            val intent =Intent(this, FilterFormActivity::class.java)
+            intent.putExtra("type", type)
+            startActivity(intent)
+        }
     }
 
     private fun setBottomBarNav() {
         binding.bottomNavRecyclerView.apply {
-            layoutManager=GridLayoutManager(this@MainActivity,5)
+            layoutManager=GridLayoutManager(this@MainActivity, 5)
             adapter=bottomAdapter
         }
     }
@@ -78,23 +87,49 @@ class MainActivity : BaseActivity<MainViewModel,ActivityMainBinding>(), NavContr
         destination: NavDestination,
         arguments: Bundle?
     ) {
+        searchView.visibility= GONE
+        searchBtn.visibility= VISIBLE
+        binding.toolbar.titleContainer.visibility=VISIBLE
         when (destination.id) {
-            R.id.pets_fragments -> bottomAdapter.show(0)
-            R.id.items_fragments -> bottomAdapter.show(1)
-            R.id.clinic_fragments -> bottomAdapter.show(2)
-            R.id.services_fragments -> bottomAdapter.show(3)
-            R.id.chat_fragments -> bottomAdapter.show(4)
+
+            R.id.pets_fragments -> {
+                bottomAdapter.show(0)
+                type = PETS_STR
+            }
+            R.id.items_fragments -> {
+                bottomAdapter.show(1)
+                type = AppConstants.ACCESSORIES_STR
+            }
+            R.id.clinic_fragments -> {
+                bottomAdapter.show(2)
+                type = AppConstants.PET_CARE_STR
+            }
+            R.id.services_fragments -> {
+                bottomAdapter.show(3)
+                type = AppConstants.SERVICE_STR
+            }
+            R.id.chat_fragments -> {
+                bottomAdapter.show(4)
+                searchBtn.visibility = GONE
+            }
+            R.id.blogs_fragments -> {
+                searchView.visibility = VISIBLE
+                searchBtn.visibility = GONE
+                binding.toolbar.titleContainer.visibility = GONE
+            }
         }
     }
 
     override fun menuClick(enum: MenuAdapter.MenuEnum) {
         when (enum) {
             MenuAdapter.MenuEnum.profile -> startActivity(
-                Intent(this, ProfileActivity::class.java))
+                Intent(this, ProfileActivity::class.java)
+            )
             MenuAdapter.MenuEnum.blogs -> navigation.navigate(R.id.nav_blogs_fragments)
             MenuAdapter.MenuEnum.pets -> navigation.navigate(R.id.nav_pets_list_fragments)
             MenuAdapter.MenuEnum.items -> navigation.navigate(R.id.nav_items_fragments)
             MenuAdapter.MenuEnum.service -> navigation.navigate(R.id.nav_services_fragments)
+            MenuAdapter.MenuEnum.subscribe -> startActivity(Intent(this,SubscribeActivity::class.java))
          }
 
         runBlocking {
@@ -122,4 +157,11 @@ class MainActivity : BaseActivity<MainViewModel,ActivityMainBinding>(), NavContr
 
     override fun hideLoader() {
      }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        if (intent.data != null) {
+            Utiles.log_D("cncnncncncnncn","${intent.data?.query}  ${intent.data?.encodedQuery}")
+        }
+    }
 }

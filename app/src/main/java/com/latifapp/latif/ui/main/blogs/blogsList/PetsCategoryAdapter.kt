@@ -1,4 +1,4 @@
-package com.latifapp.latif.ui.main.blogs
+package com.latifapp.latif.ui.main.blogs.blogsList
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,7 +7,6 @@ import com.bumptech.glide.Glide
 import com.example.postsapplication.network.NetworkClient.BASE_URL
 import com.latifapp.latif.R
 import com.latifapp.latif.data.models.CategoryItemsModel
-import com.latifapp.latif.data.models.CategoryModel
 import com.latifapp.latif.databinding.PetItemLayoutBinding
 import com.latifapp.latif.databinding.SelectedPetItemBinding
 
@@ -64,17 +63,16 @@ class PetsCategoryAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             holder.binding.rootv.apply {
                 selectedPosition = -1
                 notifyDataSetChanged()
-                action?.selectedCategory(-1)
+                action?.selectedCategory(null)
             }
         }
         if (!category.iconSelect.isNullOrEmpty()) {
             var image=category.iconSelect
-            if (!category.isExternalLink)
-                image=BASE_URL+image
+
             Glide.with(holder.itemView.context).load(image)
                 .error(R.drawable.ic_image)
                 .placeholder(R.drawable.ic_image).into(holder.binding.image)
-        }
+        }else holder.binding.image.setImageResource(R.drawable.ic_image)
     }
 
     private fun setViewsAsUnSelecte(
@@ -93,16 +91,15 @@ class PetsCategoryAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         holder.binding.text.text = category.name
         if (!category.icon.isNullOrEmpty()) {
             var image=category.icon
-            if (!category.isExternalLink)
-                image=BASE_URL+image
+
             Glide.with(holder.itemView.context).load(image).error(R.drawable.ic_image)
                 .placeholder(R.drawable.ic_image).into(holder.binding.image)
-        }
+        }else holder.binding.image.setImageResource(R.drawable.ic_image)
     }
 
     override fun getItemCount(): Int = list.size
 
     interface CategoryActions {
-        fun selectedCategory(id: Int)
+        fun selectedCategory(id: Int?)
     }
 }

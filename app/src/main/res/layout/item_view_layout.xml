@@ -30,6 +30,7 @@
             android:textColor="@color/sunset_orange"
             android:textSize="10sp"
             android:text="• NEW"
+            android:visibility="gone"
             android:fontFamily="@font/poppins_regular"
             app:layout_constraintTop_toBottomOf="@id/petName"
             app:layout_constraintStart_toStartOf="parent"
@@ -60,24 +61,30 @@
             android:layout_marginTop="4dp"
             />
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="@color/yellow_orange"
             android:textSize="13sp"
-            android:text="nndmd djkdj dodjjd"
-            android:fontFamily="@font/poppins_regular"
+             android:fontFamily="@font/poppins_regular"
             app:layout_constraintTop_toBottomOf="@id/priceTxt"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            android:includeFontPadding="false"
+            android:ellipsize="end"
+            android:maxLines="2"
             android:id="@+id/locTxt"
             android:layout_marginTop="4dp"
+
             />
 
         <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             app:srcCompat="@drawable/ic_image"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/image"
             />
         <TextView
             android:layout_width="wrap_content"
@@ -88,6 +95,7 @@
              android:fontFamily="@font/poppins_regular"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/hidBtn"
+            app:layout_constraintTop_toTopOf="@id/locTxt"
             android:background="@drawable/select_bg"
             android:drawableStart="@drawable/ic_report_white"
             android:drawableTint="@color/white"
@@ -95,6 +103,7 @@
             android:gravity="center"
             android:layout_marginEnd="8dp"
             android:id="@+id/reportBtn"
+            android:visibility="gone"
             />
         <ImageView
             android:layout_width="40dp"
@@ -105,6 +114,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/ic_visibility"
             android:scaleType="centerInside"
+            android:visibility="gone"
             android:id="@+id/hidBtn"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

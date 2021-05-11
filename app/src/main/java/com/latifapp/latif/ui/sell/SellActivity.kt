@@ -21,6 +21,7 @@ import com.latifapp.latif.data.models.AdsTypeModel
 import com.latifapp.latif.data.models.RequireModel
 import com.latifapp.latif.databinding.ActivitySellBinding
 import com.latifapp.latif.ui.base.BaseActivity
+import com.latifapp.latif.ui.main.pets.PetsFragment
 import com.latifapp.latif.ui.map.MapsActivity
 import com.latifapp.latif.ui.sell.adapters.ImagesAdapter
 import com.latifapp.latif.ui.sell.views.*
@@ -54,6 +55,8 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.backBtn.setOnClickListener { onBackPressed() }
+        lat=PetsFragment.Latitude_
+        lng=PetsFragment.Longitude_
         items = arrayOf<String>(
             getString(R.string.camera),
             getString(R.string.gallery),
@@ -131,10 +134,11 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
                 "file" -> createImage(model_)
                 "files" -> createImagesList(model_)
                 "select" -> createCheckBoxGroup(model_)
-                "dropdown" -> createSpinner(model_)
+               "dropdown" -> createSpinner(model_)
                 "radiobutton" -> createRadioButtonGroup(model_)
                 "map" -> createMapBtn(model_)
                 "url_option" -> getUrlInfo(model_)
+                "text" -> createEditText(model_,true)
                 else -> createEditText(model_)
 
 
@@ -144,6 +148,7 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
     private fun getUrlInfo(model_: RequireModel) {
         lifecycleScope.launchWhenStarted {
             viewModel.getUrlInfo(model_).observe(this@SellActivity, Observer {
+
                 if (it != null)
                     createSpinner(it)
             })
@@ -154,7 +159,10 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
 
 
     private fun createCheckBoxGroup(model: RequireModel) {
-        val text = CustomCheckBoxGroup(this, model.label!!, model.options!!, object :
+        var header=model.label
+        if (!lang.equals("en"))
+         header=model.label_ar
+        val text = CustomCheckBoxGroup(this, header!!, model.options!!, object :
             CustomParentView.ViewAction<String> {
             override fun getActionId(text: String) {
                 setHashMapValues("${model.name}", "$text")
@@ -165,7 +173,10 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
     }
 
     private fun createRadioButtonGroup(model: RequireModel) {
-        val text = CustomRadioGroup(this, model.label!!, model.options!!, object :
+        var header=model.label
+        if (!lang.equals("en"))
+            header=model.label_ar
+        val text = CustomRadioGroup(this, header!!, model.options!!, object :
             CustomParentView.ViewAction<String> {
             override fun getActionId(text: String) {
                 setHashMapValues("${model.name}", "$text")
@@ -194,14 +205,17 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
     }
 
     private fun createImage(model: RequireModel) {
-
-        val view = CustomImage(this, model.label!!, object :
+        var header=model.label
+        if (!lang.equals("en"))
+            header=model.label_ar
+        val view = CustomImage(this, header!!, object :
             CustomParentView.ViewAction<ImageView> {
             override fun getActionId(imageView: ImageView) {
                 liveData = MutableLiveData<String>()
                 liveData.observe(this@SellActivity, Observer {
-                    Glide.with(this@SellActivity).load(it).into(imageView)
                     setHashMapValues(model.name!!, it)
+                    Glide.with(this@SellActivity).load(it).into(imageView)
+
                 })
                 choose(false)
             }
@@ -212,15 +226,18 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
     private fun createImagesList(model: RequireModel) {
         val adapter = ImagesAdapter()
         val listOfImages = mutableListOf<String>()
-        val view = CustomImagesList(this, model.label!!, adapter, object :
+        var header=model.label
+        if (!lang.equals("en"))
+            header=model.label_ar
+        val view = CustomImagesList(this, header!!, adapter, object :
             CustomParentView.ViewAction<View> {
             override fun getActionId(btn: View) {
                 liveData = MutableLiveData<String>()
                 liveData.observe(this@SellActivity, Observer {
                     adapter.list.add(it)
                     adapter.notifyDataSetChanged()
-                    //   listOfImages.add(it)
-                    //  hashMap.put(model.name!!, listOfImages)
+                      listOfImages.add(it)
+                     hashMap.put(model.name!!, listOfImages)
                 })
                 choose(true)
             }
@@ -231,10 +248,13 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
 
     }
 
-    fun createEditText(model: RequireModel) {
+    fun createEditText(model: RequireModel, isMultiLine:Boolean=false) {
         if (model.label.isNullOrEmpty()) return
+        var header=model.label
+        if (!lang.equals("en"))
+            header=model.label_ar
         val text =
-            CustomEditText(this, model.label!!, model.type?.toLowerCase().equals("string"), object :
+            CustomEditText(this, header!!, model.type?.toLowerCase().equals("string"),isMultiLine, object :
                 CustomParentView.ViewAction<String> {
                 override fun getActionId(text: String) {
                     setHashMapValues("${model.name}", "$text")
@@ -245,8 +265,11 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
     }
 
     fun createSwitch(model: RequireModel) {
+        var header=model.label
+        if (!lang.equals("en"))
+            header=model.label_ar
         setHashMapValues("${model.name}", "false")
-        val switch = CustomSwitch(this, model.label!!, object :
+        val switch = CustomSwitch(this, header!!, object :
             CustomParentView.ViewAction<Boolean> {
             override fun getActionId(isON: Boolean) {
                 setHashMapValues("${model.name}", "$isON")
@@ -257,13 +280,17 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
     }
 
     fun createSpinner(model: RequireModel) {
-        val text = CustomSpinner(this, model.label!!, model.options!!, object :
+        var header=model.label
+        if (!lang.equals("en"))
+            header=model.label_ar
+        val text = CustomSpinner(this, header!!, model.options!!, object :
             CustomParentView.ViewAction<String> {
             override fun getActionId(text: String) {
                 setHashMapValues("${model.name}", "$text")
             }
         }
         )
+        Utiles.log_D("smsmmsmsmsmsms","$text")
         binding.container.addView(text.getView())
     }
 
@@ -306,7 +333,7 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
             .setProgressBarColor("#4CAF50") //  ProgressBar color
             .setBackgroundColor("#212121") //  Background color
             .setCameraOnly(false) //  Camera mode
-            .setMultipleMode(false) //  Select multiple images or single image
+            .setMultipleMode(isMultiple) //  Select multiple images or single image
             .setFolderMode(true) //  Folder mode
             .setShowCamera(false) //  Show camera button
             .setDoneTitle("Done") //  Done button title
@@ -315,7 +342,7 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
             .setRequestCode(galleryRequest) //  Set request code, default Config.RC_PICK_IMAGES
             .setKeepScreenOn(true)
             .setSavePath("latif")
-            .setMaxSize(1)
+            .setMaxSize(4)
             .start()
     }
 
@@ -400,14 +427,14 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
         if (value.isNullOrEmpty())
             hashMap.remove(key)
         else
-            hashMap.put(key, value)
+            hashMap.put("$key", value)
 
 
         Utiles.log_D("cncnncncncncn", hashMap)
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        getForm(typeList.get(position).name)
+        getForm(typeList.get(position).code)
         binding.container.removeAllViews()
         binding.mapContainer.visibility = GONE
         binding.placeNme.text = ""

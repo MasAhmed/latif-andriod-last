@@ -1,13 +1,14 @@
-package com.latifapp.latif.ui.main.blogs
+package com.latifapp.latif.ui.main.blogs.blogsList
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.postsapplication.network.NetworkClient
 import com.latifapp.latif.R
 import com.latifapp.latif.data.models.BlogsModel
 import com.latifapp.latif.databinding.BlogItemBinding
-import java.io.File
+import com.latifapp.latif.ui.main.petsList.PetsListAdapter
 import javax.inject.Inject
 
 class BlogsAdapter @Inject constructor() : RecyclerView.Adapter<BlogsAdapter.MyViewHolder>() {
@@ -18,6 +19,7 @@ class BlogsAdapter @Inject constructor() : RecyclerView.Adapter<BlogsAdapter.MyV
 
         }
 
+    var action: PetsListAdapter.Action? = null
     class MyViewHolder(val binding: BlogItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
     }
@@ -32,14 +34,24 @@ class BlogsAdapter @Inject constructor() : RecyclerView.Adapter<BlogsAdapter.MyV
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val img = "${list.get(position).path}${list.get(position).image}"
-        if (!img.isNullOrEmpty())
-            Glide.with(holder.itemView.context).load(img).error(R.drawable.ic_image)
-                .placeholder(R.drawable.ic_image).into(holder.binding.image)
+
         holder.binding.text.text = list.get(position).title
         holder.binding.authorName.text =
             "${list.get(position).user?.firstName} ${list.get(position).user?.lastName}"
         holder.binding.dateTxt.text = list.get(position).createdDate
+
+        val img=list.get(position).image
+        if (!img.isNullOrEmpty()) {
+            var imagePath=img
+
+            Glide.with(holder.itemView.context).load(imagePath)
+                .error(R.drawable.ic_image)
+                .placeholder(R.drawable.ic_image).into(holder.binding.image)
+        }else holder.binding.image.setImageResource(R.drawable.ic_image)
+
+        holder.itemView.setOnClickListener {
+            action?.onAdClick(list.get(position).id)
+        }
     }
 
     override fun getItemCount(): Int = list.size

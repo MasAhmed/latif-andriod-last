@@ -64,17 +64,16 @@ class PetsAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             holder.binding.rootv.apply {
                 selectedPosition = -1
                 notifyDataSetChanged()
-                action?.selectedCategory(-1)
+                action?.selectedCategory(null)
             }
         }
         if (!category.iconSelect.isNullOrEmpty()) {
             var image=category.iconSelect
-            if (!category.isExternalLink)
-                image=BASE_URL+image
+
             Glide.with(holder.itemView.context).load(image)
                 .error(R.drawable.ic_image)
                 .placeholder(R.drawable.ic_image).into(holder.binding.image)
-        }
+        }else holder.binding.image.setImageResource(R.drawable.ic_image)
     }
 
     private fun setViewsAsUnSelecte(
@@ -93,16 +92,15 @@ class PetsAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         holder.binding.text.text = category.name
         if (!category.icon.isNullOrEmpty()) {
             var image=category.icon
-            if (!category.isExternalLink)
-                image=BASE_URL+image
+
             Glide.with(holder.itemView.context).load(image).error(R.drawable.ic_image)
                 .placeholder(R.drawable.ic_image).into(holder.binding.image)
-        }
+        }else holder.binding.image.setImageResource(R.drawable.ic_image)
     }
 
     override fun getItemCount(): Int = list.size
 
     interface CategoryActions {
-        fun selectedCategory(id: Int)
+        fun selectedCategory(id: Int?)
     }
 }

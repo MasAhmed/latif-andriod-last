@@ -29,7 +29,8 @@
             android:layout_centerInParent="true"
             android:gravity="center"
             android:orientation="horizontal"
-            android:visibility="gone">
+            android:id="@+id/titleContainer"
+        >
 
             <ImageView
                 android:layout_width="30dp"
@@ -43,19 +44,19 @@
                 android:layout_gravity="center"
                 android:fontFamily="@font/poppins_regular"
                 android:gravity="center"
-                android:text="Cairo"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
+                 android:textColor="@color/white"
+                android:textSize="20sp"
+                android:id="@+id/title"/>
         </LinearLayout>
 
         <View
             android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/menuBtn"/>
-        <androidx.appcompat.widget.SearchView
+        <ImageView
             android:id="@+id/searchBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
              android:layout_marginStart="30dp"
@@ -63,9 +64,25 @@
             android:backgroundTint="@color/white"
             app:queryBackground="@color/cornflower_lilac"
             app:dividerPadding="5dp"
-            android:padding="6dp"
+            android:padding="9dp"
             app:iconifiedByDefault="true"
 
              />
+
+        <SearchView
+            android:id="@+id/searchView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="30dp"
+            app:srcCompat="@drawable/ic_search"
+            android:backgroundTint="@color/white"
+            app:queryBackground="@color/cornflower_lilac"
+            app:dividerPadding="5dp"
+            android:padding="9dp"
+            android:theme="@style/WallSearchView"
+            android:queryHint="@string/Search"
+             android:visibility="gone"/>
     </RelativeLayout>
 </androidx.appcompat.widget.Toolbar>

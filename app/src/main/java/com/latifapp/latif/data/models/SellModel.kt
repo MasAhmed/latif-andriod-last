@@ -7,7 +7,8 @@ data class RequireModel(
     val required: Boolean?=false,
     val multi: Boolean=false,
     val name: String?=null,
-    val label: String?=null,
+    val label: String="",
+    val label_ar: String="",
     val url: String?=null,
     val options: List<OptionsModel>?=null
 
@@ -16,7 +17,8 @@ data class OptionsModel(val code: String?,
                         val label: String?)
 data class SaveformModelRequest(
     val type: String?,
-    val userAds: List<UserAds>
+    val userAds: List<UserAds>,
+    val external: Boolean=true,
 
 )
 data class UserAds( val id: String?, val value: Any?)
