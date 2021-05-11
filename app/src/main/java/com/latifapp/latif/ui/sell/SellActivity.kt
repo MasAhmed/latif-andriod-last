@@ -21,6 +21,7 @@ import com.latifapp.latif.data.models.AdsTypeModel
 import com.latifapp.latif.data.models.RequireModel
 import com.latifapp.latif.databinding.ActivitySellBinding
 import com.latifapp.latif.ui.base.BaseActivity
+import com.latifapp.latif.ui.main.pets.PetsFragment
 import com.latifapp.latif.ui.map.MapsActivity
 import com.latifapp.latif.ui.sell.adapters.ImagesAdapter
 import com.latifapp.latif.ui.sell.views.*
@@ -54,6 +55,8 @@ class SellActivity : BaseActivity<SellViewModel, ActivitySellBinding>(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.backBtn.setOnClickListener { onBackPressed() }
+        lat=PetsFragment.Latitude_
+        lng=PetsFragment.Longitude_
         items = arrayOf<String>(
             getString(R.string.camera),
             getString(R.string.gallery),
